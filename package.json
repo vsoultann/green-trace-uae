@@ -1,0 +1,28 @@
+{
+  "name": "green-trace-uae",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tooling for the Green-Trace UAE leaf identifier (dataset fetch + model training).",
+  "scripts": {
+    "fetch": "node tools/fetch-dataset.mjs",
+    "train": "node tools/train.mjs",
+    "qr": "node tools/make-qr.mjs",
+    "test": "node tools/smoke-test.mjs",
+    "serve": "node tools/serve.mjs"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-wasm": "^4.22.0",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vsoultann/green-trace-uae.git"
+  }
+}

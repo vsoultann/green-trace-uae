@@ -1,0 +1,43 @@
+# Publishes app/ to GitHub Pages on every push to main.
+#
+# The site is deployed from a subdirectory rather than the repo root so the
+# training tools, dataset scripts and documentation stay out of the served
+# bundle without needing a separate branch.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail if the trained model is missing
+        run: |
+          test -f app/model/head/model.json || { echo "::error::app/model/head/model.json is missing - run npm run train and commit the result"; exit 1; }
+          test -f app/model/metadata.json  || { echo "::error::app/model/metadata.json is missing"; exit 1; }
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

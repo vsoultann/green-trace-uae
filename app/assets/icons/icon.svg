@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Green-Trace UAE">
+  <defs>
+    <linearGradient id="sand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7e2b8"/>
+      <stop offset="1" stop-color="#d8a94e"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0.2" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#5fae62"/>
+      <stop offset="1" stop-color="#2c6b3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sand)"/>
+  <path d="M256 436V236" stroke="#3d2f14" stroke-width="26" stroke-linecap="round"/>
+  <path d="M256 268c0-96 66-172 176-186 14 110-56 200-176 186Z" fill="url(#leaf)"/>
+  <path d="M242 316c0-78-56-140-144-152-11 88 46 162 144 152Z" fill="#3d7f4e" opacity="0.85"/>
+  <path d="M430 96c-70 34-124 92-158 172" stroke="#e9f3e6" stroke-width="15" stroke-linecap="round" fill="none" opacity="0.75"/>
+  <path d="M104 178c56 26 100 74 128 138" stroke="#e9f3e6" stroke-width="13" stroke-linecap="round" fill="none" opacity="0.6"/>
+</svg>
