@@ -137,14 +137,22 @@ for (const route of ['#/scan', '#/library', '#/tree/ghaf', '#/tree/nakhl', '#/ab
 
 /* Themes and language. */
 console.log('\nThemes and language...');
-for (const th of ['desert-dawn', 'oasis', 'night-falcon', 'mangrove', 'contrast', 'system']) {
-  const bg = await page.evaluate(async (id) => {
-    const m = await import('./js/themes.js');
-    m.applyTheme(id);
-    return getComputedStyle(document.body).backgroundColor;
-  }, th);
-  check(`theme ${th}`, !!bg && bg !== 'rgba(0, 0, 0, 0)', bg);
+// getComputedStyle(body).backgroundColor reports the *propagated canvas*
+// colour, which Chromium does not update when a token changes -- it reads the
+// same for every theme and would pass a broken app. Sample real pixels.
+const seen = new Map();
+for (const th of ['desert-dawn', 'oasis', 'night-falcon', 'mangrove', 'contrast']) {
+  await page.evaluate(async (id) => (await import('./js/themes.js')).applyTheme(id), th);
+  await new Promise((r) => setTimeout(r, 350));
+  const shot = await page.screenshot({ type: 'png', clip: { x: 6, y: 380, width: 24, height: 24 } });
+  const png = await import('node:zlib').then(() => shot);
+  // Average the clip without a decoder dependency: compare raw PNG bytes,
+  // which differ whenever the rendered colour differs.
+  const sig = Buffer.from(png).toString('base64').slice(0, 64);
+  check(`theme ${th} renders distinctly`, !seen.has(sig), seen.has(sig) ? `identical to ${seen.get(sig)}` : 'unique');
+  seen.set(sig, th);
 }
+await page.evaluate(async () => (await import('./js/themes.js')).applyTheme('system'));
 
 const rtl = await page.evaluate(async () => {
   const i = await import('./js/i18n.js');
