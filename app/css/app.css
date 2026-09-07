@@ -1,148 +1,10 @@
 /* ==========================================================================
-   Green-Trace UAE — theme tokens
+   Green-Trace UAE — layout and components
 
-   Every theme redefines the same token set, so components never hard-code a
-   colour. `data-theme` on <html> selects one; absence of it means "follow the
-   operating system", handled by the prefers-color-scheme block.
-
-   The flag colours are held separately from the theme accents. Red, green,
-   white and black belong to the flag and are used as a signature — a rule at
-   the top of the page, a mark in the masthead — not as UI paint. A whole
-   interface coloured in a national flag reads as a souvenir; a restrained
-   quotation of it reads as belonging somewhere.
+   Colour lives in css/themes.css: every palette declares the same token set and
+   nothing in this file hard-codes a colour except the flag, which is fixed by
+   law rather than by taste.
    ========================================================================== */
-
-:root {
-  --uae-red: #ef3340;
-  --uae-green: #009739;
-  --uae-black: #151515;
-  --uae-white: #ffffff;
-}
-
-:root,
-[data-theme='desert-dawn'] {
-  color-scheme: light;
-  --bg: #f7f2e7;
-  --bg-elev: #fffdf8;
-  --bg-sunk: #efe6d3;
-  --ink: #1f1a12;
-  --ink-soft: #5c5241;
-  --ink-faint: #8d8168;
-  --line: #ddd0b4;
-  --rule: #cbb694;
-  --accent: #9a6b16;
-  --accent-ink: #fffdf8;
-  --accent-soft: #f2e5c8;
-  --ok: #3f7233;
-  --warn: #a8741a;
-  --bad: #a83a26;
-  --shadow: 0 1px 2px rgba(60, 45, 15, .06), 0 10px 30px -18px rgba(60, 45, 15, .34);
-  --hero: radial-gradient(120% 130% at 15% 0%, #fbf0d6 0%, #f3e3c0 45%, #e8d3a6 100%);
-  --pattern: rgba(154, 107, 22, .07);
-}
-
-[data-theme='oasis'] {
-  color-scheme: light;
-  --bg: #f2f7f0;
-  --bg-elev: #fdfffc;
-  --bg-sunk: #e2eede;
-  --ink: #131d15;
-  --ink-soft: #465c49;
-  --ink-faint: #748c78;
-  --line: #cfe2ca;
-  --rule: #b3d0ad;
-  --accent: #206b41;
-  --accent-ink: #ffffff;
-  --accent-soft: #d5ebda;
-  --ok: #206b41;
-  --warn: #9a6d10;
-  --bad: #a3352a;
-  --shadow: 0 1px 2px rgba(20, 50, 30, .06), 0 10px 30px -18px rgba(20, 50, 30, .36);
-  --hero: radial-gradient(120% 130% at 15% 0%, #e2f2e4 0%, #c9e6cf 45%, #a6d3b4 100%);
-  --pattern: rgba(32, 107, 65, .07);
-}
-
-[data-theme='night-falcon'] {
-  color-scheme: dark;
-  --bg: #101319;
-  --bg-elev: #191d26;
-  --bg-sunk: #0b0e13;
-  --ink: #f0f3f8;
-  --ink-soft: #a8b0c1;
-  --ink-faint: #737b8c;
-  --line: #282e3c;
-  --rule: #394153;
-  --accent: #d9a441;
-  --accent-ink: #171104;
-  --accent-soft: #2b2415;
-  --ok: #5fbb72;
-  --warn: #d9a441;
-  --bad: #df6d59;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 36px -18px rgba(0, 0, 0, .9);
-  --hero: radial-gradient(120% 130% at 15% 0%, #232b3d 0%, #191f2d 45%, #11151e 100%);
-  --pattern: rgba(217, 164, 65, .06);
-}
-
-[data-theme='mangrove'] {
-  color-scheme: dark;
-  --bg: #0a1717;
-  --bg-elev: #112322;
-  --bg-sunk: #061010;
-  --ink: #e4f3f0;
-  --ink-soft: #9dbcb6;
-  --ink-faint: #6a8984;
-  --line: #1c3634;
-  --rule: #274947;
-  --accent: #35b499;
-  --accent-ink: #032019;
-  --accent-soft: #143029;
-  --ok: #35b499;
-  --warn: #d09c3c;
-  --bad: #dd6d5c;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 36px -18px rgba(0, 0, 0, .85);
-  --hero: radial-gradient(120% 130% at 15% 0%, #17403c 0%, #102c2b 45%, #0a1e1d 100%);
-  --pattern: rgba(53, 180, 153, .06);
-}
-
-[data-theme='contrast'] {
-  color-scheme: dark;
-  --bg: #000000;
-  --bg-elev: #0a0a0a;
-  --bg-sunk: #000000;
-  --ink: #ffffff;
-  --ink-soft: #ececec;
-  --ink-faint: #c4c4c4;
-  --line: #ffffff;
-  --rule: #ffffff;
-  --accent: #ffd400;
-  --accent-ink: #000000;
-  --accent-soft: #332b00;
-  --ok: #4dff88;
-  --warn: #ffd400;
-  --bad: #ff6b5a;
-  --shadow: none;
-  --hero: none;
-  --pattern: transparent;
-}
-
-/* System-preference default: only applies when no explicit theme is chosen. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-    --bg: #101319; --bg-elev: #191d26; --bg-sunk: #0b0e13;
-    --ink: #f0f3f8; --ink-soft: #a8b0c1; --ink-faint: #737b8c;
-    --line: #282e3c; --rule: #394153;
-    --accent: #d9a441; --accent-ink: #171104; --accent-soft: #2b2415;
-    --ok: #5fbb72; --warn: #d9a441; --bad: #df6d59;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 36px -18px rgba(0,0,0,.9);
-    --hero: radial-gradient(120% 130% at 15% 0%, #232b3d 0%, #191f2d 45%, #11151e 100%);
-    --pattern: rgba(217, 164, 65, .06);
-  }
-}
-
-[data-theme='contrast'] * { --shadow: none; }
-[data-theme='contrast'] .card,
-[data-theme='contrast'] .btn { border-width: 2px; }
 
 /* ==========================================================================
    Base
@@ -420,18 +282,112 @@ svg.i { width: 1.05em; height: 1.05em; flex: none; vertical-align: -.16em; }
    Scan
    ========================================================================== */
 
-.dropzone {
+/* One surface carrying the headline, the target and the buttons, instead of
+   three separate boxes with air between them. */
+.capture-panel {
   position: relative;
-  display: grid; place-items: center; gap: 10px;
-  min-height: 250px; padding: 26px;
-  border: 2px dashed var(--rule); border-radius: 16px;
-  background: var(--bg-sunk); text-align: center;
-  cursor: pointer;
+  background: var(--hero);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 26px 22px 22px;
+  margin-bottom: 26px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.capture-panel::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(60deg, var(--pattern) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(-60deg, var(--pattern) 0 1px, transparent 1px 24px);
+  pointer-events: none;
+}
+.capture-panel > * { position: relative; z-index: 1; }
+.capture-panel h1 { margin-bottom: .3em; }
+.capture-panel .lede { color: var(--ink-soft); max-width: 40ch; margin-bottom: 20px; }
+
+/* A viewfinder rather than a dashed box: corner brackets say "aim here" in a
+   way a dashed rectangle only says "drop a file", and this app is mostly used
+   with a camera. */
+.viewfinder {
+  position: relative;
+  display: grid; place-items: center; gap: 6px;
+  min-height: 210px; padding: 26px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-sunk) 72%, transparent);
+  border: 1px solid var(--line);
+  text-align: center; cursor: pointer;
   transition: border-color .18s, background-color .18s;
 }
-.dropzone:hover, .dropzone.hot { border-color: var(--accent); background: var(--accent-soft); }
-.dropzone svg { width: 44px; height: 44px; color: var(--accent); }
-.dropzone strong { font-size: 1.05rem; }
+.viewfinder:hover, .viewfinder.hot {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-sunk));
+}
+.viewfinder strong { font-size: 1.02rem; }
+.viewfinder .vf-leaf { color: var(--accent); opacity: .9; margin-bottom: 2px; }
+.viewfinder .vf-leaf svg { width: 40px; height: 40px; }
+
+.viewfinder .corner {
+  position: absolute;
+  width: 20px; height: 20px;
+  border: 2.5px solid var(--accent);
+  opacity: .75;
+  transition: opacity .18s;
+}
+.viewfinder:hover .corner { opacity: 1; }
+.viewfinder .tl { top: 10px; left: 10px; border-width: 2.5px 0 0 2.5px; border-radius: 6px 0 0 0; }
+.viewfinder .tr { top: 10px; right: 10px; border-width: 2.5px 2.5px 0 0; border-radius: 0 6px 0 0; }
+.viewfinder .bl { bottom: 10px; left: 10px; border-width: 0 0 2.5px 2.5px; border-radius: 0 0 0 6px; }
+.viewfinder .br { bottom: 10px; right: 10px; border-width: 0 2.5px 2.5px 0; border-radius: 0 0 6px 0; }
+
+.capture-actions { margin-top: 14px; }
+.capture-actions .btn { flex: 1; min-width: 140px; }
+
+.tipline {
+  margin: 14px 0 0;
+  font-size: .8rem;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* ---- what the model knows ---- */
+
+/* Real content in the space the old empty hero was wasting: the species list is
+   both reassurance ("it knows this many") and a way into the reference pages. */
+.knows { margin-bottom: 14px; }
+.knows-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 12px;
+}
+.knows-head a { font-size: .8rem; font-weight: 650; text-decoration: none; white-space: nowrap; }
+
+.known-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 92px;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding-bottom: 6px;
+  margin-inline: calc(max(16px, env(safe-area-inset-left)) * -1);
+  padding-inline: max(16px, env(safe-area-inset-left));
+  scrollbar-width: thin;
+}
+.known {
+  scroll-snap-align: start;
+  display: grid; justify-items: center; gap: 7px;
+  padding: 14px 8px;
+  border: 1px solid var(--line); border-radius: 13px;
+  background: var(--bg-elev); color: inherit; text-decoration: none;
+  transition: border-color .15s, transform .12s;
+}
+.known:hover { border-color: var(--accent); transform: translateY(-2px); }
+.known span { color: var(--accent); line-height: 0; }
+.known svg { width: 26px; height: 26px; }
+.known b {
+  font-size: .72rem; font-weight: 600; text-align: center; line-height: 1.25;
+  color: var(--ink-soft);
+}
 
 #preview-wrap {
   position: relative; border-radius: 16px; overflow: hidden;
@@ -548,6 +504,8 @@ svg.i { width: 1.05em; height: 1.05em; flex: none; vertical-align: -.16em; }
   margin-bottom: 16px;
 }
 .alert h3 { color: var(--bad); margin-bottom: .4em; }
+.alert.warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 8%, var(--bg-elev)); }
+.alert.warn h3 { color: var(--warn); }
 .alert p { margin: 0; font-size: .9rem; }
 
 .supplier {
@@ -595,6 +553,13 @@ svg.i { width: 1.05em; height: 1.05em; flex: none; vertical-align: -.16em; }
 html[dir='rtl'] .species-card b { font-family: 'Noto Kufi Arabic', system-ui, sans-serif; }
 .species-card i { font-size: .76rem; color: var(--ink-soft); }
 .species-card .ar { font-size: .92rem; color: var(--ink-soft); }
+.species-card .tag {
+  justify-self: start; margin-top: 4px;
+  font-size: .62rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--warn); border: 1px solid var(--warn); border-radius: 99px; padding: 1px 7px;
+}
+html[dir='rtl'] .species-card .tag { letter-spacing: 0; }
+.species-card.untrained .em { opacity: .55; }
 
 /* ==========================================================================
    About Us — the long read
@@ -798,20 +763,47 @@ dialog.sheet {
   box-shadow: var(--shadow);
 }
 dialog.sheet::backdrop { background: rgba(0, 0, 0, .55); backdrop-filter: blur(3px); }
-dialog.sheet .sheet-body { padding: 20px; overflow: auto; }
+dialog.sheet .sheet-body { padding: 20px; overflow: auto; overscroll-behavior: contain; }
 dialog.sheet h2 { margin-bottom: 14px; }
 
-.theme-list { display: grid; gap: 9px; margin-bottom: 20px; }
+.theme-list { display: grid; gap: 4px; margin-bottom: 20px; }
+
+.theme-group { display: grid; gap: 5px; margin-bottom: 14px; }
+.theme-group h4 {
+  margin: 6px 0 2px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: .64rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+html[dir='rtl'] .theme-group h4 { letter-spacing: .03em; }
+
 .theme-opt {
   display: flex; align-items: center; gap: 12px; width: 100%;
-  padding: 11px 13px; border-radius: 12px;
-  border: 1px solid var(--line); background: var(--bg); color: inherit;
+  padding: 9px 12px; border-radius: 11px;
+  border: 1px solid transparent; background: transparent; color: inherit;
   font: inherit; cursor: pointer; text-align: start;
+  transition: background-color .12s, border-color .12s;
 }
+.theme-opt:hover { background: var(--bg-sunk); }
 .theme-opt[aria-checked='true'] { border-color: var(--accent); background: var(--accent-soft); }
-.theme-opt .swatch { width: 34px; height: 34px; border-radius: 9px; flex: none; border: 1px solid rgba(128,128,128,.35); }
-.theme-opt b { display: block; font-size: .92rem; }
-.theme-opt span { font-size: .74rem; color: var(--ink-soft); }
+
+/* Four real colours from the palette — page, accent, healthy, damaged — laid
+   out as a quartered chip. A single gradient swatch tells you nothing about
+   what a theme does to a result screen; this does. */
+.theme-opt .swatch {
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  width: 32px; height: 32px; flex: none;
+  border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(128, 128, 128, .38);
+}
+.theme-opt .swatch i { display: block; }
+
+.theme-opt .theme-name { display: grid; min-width: 0; }
+.theme-opt b { font-size: .9rem; font-weight: 600; }
+.theme-opt .theme-name span {
+  font-size: .72rem; color: var(--ink-faint);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 .theme-opt .tick { margin-inline-start: auto; color: var(--accent); font-weight: 700; }
 
 .seg { display: flex; gap: 6px; padding: 4px; background: var(--bg-sunk); border: 1px solid var(--line); border-radius: 11px; }
@@ -855,7 +847,10 @@ dialog.sheet h2 { margin-bottom: 14px; }
   .quote { max-width: 34em; }
 
   .hero { padding: 36px 32px; }
+  .capture-panel { padding: 34px 30px 26px; }
+  .viewfinder { min-height: 260px; }
   .aboutus-hero { padding: 52px 36px 44px; }
+  .known-strip { grid-auto-columns: 104px; }
 
   .species-grid { grid-template-columns: repeat(3, 1fr); }
   .leaders { gap: 20px; }
@@ -979,9 +974,14 @@ dialog.sheet h2 { margin-bottom: 14px; }
   .hero { padding: 12px 18px; margin-bottom: 10px; }
   .hero h1 { font-size: 1.15rem; margin-bottom: 0; }
   .hero p { display: none; }
-  .dropzone { min-height: 112px; padding: 16px; }
-  .dropzone svg { width: 30px; height: 30px; }
-  .dropzone strong { font-size: .95rem; }
+  .capture-panel { padding: 14px 16px 16px; margin-bottom: 14px; }
+  .capture-panel h1 { font-size: 1.15rem; }
+  .capture-panel .lede { display: none; }
+  .viewfinder { min-height: 104px; padding: 14px; }
+  .viewfinder .vf-leaf svg { width: 26px; height: 26px; }
+  .viewfinder strong { font-size: .92rem; }
+  .viewfinder .faint { display: none; }
+  .knows { display: none; }
   .aboutus-hero { padding: 22px 20px; }
   .leaders { max-width: 480px; margin-inline: auto; }
 }

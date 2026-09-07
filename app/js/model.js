@@ -5,7 +5,7 @@
  *   1. a frozen MobileNetV2 (ImageNet) that turns a 224x224 photo into a
  *      1280-dimension feature vector,
  *   2. a small dense head, trained by tools/train.mjs, that maps that vector
- *      onto the four Green-Trace species.
+ *      onto the Green-Trace species.
  *
  * Both are served from this repository, so once the service worker has cached
  * them the kiosk works with the network unplugged.
@@ -151,7 +151,7 @@ export async function classify(source) {
 
   // Normalised entropy: 0 = the model is certain, 1 = it is guessing evenly.
   // More trustworthy than top-1 probability alone for spotting "not one of the
-  // four species" -- which is exactly what a judge will try first.
+  // one of the species we know" -- which is exactly what a judge tries first.
   const eps = 1e-9;
   const entropy =
     -values.reduce((acc, p) => acc + p * Math.log(p + eps), 0) / Math.log(values.length);
@@ -199,7 +199,7 @@ export function isUncertain(result) {
  * shoe has failed in the most visible way available to it.
  *
  * Three independent signals have to agree that the input is a leaf of one of the
- * four species. `similarity` is the strongest of them because it does not go
+ * the species. `similarity` is the strongest of them because it does not go
  * through the softmax at all, but it is only available when ood.json loaded, so
  * the other two still stand on their own.
  *

@@ -279,22 +279,65 @@ for (const route of ['#/scan', '#/library', '#/tree/ghaf', '#/tree/nakhl',
 
 /* Themes and language. */
 console.log('\nThemes and language...');
+
 // getComputedStyle(body).backgroundColor reports the *propagated canvas*
 // colour, which Chromium does not update when a token changes -- it reads the
-// same for every theme and would pass a broken app. Sample real pixels.
+// same for every theme and would pass a broken app. Sampling a real element's
+// resolved styles does update, and unlike comparing screenshot bytes it tells
+// us *which* colour differs when a check fails.
+await page.evaluate(() => { location.hash = '#/scan'; });
+await new Promise((r) => setTimeout(r, 600));
+
+const themeIds = await page.evaluate(async () =>
+  (await import('./js/themes.js')).THEMES.map((t) => t.id).filter((id) => id !== 'system'));
+
 const seen = new Map();
-for (const th of ['desert-dawn', 'oasis', 'night-falcon', 'mangrove', 'contrast']) {
+for (const th of themeIds) {
   await page.evaluate(async (id) => (await import('./js/themes.js')).applyTheme(id), th);
-  await new Promise((r) => setTimeout(r, 350));
-  const shot = await page.screenshot({ type: 'png', clip: { x: 6, y: 380, width: 24, height: 24 } });
-  const png = await import('node:zlib').then(() => shot);
-  // Average the clip without a decoder dependency: compare raw PNG bytes,
-  // which differ whenever the rendered colour differs.
-  const sig = Buffer.from(png).toString('base64').slice(0, 64);
-  check(`theme ${th} renders distinctly`, !seen.has(sig), seen.has(sig) ? `identical to ${seen.get(sig)}` : 'unique');
+  await new Promise((r) => setTimeout(r, 120));
+  const sig = await page.evaluate(() => {
+    const card = document.querySelector('.card');
+    const cs = getComputedStyle(document.documentElement);
+    return [
+      card ? getComputedStyle(card).backgroundColor : 'no-card',
+      card ? getComputedStyle(card).color : '',
+      cs.getPropertyValue('--accent').trim(),
+      cs.getPropertyValue('--bad').trim(),
+    ].join('|');
+  });
+  const dup = seen.get(sig);
+  check(`theme ${th} renders distinctly`, !dup && !sig.startsWith('no-card'),
+    dup ? `identical to ${dup}` : sig.split('|')[0]);
   seen.set(sig, th);
 }
 await page.evaluate(async () => (await import('./js/themes.js')).applyTheme('system'));
+
+/* Every palette must actually define every token it is asked for. A theme that
+   silently inherits another one's --ink is the sort of thing that looks fine on
+   the machine it was written on and unreadable on the kiosk. */
+const tokenReport = await page.evaluate(async () => {
+  const { THEMES } = await import('./js/themes.js');
+  const REQUIRED = ['--bg', '--bg-elev', '--bg-sunk', '--ink', '--ink-soft', '--ink-faint',
+    '--line', '--rule', '--accent', '--accent-ink', '--ok', '--warn', '--bad',
+    '--accent-soft', '--hero', '--pattern'];
+  const root = document.documentElement;
+  const before = root.getAttribute('data-theme');
+  const broken = [];
+  for (const th of THEMES) {
+    if (th.id === 'system') { root.removeAttribute('data-theme'); }
+    else root.setAttribute('data-theme', th.id);
+    const cs = getComputedStyle(root);
+    const missing = REQUIRED.filter((k) => !cs.getPropertyValue(k).trim());
+    if (missing.length) broken.push(`${th.id}: ${missing.join(' ')}`);
+    if (th.swatch.length !== 4) broken.push(`${th.id}: swatch has ${th.swatch.length} colours, not 4`);
+    if (!th.note?.en || !th.note?.ar) broken.push(`${th.id}: note missing a language`);
+  }
+  if (before) root.setAttribute('data-theme', before); else root.removeAttribute('data-theme');
+  return { count: THEMES.length, broken };
+});
+check('every theme defines every token', tokenReport.broken.length === 0,
+  tokenReport.broken.length ? tokenReport.broken.join(' | ') : `${tokenReport.count} themes complete`);
+check('enough themes to be worth a picker', tokenReport.count >= 12, `${tokenReport.count} themes`);
 
 const rtl = await page.evaluate(async () => {
   const i = await import('./js/i18n.js');

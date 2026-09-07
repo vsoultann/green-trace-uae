@@ -118,13 +118,13 @@ export const SECTIONS = [
     body: {
       en: [
         'Photograph one leaf. The app answers two separate questions about it.',
-        'First: which tree is this? A convolutional neural network compares the leaf against four species that define the Emirati landscape — the Ghaf, the Sidr, the date palm and the Samar. If the leaf is not one of those four, the app is built to say so plainly instead of guessing, which is the single hardest thing to get an image classifier to do.',
+        'First: which tree is this? A convolutional neural network compares the leaf against ten species that between them cover most of what grows in the Emirates — from the Ghaf and the date palm to the grey mangroves of the coast, and including the invasive mesquite that is steadily replacing the Ghaf. If the leaf is none of them, the app is built to say so plainly instead of guessing, which is the single hardest thing to get an image classifier to do.',
         'Second: is this leaf healthy? A separate analysis measures yellowing, dead tissue, colour evenness, greenness and surface texture, and folds them into one score out of a hundred. Deliberately, no neural network is involved in this half — every number can be explained in one sentence, and shown on the photograph itself, so that a judge can point at a brown patch and see the app agree with them.',
         'When the analysis finds a problem, the app names the likely cause, recommends the treatment that addresses it, and then helps you find that treatment: nearby nurseries and agricultural suppliers, with phone numbers, opening hours and directions.',
       ],
       ar: [
         'صوّر ورقة واحدة، فيجيب التطبيق عن سؤالين منفصلين.',
-        'الأول: ما هذه الشجرة؟ تقارن شبكة عصبية التفافية الورقة بأربعة أنواع تُشكّل ملامح البيئة الإماراتية: الغاف والسدر والنخيل والسمر. وإذا لم تكن الورقة من هذه الأربعة، فالتطبيق مصمَّم ليقول ذلك صراحةً بدل التخمين، وهو أصعب سلوك يمكن تعليمه لمصنِّف صور.',
+        'الأول: ما هذه الشجرة؟ تقارن شبكة عصبية التفافية الورقة بعشرة أنواع تغطي بينها معظم ما ينمو في الإمارات، من الغاف والنخيل إلى أشجار القرم على الساحل، ومنها المسكيت الغازي الذي يزاحم الغاف تدريجياً. وإذا لم تكن الورقة من بينها، فالتطبيق مصمَّم ليقول ذلك صراحةً بدل التخمين، وهو أصعب سلوك يمكن تعليمه لمصنِّف صور.',
         'والثاني: هل هذه الورقة سليمة؟ يقيس تحليل منفصل الاصفرار والنسيج الميت وتجانس اللون ودرجة الخضرة وتباين الملمس، ثم يجمعها في درجة واحدة من مئة. وعن قصد، لا تتدخل أي شبكة عصبية في هذا النصف: كل رقم يمكن شرحه في جملة واحدة وإظهاره على الصورة نفسها، حتى يستطيع المحكّم أن يشير إلى بقعة بنية ويرى التطبيق يوافقه.',
         'وحين يرصد التحليل مشكلة، يسمّي التطبيق السبب المرجّح، ويوصي بالعلاج المناسب، ثم يساعدك على إيجاده: مشاتل وموردون زراعيون قريبون منك، مع أرقام الهاتف وساعات العمل والاتجاهات.',
       ],
@@ -133,7 +133,7 @@ export const SECTIONS = [
 
   {
     id: 'why',
-    heading: { en: 'Why these four trees', ar: 'لماذا هذه الأشجار الأربع' },
+    heading: { en: 'Why these trees', ar: 'لماذا هذه الأشجار' },
     body: {
       en: [
         'The Ghaf is the national tree of the United Arab Emirates. It survives where almost nothing else does, its roots reaching thirty metres down for water, and for centuries it was the meeting point where Bedouin communities gathered and made decisions. The Sidr fed and healed people long before there were pharmacies. The date palm has been the backbone of Emirati food, shelter and trade for five thousand years. The Samar holds the desert soil together and shades the animals that graze on it.',
@@ -153,12 +153,12 @@ export const SECTIONS = [
     heading: { en: 'How we built it', ar: 'كيف بنيناه' },
     body: {
       en: [
-        'We started with MobileNetV2, a network Google trained on millions of general photographs. It already knows what edges, textures and shapes look like; it simply has never been told about the Ghaf. So we froze it and trained only a small classifier on top, using openly licensed field photographs of the four species gathered from iNaturalist contributors — every photograph we used is credited in the repository.',
+        'We started with MobileNetV2, a network Google trained on millions of general photographs. It already knows what edges, textures and shapes look like; it simply has never been told about the Ghaf. So we froze it and trained only a small classifier on top, using openly licensed field photographs of each species gathered from iNaturalist contributors — every photograph we used is credited in the repository.',
         'That approach is why this runs on a phone at all. The trained part of our model is a few hundred kilobytes, and the whole system fits in a browser cache. It also means the team can improve it: photographing real leaves and retraining takes minutes, not days.',
         'Everything here is open. The source code, the training script, the dataset credits and this text are all in a public repository, and the entire application is the folder that GitHub serves — there is no hidden build step and nothing you cannot inspect.',
       ],
       ar: [
-        'بدأنا من MobileNetV2، وهي شبكة درّبتها جوجل على ملايين الصور العامة. تعرف الشبكة أصلاً ما هي الحواف والملامس والأشكال، لكن أحداً لم يخبرها قط عن الغاف. لذلك جمّدناها ودرّبنا فوقها مصنِّفاً صغيراً فقط، باستخدام صور ميدانية مفتوحة الترخيص للأنواع الأربعة من مساهمي iNaturalist، وكل صورة استخدمناها موثّقة في المستودع.',
+        'بدأنا من MobileNetV2، وهي شبكة درّبتها جوجل على ملايين الصور العامة. تعرف الشبكة أصلاً ما هي الحواف والملامس والأشكال، لكن أحداً لم يخبرها قط عن الغاف. لذلك جمّدناها ودرّبنا فوقها مصنِّفاً صغيراً فقط، باستخدام صور ميدانية مفتوحة الترخيص لكل نوع من مساهمي iNaturalist، وكل صورة استخدمناها موثّقة في المستودع.',
         'هذا الأسلوب هو سبب عمل التطبيق على الهاتف أساساً. فالجزء الذي درّبناه لا يتجاوز بضع مئات من الكيلوبايت، والنظام كله يتّسع في ذاكرة المتصفح. كما يعني ذلك أن بإمكان الفريق تحسينه: تصوير أوراق حقيقية وإعادة التدريب تستغرق دقائق لا أياماً.',
         'كل شيء هنا مفتوح: الشيفرة المصدرية، وبرنامج التدريب، ومصادر البيانات، وهذا النص نفسه، كلها في مستودع عام، والتطبيق بأكمله هو المجلد الذي يقدّمه GitHub — لا خطوة بناء خفية ولا شيء لا يمكنك تفحّصه.',
       ],

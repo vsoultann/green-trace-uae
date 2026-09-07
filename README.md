@@ -1,6 +1,6 @@
 # Green-Trace UAE
 
-**Identify four native Emirati trees from a single leaf, measure how healthy that leaf is, and find the treatment in a shop near you — entirely inside the browser, with no server and no internet connection.**
+**Identify Emirati trees from a single leaf, measure how healthy that leaf is, and find the treatment in a shop near you — entirely inside the browser, with no server and no internet connection.**
 
 A graduation project by Sultan Alkaabi and Saif Alshamsi (team leaders), Mohammed Abdulla (co-leader), Hamdan Alneyemi (AI specialist) and Mohammed Rashed (programmer).
 
@@ -12,14 +12,14 @@ A graduation project by Sultan Alkaabi and Saif Alshamsi (team leaders), Mohamme
 
 | | |
 |---|---|
-| **Species identification** | Ghaf (*Prosopis cineraria*), Sidr (*Ziziphus spina-christi*), Date Palm (*Phoenix dactylifera*), Samar (*Vachellia tortilis*) |
+| **Species identification** | Ghaf, Sidr, Date Palm, Samar, Grey Mangrove, Athel Tamarisk, Arak, Neem, Apple of Sodom, and the invasive Mesquite that is displacing the Ghaf |
 | **Health diagnosis** | Chlorosis, necrosis, greenness, colour uniformity, texture variance → a single 0–100 score with plain-language findings |
 | **Unknown inputs** | Says *"I don't recognise this leaf"* rather than forcing a fifth species into one of the four |
 | **Treatment** | Names the likely cause, recommends what to buy, and lists nurseries and agricultural suppliers with phone numbers, opening hours and directions |
 | **Runs where** | The user's phone. No API, no upload, no account. Works offline after first load. |
 | **Languages** | English and Arabic, with full right-to-left layout |
 | **Layout** | Phone, tablet and desktop — the navigation moves from a bottom tab bar to a top bar on wide screens, and the About page sets both languages as facing columns |
-| **Themes** | Five, plus "match device" |
+| **Themes** | Sixteen, grouped: four made for this project, plus Catppuccin, Nord, Tokyo Night, Dracula, Gruvbox, Rosé Pine, Solarized, Everforest and One Dark, a high-contrast mode and "match device" |
 
 ## How the AI works
 
@@ -148,7 +148,8 @@ treat it privately, because it is a notifiable pest.
 ```
 app/                    everything GitHub Pages serves
   index.html
-  css/app.css           theme tokens and layout
+  css/themes.css        the sixteen palettes, one token set each
+  css/app.css           layout and components
   css/anim.css          the motion layer
   js/app.js             router and views
   js/model.js           MobileNetV2 + trained head, in the browser
@@ -254,9 +255,16 @@ are credited individually in `dataset/inaturalist/CREDITS.json`.
 
 Worth saying out loud before a judge says it for you:
 
-- The model knows **four** species. It now refuses to name one when the input
-  looks unlike all four, but that refusal is a threshold, not a certainty: a
-  fifth species that genuinely resembles a ghaf can still be called a ghaf.
+- **The deployed model is still the 4-class one.** `tools/species.mjs` and the
+  reference library now describe ten species, and the dataset fetch for the six
+  new ones was still running when this was committed. Until `npm run fetch` and
+  `npm run train` have both finished, the library marks the six untrained
+  species **Reference only** and the classifier will not return them. Finishing
+  the job is exactly two commands.
+- The model refuses to name a species when the input looks unlike all of them,
+  but that refusal is a threshold, not a certainty: a species that genuinely
+  resembles a Ghaf can still be called a Ghaf. Mesquite is in the training set
+  precisely because it is that species.
 - Health analysis measures *appearance*. A leaf can be discoloured for reasons
   the pipeline cannot distinguish (dust, sunburn, natural senescence, varietal
   colour), and a plant can be seriously diseased while a single leaf looks fine.

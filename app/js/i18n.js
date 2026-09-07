@@ -18,7 +18,7 @@ const STRINGS = {
     'nav.team': 'Team',
 
     'scan.title': 'Identify a UAE tree from its leaf',
-    'scan.lede': 'Point your camera at a single leaf on a plain background, or upload a photo. Everything runs on your device — no internet needed after the first load.',
+    'scan.lede': 'Point the camera at one leaf on a plain background. Everything runs on your device, offline.',
     'scan.drop': 'Take or choose a photo',
     'scan.dropHint': 'Tap here · or drag an image in',
     'scan.camera': 'Use camera',
@@ -28,10 +28,10 @@ const STRINGS = {
     'scan.again': 'Scan another leaf',
     'scan.analysing': 'Analysing leaf…',
     'scan.loadingModel': 'Loading AI model…',
-    'scan.tipTitle': 'For the best result',
-    'scan.tip1': 'One leaf, filling most of the frame',
-    'scan.tip2': 'Plain, contrasting background (paper works well)',
-    'scan.tip3': 'Even light, no harsh shadow across the leaf',
+    'scan.eyebrow': 'Leaf scanner',
+    'scan.tipLine': 'One leaf · plain background · even light',
+    'scan.knows': 'The {n} trees in this app',
+    'scan.knowsAll': 'Read about them',
 
     'result.species': 'Species identification',
     'result.confidence': 'Confidence',
@@ -48,12 +48,12 @@ const STRINGS = {
     'result.showAnalysis': 'Show health analysis',
 
     'unknown.title': 'I don’t recognise this leaf',
-    'unknown.body': 'This does not look like a Ghaf, Sidr, date palm or Samar. Rather than guess at one of the four, the app is telling you it does not know.',
+    'unknown.body': 'This does not match any of the trees the model was trained on. Rather than force it into the closest one, the app is telling you it does not know.',
     'unknown.noFoliage': 'There is little or no plant tissue in the photo.',
     'unknown.unfamiliar': 'The image sits far from every species the model was trained on.',
     'unknown.lowProbability': 'No species scored anywhere near high enough.',
     'unknown.spreadEvenly': 'The scores are spread almost evenly, which means guessing.',
-    'unknown.seeFour': 'See the four trees',
+    'unknown.seeFour': 'See the species it knows',
 
     'health.excellent': 'Healthy',
     'health.good': 'Mostly healthy',
@@ -104,8 +104,8 @@ const STRINGS = {
     'model.title': 'How the model works',
     'model.how': 'The pipeline, end to end',
     'model.how1': 'A MobileNetV2 convolutional neural network, pre-trained on ImageNet, converts the leaf photo into a 1,280-number description of its shape, texture and pattern.',
-    'model.how2': 'A small classifier, trained by us on openly-licensed field photographs of the four species, maps that description onto a tree.',
-    'model.how3': 'Before naming anything, the photo is checked against the average appearance of each species in that 1,280-number space. Something unlike all four is reported as unrecognised instead of being forced into the nearest class.',
+    'model.how2': 'A small classifier, trained by us on openly-licensed field photographs of each species, maps that description onto a tree.',
+    'model.how3': 'Before naming anything, the photo is checked against the average appearance of each species in that 1,280-number space. Something unlike all of them is reported as unrecognised instead of being forced into the nearest class.',
     'model.how4': 'Health is measured separately, without a neural network, so every number can be explained: the leaf is white-balanced and cut out of the background, then each pixel is graded as healthy, chlorotic (yellowing) or necrotic (dead).',
     'model.performance': 'Model performance',
     'model.valAcc': 'Validation accuracy',
@@ -125,6 +125,12 @@ const STRINGS = {
     'team.splitNote': 'Percentages are the team’s own assessment of how the work divided across research, data collection, model training, programming and presentation.',
     'team.gradProject': 'Graduation Project',
 
+    'theme.group.auto': 'Automatic',
+    'theme.group.emirati': 'Made for this project',
+    'theme.group.light': 'Light',
+    'theme.group.dark': 'Dark',
+    'theme.group.access': 'Accessibility',
+
     'settings.title': 'Appearance',
     'settings.theme': 'Theme',
     'settings.language': 'Language',
@@ -135,26 +141,14 @@ const STRINGS = {
     'motion.on': 'Full',
     'motion.off': 'Off',
 
-    'theme.desert-dawn': 'Desert Dawn',
-    'theme.desert-dawn.d': 'Warm sand and gold, light',
-    'theme.oasis': 'Oasis',
-    'theme.oasis.d': 'Fresh green, light',
-    'theme.night-falcon': 'Night Falcon',
-    'theme.night-falcon.d': 'Deep navy and gold, dark',
-    'theme.mangrove': 'Mangrove',
-    'theme.mangrove.d': 'Coastal teal, dark',
-    'theme.contrast': 'High Contrast',
-    'theme.contrast.d': 'Maximum legibility',
-    'theme.system': 'Match device',
-    'theme.system.d': 'Follow your system setting',
-
-    'library.title': 'The four trees',
-    'library.lede': 'Green-Trace UAE is trained on four species that define the Emirati landscape.',
+    'library.title': 'The trees it knows',
+    'library.lede': 'Native, naturalised and invasive — the species that between them cover most of what grows in the Emirates.',
     'library.leaf': 'How to recognise the leaf',
     'library.about': 'About the tree',
     'library.significance': 'Why it matters here',
     'library.health': 'Common health problems',
     'library.back': 'All trees',
+    'library.referenceOnly': 'Reference only',
 
     'err.model': 'The AI model could not be loaded. Check your connection and reload.',
     'err.camera': 'Camera unavailable. Upload a photo instead.',
@@ -173,7 +167,7 @@ const STRINGS = {
     'nav.team': 'الفريق',
 
     'scan.title': 'تعرّف على شجرة إماراتية من ورقتها',
-    'scan.lede': 'صوّر ورقة واحدة على خلفية سادة، أو ارفع صورة. كل المعالجة تتم على جهازك ولا تحتاج إنترنت بعد التحميل الأول.',
+    'scan.lede': 'وجّه الكاميرا إلى ورقة واحدة على خلفية سادة. كل المعالجة على جهازك ودون إنترنت.',
     'scan.drop': 'التقط صورة أو اخترها',
     'scan.dropHint': 'اضغط هنا · أو اسحب صورة',
     'scan.camera': 'استخدام الكاميرا',
@@ -183,10 +177,10 @@ const STRINGS = {
     'scan.again': 'مسح ورقة أخرى',
     'scan.analysing': 'جارٍ التحليل…',
     'scan.loadingModel': 'جارٍ تحميل النموذج…',
-    'scan.tipTitle': 'للحصول على أفضل نتيجة',
-    'scan.tip1': 'ورقة واحدة تملأ معظم الإطار',
-    'scan.tip2': 'خلفية سادة مغايرة في اللون (الورق مناسب)',
-    'scan.tip3': 'إضاءة متساوية بلا ظلال حادة',
+    'scan.eyebrow': 'ماسح الأوراق',
+    'scan.tipLine': 'ورقة واحدة · خلفية سادة · إضاءة متساوية',
+    'scan.knows': 'الأشجار العشر في التطبيق',
+    'scan.knowsAll': 'اقرأ عنها',
 
     'result.species': 'تحديد النوع',
     'result.confidence': 'نسبة الثقة',
@@ -203,12 +197,12 @@ const STRINGS = {
     'result.showAnalysis': 'إظهار تحليل الصحة',
 
     'unknown.title': 'لا أتعرّف على هذه الورقة',
-    'unknown.body': 'لا تبدو هذه ورقة غاف أو سدر أو نخيل أو سمر. وبدل التخمين بواحدة من الأربع، يخبرك التطبيق بأنه لا يعرف.',
+    'unknown.body': 'لا تطابق هذه الصورة أياً من الأشجار التي تدرّب عليها النموذج. وبدل حشرها في أقربها، يخبرك التطبيق بأنه لا يعرف.',
     'unknown.noFoliage': 'لا يوجد نسيج نباتي في الصورة أو يكاد.',
     'unknown.unfamiliar': 'الصورة بعيدة عن كل نوع تدرّب عليه النموذج.',
     'unknown.lowProbability': 'لم يحصل أي نوع على درجة قريبة من الكافية.',
     'unknown.spreadEvenly': 'الدرجات موزّعة بالتساوي تقريباً، وهذا يعني التخمين.',
-    'unknown.seeFour': 'شاهد الأشجار الأربع',
+    'unknown.seeFour': 'شاهد الأنواع التي يعرفها',
 
     'health.excellent': 'سليمة',
     'health.good': 'سليمة غالباً',
@@ -259,8 +253,8 @@ const STRINGS = {
     'model.title': 'كيف يعمل النموذج',
     'model.how': 'المسار من البداية إلى النهاية',
     'model.how1': 'شبكة عصبية التفافية MobileNetV2 مدرَّبة مسبقاً على ImageNet تحوّل صورة الورقة إلى وصف رقمي من ١٢٨٠ قيمة يمثل شكلها وملمسها ونمطها.',
-    'model.how2': 'مصنّف صغير دربناه على صور ميدانية مفتوحة الترخيص للأنواع الأربعة يربط هذا الوصف بالشجرة المناسبة.',
-    'model.how3': 'قبل تسمية أي نوع، تُقارن الصورة بالمظهر المتوسط لكل نوع في فضاء الـ١٢٨٠ قيمة. وما لا يشبه الأنواع الأربعة يُعلَن أنه غير معروف بدل حشره في أقرب فئة.',
+    'model.how2': 'مصنّف صغير دربناه على صور ميدانية مفتوحة الترخيص لكل نوع يربط هذا الوصف بالشجرة المناسبة.',
+    'model.how3': 'قبل تسمية أي نوع، تُقارن الصورة بالمظهر المتوسط لكل نوع في فضاء الـ١٢٨٠ قيمة. وما لا يشبه أياً منها يُعلَن أنه غير معروف بدل حشره في أقرب فئة.',
     'model.how4': 'تُقاس الصحة بشكل منفصل ودون شبكة عصبية حتى يمكن تفسير كل رقم: تُضبط إضاءة الورقة وتُفصل عن الخلفية، ثم تُصنَّف كل بكسل كسليمة أو مصفرّة أو متنخرة.',
     'model.performance': 'أداء النموذج',
     'model.valAcc': 'دقة التحقق',
@@ -280,6 +274,12 @@ const STRINGS = {
     'team.splitNote': 'النسب تقدير الفريق نفسه لتوزّع العمل بين البحث وجمع البيانات وتدريب النموذج والبرمجة والعرض.',
     'team.gradProject': 'مشروع تخرج',
 
+    'theme.group.auto': 'تلقائي',
+    'theme.group.emirati': 'مصممة لهذا المشروع',
+    'theme.group.light': 'فاتحة',
+    'theme.group.dark': 'داكنة',
+    'theme.group.access': 'إمكانية الوصول',
+
     'settings.title': 'المظهر',
     'settings.theme': 'السمة',
     'settings.language': 'اللغة',
@@ -290,26 +290,14 @@ const STRINGS = {
     'motion.on': 'كاملة',
     'motion.off': 'إيقاف',
 
-    'theme.desert-dawn': 'فجر الصحراء',
-    'theme.desert-dawn.d': 'رملي ذهبي، فاتح',
-    'theme.oasis': 'الواحة',
-    'theme.oasis.d': 'أخضر منعش، فاتح',
-    'theme.night-falcon': 'صقر الليل',
-    'theme.night-falcon.d': 'كحلي وذهبي، داكن',
-    'theme.mangrove': 'القرم',
-    'theme.mangrove.d': 'أزرق ساحلي، داكن',
-    'theme.contrast': 'تباين عالٍ',
-    'theme.contrast.d': 'أقصى وضوح للقراءة',
-    'theme.system': 'حسب الجهاز',
-    'theme.system.d': 'اتّبع إعداد نظامك',
-
-    'library.title': 'الأشجار الأربع',
-    'library.lede': 'دُرِّب الأثر الأخضر على أربعة أنواع تُشكّل ملامح البيئة الإماراتية.',
+    'library.title': 'الأشجار التي يعرفها',
+    'library.lede': 'محلية ومستوطنة وغازية — أنواع تغطي بينها معظم ما ينمو في الإمارات.',
     'library.leaf': 'كيف تميّز الورقة',
     'library.about': 'عن الشجرة',
     'library.significance': 'أهميتها لدينا',
     'library.health': 'المشكلات الصحية الشائعة',
     'library.back': 'كل الأشجار',
+    'library.referenceOnly': 'مرجع فقط',
 
     'err.model': 'تعذّر تحميل النموذج. تحقق من الاتصال وأعد التحميل.',
     'err.camera': 'الكاميرا غير متاحة. ارفع صورة بدلاً من ذلك.',
@@ -324,8 +312,18 @@ let current = localStorage.getItem(LANG_KEY) || (navigator.language?.startsWith(
 export const lang = () => current;
 export const isRTL = () => current === 'ar';
 
-export function t(key) {
-  return STRINGS[current]?.[key] ?? STRINGS.en[key] ?? key;
+/**
+ * Looks up a string, optionally filling `{name}` placeholders.
+ *
+ * Interpolation rather than concatenation because word order differs between
+ * the two languages: "Knows 10 species" and "يعرف ١٠ أنواع" put the number in
+ * different places, and gluing strings together would force one of them to be
+ * wrong.
+ */
+export function t(key, vars) {
+  const str = STRINGS[current]?.[key] ?? STRINGS.en[key] ?? key;
+  if (!vars) return str;
+  return str.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m));
 }
 
 /** Applies the language to <html> and notifies listeners so views can re-render. */

@@ -167,6 +167,18 @@ export const TREATMENTS = {
  * infestation can take out a whole plantation.
  */
 export const SPECIES_ALERTS = {
+  mesquite: {
+    // Fires on any identification, healthy or not: with an invasive species the
+    // finding *is* the problem, and treating the individual tree is beside the
+    // point. This is the one case where the app's advice is "tell someone".
+    when: null,
+    level: 'warn',
+    title: { en: 'This is an invasive species', ar: 'هذا نوع غازٍ' },
+    body: {
+      en: 'Mesquite is not native to the UAE. It spreads aggressively, draws down groundwater and displaces the native Ghaf it closely resembles — which is why it is worth being sure which of the two you are looking at. Check the thorns: mesquite carries long, straight, paired spines where the Ghaf has short scattered ones. If this is growing in an area of native Ghaf, report it to the Ministry of Climate Change and Environment rather than treating it.',
+      ar: 'المسكيت ليس محلياً في الإمارات. ينتشر بعدوانية، ويستنزف المياه الجوفية، ويزيح الغاف المحلي الذي يشبهه كثيراً، ولهذا يجدر التأكد أيّ الشجرتين أمامك. انظر إلى الأشواك: للمسكيت أشواك طويلة مستقيمة مزدوجة، بينما أشواك الغاف قصيرة متفرقة. وإذا كان ينمو في منطقة غاف محلي، فأبلغ وزارة التغير المناخي والبيئة بدل معالجته.',
+    },
+  },
   nakhl: {
     when: ['necrosisHigh', 'necrosisSome', 'texture'],
     level: 'bad',

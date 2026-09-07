@@ -148,12 +148,36 @@ async function fetchSpecies(species) {
   return { kept, credits };
 }
 
+/**
+ * Credits already on disk.
+ *
+ * A class that is already complete is skipped, and a skipped class returns no
+ * credits -- so rebuilding the manifest from scratch would silently erase the
+ * attribution for every species fetched on an earlier run. These photographs are
+ * used under Creative Commons licences that require credit, so the old entries
+ * are carried forward rather than overwritten.
+ */
+async function existingCredits() {
+  try {
+    const prev = JSON.parse(await fs.readFile(path.join(OUT, 'CREDITS.json'), 'utf8'));
+    return prev.classes || {};
+  } catch { return {}; }
+}
+
+const carried = await existingCredits();
 const manifest = { generated: new Date().toISOString(), source: 'iNaturalist', classes: {} };
 console.log(`Fetching up to ${perClass} images per species into dataset/inaturalist/\n`);
 
 for (const species of SPECIES) {
   const { kept, credits } = await fetchSpecies(species);
-  manifest.classes[species.key] = { latin: species.latin, count: kept, credits };
+  const previous = carried[species.key]?.credits || [];
+  // Merge by photo id: a resumed run reports only the photos it downloaded this
+  // time, and both sets belong in the manifest.
+  const byId = new Map(previous.map((c) => [c.id, c]));
+  for (const c of credits) byId.set(c.id, c);
+  manifest.classes[species.key] = {
+    latin: species.latin, count: kept, credits: [...byId.values()],
+  };
 }
 
 await fs.mkdir(OUT, { recursive: true });

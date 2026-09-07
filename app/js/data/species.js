@@ -1,5 +1,5 @@
 /**
- * Reference data for the four species Green-Trace UAE recognises.
+ * Reference data for the ten species Green-Trace UAE recognises.
  *
  * `key` and the ordering here must match tools/species.mjs and the class order
  * baked into the trained model's metadata -- model.js asserts this on load.
@@ -108,6 +108,168 @@ export const SPECIES = [
       significance: 'نوع أساسي في السهول الحصوية والأودية الإماراتية؛ ظله يخفض حرارة الأرض بما يكفي لإنبات نباتات أخرى.',
       health:
         'لصغر الوريقات تُقاس الصحة بكثافة التاج لا بالورقة الواحدة. التخلخل الذي يكشف الأغصان يعني إجهاد جفاف أو رعياً مفرطاً، والعقد المتورمة عند قواعد الأشواك تدل على إصابة حشرية.',
+    },
+  },
+  {
+    key: 'qurm',
+    emoji: '🌊',
+    latin: 'Avicennia marina',
+    en: {
+      name: 'Grey Mangrove',
+      family: 'Acanthaceae',
+      leaf: 'Thick, leathery, oval leaves 4–10 cm long, glossy dark green above and distinctly pale grey-white underneath — the underside is the giveaway. Often crusted with visible salt crystals excreted through the leaf surface.',
+      about:
+        'The Grey Mangrove is the only mangrove that grows naturally along most of the UAE coast, and it survives conditions no other tree here tolerates: seawater, twice-daily flooding, and mud with almost no oxygen. It breathes through pencil-like roots called pneumatophores that stand up out of the mud around it, and it sheds excess salt straight through its leaves, which is why they taste of it.',
+      significance:
+        'Abu Dhabi holds the largest mangrove forests in the Gulf, and they are the emirate’s most effective carbon sink per hectare as well as the nursery for most of its coastal fish. Planting them has been national policy since Sheikh Zayed ordered the first large-scale replanting in the 1970s.',
+      health:
+        'Healthy leaves are firm and glossy with a clean pale underside. Yellowing across whole leaves usually means the tree is being drowned by changed water flow rather than starved of nutrients; blackened patches often follow an oil or sediment spill.',
+    },
+    ar: {
+      name: 'القرم',
+      family: 'الفصيلة الشوكية',
+      leaf: 'أوراق سميكة جلدية بيضاوية طولها ٤–١٠ سم، خضراء داكنة لامعة من الأعلى وشاحبة رمادية بيضاء من الأسفل، وهذه هي العلامة المميزة. وغالباً تُرى عليها بلورات ملح تفرزها الورقة.',
+      about:
+        'القرم هو المانغروف الوحيد الذي ينمو طبيعياً على معظم ساحل الإمارات، ويعيش في ظروف لا تحتملها شجرة أخرى هنا: ماء البحر، والغمر مرتين يومياً، وطين شبه خالٍ من الأكسجين. يتنفس عبر جذور تنفسية تشبه الأقلام تنتصب من الطين حوله، ويطرح الملح الزائد من أوراقه مباشرة.',
+      significance:
+        'تضم أبوظبي أكبر غابات القرم في الخليج، وهي أكفأ مصارف الكربون في الإمارة لكل هكتار، ومحضن معظم أسماكها الساحلية. وزراعتها سياسة وطنية منذ أمر الشيخ زايد بأول حملة تشجير واسعة في السبعينيات.',
+      health:
+        'الورقة السليمة متماسكة لامعة وظهرها شاحب نظيف. اصفرار الورقة كاملة يعني عادةً غرق الشجرة بسبب تغيّر مجرى المياه لا نقص التغذية، أما البقع السوداء فتتبع غالباً تسرّب زيت أو ترسّبات.',
+    },
+  },
+  {
+    key: 'athl',
+    emoji: '🌾',
+    latin: 'Tamarix aphylla',
+    en: {
+      name: 'Athel Tamarisk',
+      family: 'Tamaricaceae',
+      leaf: 'Not really leaves at all: minute grey-green scales that sheathe the slender green twigs, so the whole shoot looks like a jointed cord rather than a leafy branch. Often furred with excreted salt.',
+      about:
+        'The Athel is the UAE’s traditional windbreak. It grows fast, tolerates salt and drought that would kill almost anything else, and its dense feathery crown stops moving sand — which is why lines of Athel edge farms and roads all over the Emirates. Its wood was the standard timber for roof beams and boat frames long before imported wood was available.',
+      significance:
+        'Planted for centuries as shelter belts around date gardens. Because it excretes salt onto the soil beneath it, an Athel row also suppresses weeds — useful, but the same trait makes it aggressive where it escapes cultivation.',
+      health:
+        'Healthy shoots are firm and grey-green along their whole length. Twigs that turn straw-brown from the tip back indicate drought stress or root damage; whole-branch dieback in irrigated ground usually means waterlogging.',
+    },
+    ar: {
+      name: 'الأثل',
+      family: 'الفصيلة الأثلية',
+      leaf: 'ليست أوراقاً بالمعنى المعتاد: حراشف دقيقة رمادية خضراء تغلّف الأغصان الخضراء الرفيعة، فيبدو الفرع كحبل مفصّل لا كغصن مورق. وغالباً يعلوه غبار ملحي تفرزه الشجرة.',
+      about:
+        'الأثل مصدّ الرياح التقليدي في الإمارات. ينمو سريعاً، ويتحمل من الملوحة والجفاف ما يقتل غيره، وتاجه الكثيف الريشي يوقف زحف الرمال، ولذلك تحفّ صفوفه المزارع والطرق في أنحاء الدولة. وكان خشبه الخشب المعتمد لجذوع السقوف وهياكل السفن قبل توفّر الخشب المستورد.',
+      significance:
+        'زُرع قروناً كمصدّات حول حدائق النخيل. ولأنه يفرز الملح على التربة تحته فإن صفّ الأثل يكبح الأعشاب أيضاً، وهي ميزة تنقلب عدوانية حين يخرج عن السيطرة.',
+      health:
+        'الأغصان السليمة متماسكة رمادية خضراء بطولها. تحوّل الأغصان إلى بني قشّي من الطرف نحو الداخل يعني إجهاد جفاف أو ضرراً في الجذور، وموت الفرع كاملاً في أرض مروية يعني عادةً غدقاً.',
+    },
+  },
+  {
+    key: 'arak',
+    emoji: '🪥',
+    latin: 'Salvadora persica',
+    en: {
+      name: 'Arak (Toothbrush Tree)',
+      family: 'Salvadoraceae',
+      leaf: 'Fleshy, slightly succulent oval leaves 3–7 cm long in opposite pairs, a bright yellow-green, and noticeably soft and brittle compared with the leathery leaves of its neighbours. Crushed, they smell sharply of mustard.',
+      about:
+        'The Arak is a low, tangled evergreen of coastal plains and wadi beds, and its roots and twigs are the miswak — the natural toothbrush used across the Arab world for well over a thousand years. That is not folklore: the wood contains natural antibacterial compounds and silica, which is why it works.',
+      significance:
+        'One of the few native species that stays green through the hottest part of a UAE summer without irrigation, and an important food source for birds and desert foxes when its small pink berries ripen.',
+      health:
+        'Leaves should be plump and pale yellow-green; genuine chlorosis is hard to judge here because the species is naturally lighter than most. Limp or shrivelled leaves mean water stress, and blackening at the leaf base usually indicates root rot in over-irrigated ground.',
+    },
+    ar: {
+      name: 'الأراك',
+      family: 'الفصيلة الأراكية',
+      leaf: 'أوراق لحمية بيضاوية طولها ٣–٧ سم في أزواج متقابلة، خضراء مصفرّة زاهية، وطريّة هشّة مقارنة بأوراق جاراتها الجلدية. ورائحتها عند السحق حادة تشبه الخردل.',
+      about:
+        'الأراك شجيرة دائمة الخضرة متشابكة تنمو في السهول الساحلية وبطون الأودية، وجذوره وأغصانه هي السواك المستخدم في العالم العربي منذ أكثر من ألف عام. وليس ذلك من الموروث فحسب: فخشبه يحتوي مركبات طبيعية مضادة للبكتيريا وسيليكا، وهذا سبب فاعليته.',
+      significance:
+        'من الأنواع المحلية القليلة التي تبقى خضراء في ذروة صيف الإمارات دون ريّ، ومصدر غذاء مهم للطيور وثعالب الصحراء حين تنضج ثماره الوردية الصغيرة.',
+      health:
+        'ينبغي أن تكون الأوراق ممتلئة خضراء مصفرّة؛ ويصعب الحكم على الاصفرار هنا لأن النوع أفتح لوناً بطبيعته. الأوراق الذابلة تعني إجهاد ماء، والاسوداد عند قاعدة الورقة يدل غالباً على تعفّن جذور في أرض مفرطة الري.',
+    },
+  },
+  {
+    key: 'neem',
+    emoji: '🌿',
+    latin: 'Azadirachta indica',
+    en: {
+      name: 'Neem',
+      family: 'Meliaceae (mahogany family)',
+      leaf: 'Pinnate leaves 20–40 cm long carrying 8–19 leaflets, each one curved like a scimitar with a clearly toothed edge and an asymmetric base. Deep glossy green, and bitter to taste.',
+      about:
+        'Neem is not native to the Emirates but has been planted along more UAE streets, car parks and school yards than almost any other tree, because it grows fast, casts genuinely deep shade, and asks for very little water once established. Every part of it is bitter, which is why so few pests touch it — and why its oil is sold as an organic pesticide.',
+      significance:
+        'The single most common shade tree in UAE urban planting, and the source of the neem oil this app recommends for pest problems on other species.',
+      health:
+        'Healthy Neem is uniformly dark and glossy. Yellowing between the veins while the veins stay green is classic iron chlorosis, very common in the UAE’s alkaline soils; sudden branch-by-branch wilting can indicate a root or vascular problem rather than anything on the leaf.',
+    },
+    ar: {
+      name: 'النيم',
+      family: 'الفصيلة المهوغانية',
+      leaf: 'أوراق ريشية طولها ٢٠–٤٠ سم تحمل ٨–١٩ وريقة، كل واحدة منحنية كالسيف بحافة مسننة واضحة وقاعدة غير متماثلة، خضراء داكنة لامعة ومرّة المذاق.',
+      about:
+        'النيم ليس محلياً في الإمارات، لكنه زُرع في شوارعها ومواقفها وساحات مدارسها أكثر من أي شجرة أخرى تقريباً، لأنه سريع النمو، وظله كثيف حقاً، ولا يطلب ماءً كثيراً بعد رسوخه. وكل أجزائه مرّة، ولهذا تتجنبه الآفات، ولهذا أيضاً يُباع زيته كمبيد عضوي.',
+      significance:
+        'أكثر أشجار الظل شيوعاً في التشجير الحضري بالإمارات، ومصدر زيت النيم الذي يوصي به هذا التطبيق لمشكلات الآفات في الأنواع الأخرى.',
+      health:
+        'النيم السليم داكن لامع متجانس. أما اصفرار ما بين العروق مع بقاء العروق خضراء فهو اصفرار الحديد الكلاسيكي، وهو شائع جداً في تربة الإمارات القلوية؛ والذبول المفاجئ فرعاً بعد فرع يشير إلى مشكلة في الجذور أو الأوعية لا في الورقة.',
+    },
+  },
+  {
+    key: 'osher',
+    emoji: '🫧',
+    latin: 'Calotropis procera',
+    en: {
+      name: 'Apple of Sodom',
+      family: 'Apocynaceae',
+      leaf: 'Very large, thick, oval leaves 8–20 cm long in opposite pairs, pale blue-grey-green and covered in a fine woolly down that rubs off. They clasp the stem directly with almost no stalk, and any break bleeds thick white latex.',
+      about:
+        'Osher is the big grey-leaved shrub growing out of waste ground, roadside gravel and dry wadi beds all over the UAE — most people have walked past a hundred of them without knowing the name. Its milky sap is toxic and irritates skin and eyes, which is exactly why nothing grazes it and why it thrives where everything else has been eaten.',
+      significance:
+        'A reliable indicator of disturbed or overgrazed ground. Traditionally its floss was used for stuffing and its latex, very cautiously, in folk medicine — it is genuinely poisonous and is not something to experiment with.',
+      health:
+        'The natural leaf colour is pale grey-green with a woolly bloom, so this species reads as low-greenness even when perfectly healthy — do not mistake that for chlorosis. Real problems show as brown-edged, collapsing leaves or as heavy infestations of the orange-and-black bugs that specialise in it.',
+    },
+    ar: {
+      name: 'العشر',
+      family: 'الفصيلة الدفلية',
+      leaf: 'أوراق كبيرة سميكة بيضاوية طولها ٨–٢٠ سم في أزواج متقابلة، رمادية زرقاء شاحبة مغطاة بزغب ناعم يزول بالفرك، تلتصق بالساق بلا عنق تقريباً، وأي كسر فيها ينزّ لبناً أبيض كثيفاً.',
+      about:
+        'العشر هو الشجيرة الكبيرة رمادية الأوراق التي تنبت في الأراضي المهملة وحصى الطرق وبطون الأودية الجافة في أنحاء الإمارات، وقد مرّ أكثر الناس بمئة منها دون أن يعرفوا اسمها. عصارتها اللبنية سامة وتهيّج الجلد والعين، ولهذا لا ترعاها الماشية، ولهذا تزدهر حيث أُكل كل ما سواها.',
+      significance:
+        'دليل موثوق على أرض مضطربة أو مرعية بإفراط. وكان وبرها يُستخدم تقليدياً في الحشو، ولبنها بحذر شديد في الطب الشعبي، وهو سامّ فعلاً ولا يصح تجريبه.',
+      health:
+        'لون الورقة الطبيعي رمادي أخضر شاحب بزغب، ولذلك يظهر هذا النوع منخفض الخضرة حتى وهو سليم تماماً، فلا يُخلط ذلك بالاصفرار المرضي. المشكلات الحقيقية تظهر كحواف بنية وأوراق منهارة، أو كإصابة كثيفة بالحشرات البرتقالية والسوداء المتخصصة به.',
+    },
+  },
+  {
+    key: 'mesquite',
+    emoji: '⚠️',
+    latin: 'Prosopis juliflora',
+    en: {
+      name: 'Mesquite',
+      family: 'Fabaceae (legume family)',
+      leaf: 'Bipinnate like the Ghaf, but with far fewer, much larger and darker leaflets — usually 1 to 3 pairs of side branches carrying 12–25 pairs of leaflets each, and a brighter, glossier green. The thorns are long, paired and straight, where the Ghaf’s are short and scattered.',
+      about:
+        'Mesquite is the Ghaf’s invasive double. Introduced to the region for fuelwood and dune stabilisation, it escaped, and it now outcompetes native Ghaf across large areas: it grows faster, drinks more groundwater, and forms thickets so dense that nothing establishes underneath. Telling the two apart at a glance is genuinely difficult, which is a large part of why the invasion went unnoticed for so long.',
+      significance:
+        'Included in this app on purpose. A tree identifier for the UAE that cannot distinguish native Ghaf from invasive mesquite has dodged the one identification question here that actually has consequences.',
+      health:
+        'Mesquite is usually the healthiest-looking tree in a degraded landscape, which is the point — vigour is not a good sign here. If you have identified mesquite in an area of native Ghaf, the useful action is to report it, not to treat it.',
+    },
+    ar: {
+      name: 'المسكيت',
+      family: 'الفصيلة البقولية',
+      leaf: 'ريشية مزدوجة كالغاف، لكن بوريقات أقل عدداً وأكبر حجماً وأغمق لوناً: عادةً ١ إلى ٣ أزواج من الأفرع الجانبية تحمل كل منها ١٢–٢٥ زوجاً من الوريقات، وخضرتها أزهى وألمع. وأشواكه طويلة مزدوجة مستقيمة، بينما أشواك الغاف قصيرة متفرقة.',
+      about:
+        'المسكيت هو شبيه الغاف الغازي. أُدخل إلى المنطقة للحطب وتثبيت الكثبان فانفلت، وهو اليوم يزاحم الغاف المحلي في مساحات واسعة: ينمو أسرع، ويستهلك مياهاً جوفية أكثر، ويكوّن أدغالاً كثيفة لا ينبت تحتها شيء. والتفريق بينهما بنظرة واحدة صعب فعلاً، وهذا سبب كبير لمرور الغزو دون انتباه طويلاً.',
+      significance:
+        'أُدرج في هذا التطبيق عن قصد. فمعرّف أشجار للإمارات لا يفرّق بين الغاف المحلي والمسكيت الغازي يكون قد تهرّب من سؤال التعريف الوحيد الذي تترتب عليه نتائج.',
+      health:
+        'المسكيت غالباً أصحّ ما في المشهد المتدهور مظهراً، وهذا هو بيت القصيد: قوة النمو ليست علامة جيدة هنا. وإذا تعرّفت على مسكيت في منطقة غاف محلي، فالإجراء المفيد هو الإبلاغ لا المعالجة.',
     },
   },
 ];

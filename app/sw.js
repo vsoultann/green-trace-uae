@@ -6,12 +6,13 @@
  * Bump CACHE when anything in the app changes; the activate step deletes every
  * older cache so a stale model can never linger.
  */
-const CACHE = 'green-trace-v2';
+const CACHE = 'green-trace-v3';
 
 const SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './css/themes.css',
   './css/app.css',
   './css/anim.css',
   './vendor/tf.min.js',

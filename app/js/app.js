@@ -11,7 +11,7 @@ import { SECTIONS, QUOTES, LEADERS } from './data/about.js';
 import { TREATMENTS, SPECIES_ALERTS, treatmentsFor } from './data/treatments.js';
 import { SUPPLIERS, HELPLINES, categoryFor } from './data/suppliers.js';
 import { t, lang, setLang, initLang } from './i18n.js';
-import { THEMES, currentTheme, applyTheme, initTheme } from './themes.js';
+import { THEMES, THEME_GROUPS, currentTheme, applyTheme, initTheme } from './themes.js';
 import { loadModel, classify, isUncertain, recognitionState, getMetadata } from './model.js';
 import { analyseLeaf, FINDING_TEXT } from './health.js';
 import { speciesIcon, UI_ICON } from './icons.js';
@@ -58,41 +58,54 @@ function stopCamera() {
 
 /* ------------------------------------------------------------------ views */
 
+/**
+ * The scan screen.
+ *
+ * It used to be three stacked boxes — a gradient panel with a headline, an empty
+ * dashed rectangle, and a card of tips — which is a lot of vertical space
+ * spent saying very little, and it is the layout every generated app arrives at.
+ *
+ * Now it is one composed panel: the headline, the target you point at a leaf,
+ * and the two buttons all live on the same surface, so the page has a subject
+ * rather than a stack. The tips collapse to a single line, and the space that
+ * frees up goes to something with actual content — the ten species the model
+ * knows, which is both reassurance and an invitation to go and read about them.
+ */
 function scanView() {
+  const strip = SPECIES.map((sp) => `
+    <a class="known" href="#/tree/${sp.key}">
+      <span aria-hidden="true">${speciesIcon(sp.key)}</span>
+      <b>${esc(L(sp).name)}</b>
+    </a>`).join('');
+
   return `
-    <section class="hero">
+    <section class="capture-panel">
+      <span class="eyebrow">${esc(t('scan.eyebrow'))}</span>
       <h1>${esc(t('scan.title'))}</h1>
-      <p>${esc(t('scan.lede'))}</p>
+      <p class="lede">${esc(t('scan.lede'))}</p>
+
+      <div id="capture-area">
+        <div class="viewfinder" id="dropzone" role="button" tabindex="0"
+             aria-label="${esc(t('scan.drop'))}">
+          <span class="corner tl"></span><span class="corner tr"></span>
+          <span class="corner bl"></span><span class="corner br"></span>
+          <span class="vf-leaf" aria-hidden="true">${speciesIcon('sidr')}</span>
+          <strong>${esc(t('scan.drop'))}</strong>
+          <span class="faint">${esc(t('scan.dropHint'))}</span>
+        </div>
+
+        <div class="row capture-actions">
+          <button class="btn" id="btn-camera" type="button">
+            <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="13" r="3.5"/><path d="M3 8.8A2 2 0 0 1 5 7h1.6l1-2h4.8l1 2H19a2 2 0 0 1 2 1.8v8.4a2 2 0 0 1-2 1.8H5a2 2 0 0 1-2-1.8V8.8Z" stroke-linejoin="round"/></svg>
+            ${esc(t('scan.camera'))}
+          </button>
+          <button class="btn ghost" id="btn-upload" type="button">${esc(t('scan.upload'))}</button>
+        </div>
+        <input type="file" id="file" accept="image/*" hidden>
+
+        <p class="tipline">${esc(t('scan.tipLine'))}</p>
+      </div>
     </section>
-
-    <div id="capture-area">
-      <div class="dropzone" id="dropzone" role="button" tabindex="0"
-           aria-label="${esc(t('scan.drop'))}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-          <path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2a2 2 0 0 0 1.7-1l.5-.8A2 2 0 0 1 11.6 3h.8a2 2 0 0 1 1.7 1.2l.5.8a2 2 0 0 0 1.7 1h1.2A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-8Z" stroke-linejoin="round"/>
-          <circle cx="12" cy="12.4" r="3.6"/>
-        </svg>
-        <strong>${esc(t('scan.drop'))}</strong>
-        <span class="faint">${esc(t('scan.dropHint'))}</span>
-      </div>
-      <div class="row" style="margin-top:12px">
-        <button class="btn" id="btn-camera" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="13" r="3.5"/><path d="M3 8.8A2 2 0 0 1 5 7h1.6l1-2h4.8l1 2H19a2 2 0 0 1 2 1.8v8.4a2 2 0 0 1-2 1.8H5a2 2 0 0 1-2-1.8V8.8Z" stroke-linejoin="round"/></svg>
-          ${esc(t('scan.camera'))}
-        </button>
-        <button class="btn ghost" id="btn-upload" type="button">${esc(t('scan.upload'))}</button>
-      </div>
-      <input type="file" id="file" accept="image/*" hidden>
-    </div>
-
-    <div class="card" style="margin-top:18px">
-      <h3>${esc(t('scan.tipTitle'))}</h3>
-      <ul class="findings">
-        <li class="ok"><i class="dot"></i><span>${esc(t('scan.tip1'))}</span></li>
-        <li class="ok"><i class="dot"></i><span>${esc(t('scan.tip2'))}</span></li>
-        <li class="ok"><i class="dot"></i><span>${esc(t('scan.tip3'))}</span></li>
-      </ul>
-    </div>
 
     <div id="model-status" class="card" hidden>
       <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -101,6 +114,14 @@ function scanView() {
       </div>
       <div class="bar"><i id="model-bar"></i></div>
     </div>
+
+    <section class="knows">
+      <div class="knows-head">
+        <span class="eyebrow" style="margin:0">${esc(t('scan.knows', { n: SPECIES.length }))}</span>
+        <a href="#/library">${esc(t('scan.knowsAll'))} →</a>
+      </div>
+      <div class="known-strip">${strip}</div>
+    </section>
   `;
 }
 
@@ -125,7 +146,7 @@ function dial(score) {
  * The species half of the result — or an honest refusal.
  *
  * The 'unknown' branch is the important one. A judge's first move is to point
- * the camera at something that is not one of the four trees, and answering
+ * the camera at something that is not one of the trees at all, and answering
  * "Ghaf, 61%" to a photograph of a coffee cup discredits everything else on
  * the screen. Saying "I don't recognise this" is a feature, so it is presented
  * as a verdict rather than as an error.
@@ -189,6 +210,31 @@ function speciesSection() {
     </div>`;
 }
 
+/**
+ * A warning that belongs to the species rather than to its health.
+ *
+ * `when: null` means "always, regardless of findings" — which is right for an
+ * invasive species, where a vigorous healthy specimen is the bad news. Alerts
+ * with a `when` list only fire alongside the matching health findings.
+ */
+function speciesAlert() {
+  const { prediction, recognition, health } = lastScan;
+  if (recognition.state === 'unknown') return '';
+
+  const sa = SPECIES_ALERTS[prediction.top.key];
+  if (!sa) return '';
+
+  if (sa.when) {
+    const problems = health.valid ? health.findings.filter((f) => f.level !== 'ok') : [];
+    if (!problems.some((f) => sa.when.includes(f.key))) return '';
+  }
+
+  return `<div class="alert ${esc(sa.level)}">
+      <h3>${esc(L(sa.title))}</h3>
+      <p>${esc(L(sa.body))}</p>
+    </div>`;
+}
+
 /** The treatment plan, plus where to buy it. Only rendered when something is wrong. */
 function treatmentSection() {
   const { health, prediction, recognition } = lastScan;
@@ -200,17 +246,6 @@ function treatmentSection() {
   const keys = treatmentsFor(problems);
   if (!keys.length) return '';
 
-  // A notifiable pest outranks any shopping list.
-  let alert = '';
-  if (recognition.state !== 'unknown') {
-    const sa = SPECIES_ALERTS[prediction.top.key];
-    if (sa && problems.some((f) => sa.when.includes(f.key))) {
-      alert = `<div class="alert">
-          <h3>${esc(L(sa.title))}</h3>
-          <p>${esc(L(sa.body))}</p>
-        </div>`;
-    }
-  }
 
   const blocks = keys.map((key) => {
     const tr = TREATMENTS[key];
@@ -237,7 +272,6 @@ function treatmentSection() {
   const category = categoryFor(TREATMENTS[keys[0]].products[0].search);
 
   return `
-    ${alert}
     <div class="card">
       <span class="eyebrow">${esc(t('treat.title'))}</span>
       ${blocks}
@@ -302,6 +336,8 @@ function resultView() {
     </div>
 
     ${speciesSection()}
+
+    ${speciesAlert()}
 
     <div class="card">
       <span class="eyebrow">${esc(t('result.health'))}</span>
@@ -390,6 +426,7 @@ function nearbyView() {
 /* --------------------------------------------------------------- library */
 
 function libraryView() {
+  const trained = getMetadata()?.classes ?? null;
   return `
     <h1>${esc(t('library.title'))}</h1>
     <p class="muted">${esc(t('library.lede'))}</p>
@@ -397,11 +434,16 @@ function libraryView() {
       ${SPECIES.map((s) => {
         const c = L(s);
         const other = lang() === 'en' ? s.ar.name : s.en.name;
-        return `<a class="species-card" href="#/tree/${s.key}">
+        // A species can have reference text here before the model has been
+        // retrained to recognise it. Saying so is better than letting someone
+        // photograph a mangrove leaf and wonder why it comes back as a Ghaf.
+        const untrained = trained && !trained.includes(s.key);
+        return `<a class="species-card${untrained ? ' untrained' : ''}" href="#/tree/${s.key}">
             <span class="em" aria-hidden="true">${speciesIcon(s.key)}</span>
             <b>${esc(c.name)}</b>
             <span class="ar">${esc(other)}</span>
             <i>${esc(s.latin)}</i>
+            ${untrained ? `<span class="tag">${esc(t('library.referenceOnly'))}</span>` : ''}
           </a>`;
       }).join('')}
     </div>`;
@@ -731,6 +773,15 @@ function wireView(name) {
     return;
   }
 
+  if (name === 'library') {
+    // The reference-only badges come from the deployed model's class list, so
+    // fetch the metadata and repaint once it lands.
+    if (!getMetadata()) {
+      loadModel().then(() => { if (currentRoute().name === 'library') render(); }).catch(() => {});
+    }
+    return;
+  }
+
   if (name === 'nearby') { wireLocate(); return; }
 
   if (name === 'result') {
@@ -924,19 +975,40 @@ async function handleFile(fileOrBlob) {
 
 const sheet = document.getElementById('sheet');
 
+/**
+ * The theme picker.
+ *
+ * Sixteen palettes is too many for a flat list, so they are grouped by what a
+ * person is actually choosing between — light or dark, ours or a familiar one —
+ * and each row previews four real colours from the palette rather than a
+ * decorative gradient: page, accent, healthy, damaged. Those are the four the
+ * user will meet on a result screen, so the swatch is a genuine preview.
+ */
 function paintThemeList() {
   const list = document.getElementById('theme-list');
   const active = currentTheme();
-  list.innerHTML = THEMES.map((th) => `
+
+  const row = (th) => `
     <button class="theme-opt" type="button" role="radio" data-theme-id="${th.id}"
             aria-checked="${th.id === active}">
-      <span class="swatch" style="background:${th.swatch}"></span>
-      <span>
-        <b>${esc(t(`theme.${th.id}`))}</b>
-        <span>${esc(t(`theme.${th.id}.d`))}</span>
+      <span class="swatch" aria-hidden="true">
+        ${th.swatch.map((c) => `<i style="background:${esc(c)}"></i>`).join('')}
+      </span>
+      <span class="theme-name">
+        <b>${esc(th.name)}</b>
+        <span>${esc(L(th.note))}</span>
       </span>
       ${th.id === active ? '<span class="tick" aria-hidden="true">✓</span>' : ''}
-    </button>`).join('');
+    </button>`;
+
+  list.innerHTML = THEME_GROUPS.map((group) => {
+    const inGroup = THEMES.filter((th) => th.group === group);
+    if (!inGroup.length) return '';
+    return `<div class="theme-group" role="group" aria-label="${esc(t(`theme.group.${group}`))}">
+        <h4>${esc(t(`theme.group.${group}`))}</h4>
+        ${inGroup.map(row).join('')}
+      </div>`;
+  }).join('');
 
   list.querySelectorAll('[data-theme-id]').forEach((btn) => {
     btn.addEventListener('click', () => {
