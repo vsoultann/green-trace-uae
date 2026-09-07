@@ -848,6 +848,12 @@ dialog.sheet h2 { margin-bottom: 14px; }
 @media (min-width: 620px) {
   main { padding-inline: 26px; }
 
+  /* Hold both languages of a quote to one measure as soon as the page is wide
+     enough for them to drift apart. Without this the Arabic line, which is
+     right-aligned, ends up at the far edge and stops reading as the same
+     quotation as the English above it. */
+  .quote { max-width: 34em; }
+
   .hero { padding: 36px 32px; }
   .aboutus-hero { padding: 52px 36px 44px; }
 
@@ -949,7 +955,6 @@ dialog.sheet h2 { margin-bottom: 14px; }
      The limit goes on the figure, not on the blockquote: constraining only the
      English left the Arabic line free to travel to the far right edge, where it
      no longer read as the same quotation. */
-  .quote { max-width: 34em; }
   .quote blockquote { font-size: clamp(1.4rem, 2vw, 1.8rem); }
   .aboutus-hero p { max-width: 46ch; }
 
