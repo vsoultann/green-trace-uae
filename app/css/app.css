@@ -1,85 +1,107 @@
 /* ==========================================================================
-   Green-Trace UAE - theme tokens
+   Green-Trace UAE — theme tokens
+
    Every theme redefines the same token set, so components never hard-code a
    colour. `data-theme` on <html> selects one; absence of it means "follow the
    operating system", handled by the prefers-color-scheme block.
+
+   The flag colours are held separately from the theme accents. Red, green,
+   white and black belong to the flag and are used as a signature — a rule at
+   the top of the page, a mark in the masthead — not as UI paint. A whole
+   interface coloured in a national flag reads as a souvenir; a restrained
+   quotation of it reads as belonging somewhere.
    ========================================================================== */
+
+:root {
+  --uae-red: #ef3340;
+  --uae-green: #009739;
+  --uae-black: #151515;
+  --uae-white: #ffffff;
+}
 
 :root,
 [data-theme='desert-dawn'] {
   color-scheme: light;
-  --bg: #fbf6ec;
-  --bg-elev: #ffffff;
-  --bg-sunk: #f2e9d8;
-  --ink: #2a2318;
-  --ink-soft: #6d6045;
-  --ink-faint: #9a8b6c;
-  --line: #e4d7bd;
-  --accent: #b8791f;
-  --accent-ink: #ffffff;
-  --accent-soft: #f6e6c9;
-  --ok: #4b7f3a;
-  --warn: #b8791f;
-  --bad: #b2452f;
-  --shadow: 0 1px 2px rgba(60, 45, 15, .07), 0 8px 24px -12px rgba(60, 45, 15, .22);
-  --hero: linear-gradient(155deg, #f7e2b8, #e8c98d 48%, #d8b478);
+  --bg: #f7f2e7;
+  --bg-elev: #fffdf8;
+  --bg-sunk: #efe6d3;
+  --ink: #1f1a12;
+  --ink-soft: #5c5241;
+  --ink-faint: #8d8168;
+  --line: #ddd0b4;
+  --rule: #cbb694;
+  --accent: #9a6b16;
+  --accent-ink: #fffdf8;
+  --accent-soft: #f2e5c8;
+  --ok: #3f7233;
+  --warn: #a8741a;
+  --bad: #a83a26;
+  --shadow: 0 1px 2px rgba(60, 45, 15, .06), 0 10px 30px -18px rgba(60, 45, 15, .34);
+  --hero: radial-gradient(120% 130% at 15% 0%, #fbf0d6 0%, #f3e3c0 45%, #e8d3a6 100%);
+  --pattern: rgba(154, 107, 22, .07);
 }
 
 [data-theme='oasis'] {
   color-scheme: light;
-  --bg: #f3f8f1;
-  --bg-elev: #ffffff;
-  --bg-sunk: #e3efdf;
-  --ink: #172419;
-  --ink-soft: #4c6350;
-  --ink-faint: #7d9481;
-  --line: #d3e5cd;
-  --accent: #2f7d4f;
+  --bg: #f2f7f0;
+  --bg-elev: #fdfffc;
+  --bg-sunk: #e2eede;
+  --ink: #131d15;
+  --ink-soft: #465c49;
+  --ink-faint: #748c78;
+  --line: #cfe2ca;
+  --rule: #b3d0ad;
+  --accent: #206b41;
   --accent-ink: #ffffff;
-  --accent-soft: #d8ecdd;
-  --ok: #2f7d4f;
-  --warn: #b07d12;
-  --bad: #b03a2e;
-  --shadow: 0 1px 2px rgba(20, 50, 30, .07), 0 8px 24px -12px rgba(20, 50, 30, .24);
-  --hero: linear-gradient(155deg, #cfe9d2, #a9d6b4 48%, #7fbf9a);
+  --accent-soft: #d5ebda;
+  --ok: #206b41;
+  --warn: #9a6d10;
+  --bad: #a3352a;
+  --shadow: 0 1px 2px rgba(20, 50, 30, .06), 0 10px 30px -18px rgba(20, 50, 30, .36);
+  --hero: radial-gradient(120% 130% at 15% 0%, #e2f2e4 0%, #c9e6cf 45%, #a6d3b4 100%);
+  --pattern: rgba(32, 107, 65, .07);
 }
 
 [data-theme='night-falcon'] {
   color-scheme: dark;
-  --bg: #12151c;
-  --bg-elev: #1b1f29;
-  --bg-sunk: #0d1015;
-  --ink: #eef1f6;
-  --ink-soft: #a7afc0;
-  --ink-faint: #6f7788;
-  --line: #2b3140;
-  --accent: #e0a94a;
-  --accent-ink: #1a1408;
-  --accent-soft: #2e2717;
-  --ok: #62bd74;
-  --warn: #e0a94a;
-  --bad: #e2705c;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 32px -14px rgba(0, 0, 0, .8);
-  --hero: linear-gradient(155deg, #232a3a, #1a2030 48%, #131722);
+  --bg: #101319;
+  --bg-elev: #191d26;
+  --bg-sunk: #0b0e13;
+  --ink: #f0f3f8;
+  --ink-soft: #a8b0c1;
+  --ink-faint: #737b8c;
+  --line: #282e3c;
+  --rule: #394153;
+  --accent: #d9a441;
+  --accent-ink: #171104;
+  --accent-soft: #2b2415;
+  --ok: #5fbb72;
+  --warn: #d9a441;
+  --bad: #df6d59;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 36px -18px rgba(0, 0, 0, .9);
+  --hero: radial-gradient(120% 130% at 15% 0%, #232b3d 0%, #191f2d 45%, #11151e 100%);
+  --pattern: rgba(217, 164, 65, .06);
 }
 
 [data-theme='mangrove'] {
   color-scheme: dark;
-  --bg: #0c1a1a;
-  --bg-elev: #132626;
-  --bg-sunk: #081212;
-  --ink: #e6f4f1;
-  --ink-soft: #9fbdb7;
-  --ink-faint: #6b8a85;
-  --line: #1f3a38;
-  --accent: #3fbfa3;
-  --accent-ink: #04201b;
-  --accent-soft: #16332e;
-  --ok: #3fbfa3;
-  --warn: #d9a441;
-  --bad: #e0705f;
-  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 32px -14px rgba(0, 0, 0, .75);
-  --hero: linear-gradient(155deg, #1a3b38, #122c2b 48%, #0d201f);
+  --bg: #0a1717;
+  --bg-elev: #112322;
+  --bg-sunk: #061010;
+  --ink: #e4f3f0;
+  --ink-soft: #9dbcb6;
+  --ink-faint: #6a8984;
+  --line: #1c3634;
+  --rule: #274947;
+  --accent: #35b499;
+  --accent-ink: #032019;
+  --accent-soft: #143029;
+  --ok: #35b499;
+  --warn: #d09c3c;
+  --bad: #dd6d5c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 14px 36px -18px rgba(0, 0, 0, .85);
+  --hero: radial-gradient(120% 130% at 15% 0%, #17403c 0%, #102c2b 45%, #0a1e1d 100%);
+  --pattern: rgba(53, 180, 153, .06);
 }
 
 [data-theme='contrast'] {
@@ -88,9 +110,10 @@
   --bg-elev: #0a0a0a;
   --bg-sunk: #000000;
   --ink: #ffffff;
-  --ink-soft: #e8e8e8;
-  --ink-faint: #bdbdbd;
+  --ink-soft: #ececec;
+  --ink-faint: #c4c4c4;
   --line: #ffffff;
+  --rule: #ffffff;
   --accent: #ffd400;
   --accent-ink: #000000;
   --accent-soft: #332b00;
@@ -98,19 +121,22 @@
   --warn: #ffd400;
   --bad: #ff6b5a;
   --shadow: none;
-  --hero: linear-gradient(155deg, #1a1a1a, #000000);
+  --hero: none;
+  --pattern: transparent;
 }
 
 /* System-preference default: only applies when no explicit theme is chosen. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
-    --bg: #12151c; --bg-elev: #1b1f29; --bg-sunk: #0d1015;
-    --ink: #eef1f6; --ink-soft: #a7afc0; --ink-faint: #6f7788;
-    --line: #2b3140; --accent: #e0a94a; --accent-ink: #1a1408; --accent-soft: #2e2717;
-    --ok: #62bd74; --warn: #e0a94a; --bad: #e2705c;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 32px -14px rgba(0,0,0,.8);
-    --hero: linear-gradient(155deg, #232a3a, #1a2030 48%, #131722);
+    --bg: #101319; --bg-elev: #191d26; --bg-sunk: #0b0e13;
+    --ink: #f0f3f8; --ink-soft: #a8b0c1; --ink-faint: #737b8c;
+    --line: #282e3c; --rule: #394153;
+    --accent: #d9a441; --accent-ink: #171104; --accent-soft: #2b2415;
+    --ok: #5fbb72; --warn: #d9a441; --bad: #df6d59;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 14px 36px -18px rgba(0,0,0,.9);
+    --hero: radial-gradient(120% 130% at 15% 0%, #232b3d 0%, #191f2d 45%, #11151e 100%);
+    --pattern: rgba(217, 164, 65, .06);
   }
 }
 
@@ -119,7 +145,7 @@
 [data-theme='contrast'] .btn { border-width: 2px; }
 
 /* ==========================================================================
-   Base layout
+   Base
    ========================================================================== */
 
 * { box-sizing: border-box; }
@@ -130,7 +156,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 400 16px/1.55 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font: 400 16px/1.6 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -142,35 +168,114 @@ html[dir='rtl'] body {
   font-family: 'Noto Sans Arabic', 'Segoe UI', system-ui, sans-serif;
 }
 
-h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; font-weight: 650; letter-spacing: -.015em; }
-h1 { font-size: clamp(1.5rem, 4.5vw, 2rem); }
-h2 { font-size: clamp(1.15rem, 3.2vw, 1.4rem); }
-h3 { font-size: 1rem; }
+/* Headings get a display face and tighter tracking than the body. The step
+   between the two is what stops a page reading as one undifferentiated block. */
+h1, h2, h3, h4 {
+  line-height: 1.15;
+  margin: 0 0 .5em;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  font-family: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+}
+html[dir='rtl'] h1, html[dir='rtl'] h2,
+html[dir='rtl'] h3, html[dir='rtl'] h4 {
+  font-family: 'Noto Kufi Arabic', 'Noto Sans Arabic', system-ui, sans-serif;
+  letter-spacing: 0;
+}
+h1 { font-size: clamp(1.7rem, 5.5vw, 2.5rem); }
+h2 { font-size: clamp(1.25rem, 3.6vw, 1.6rem); }
+h3 { font-size: 1.05rem; font-family: inherit; font-weight: 650; letter-spacing: -.01em; }
 p { margin: 0 0 1em; }
 a { color: var(--accent); }
 
-/* Screen-reader-only text, used for live status announcements. */
+/** A small caps-and-tracking label. Used instead of yet another heading level. */
+.eyebrow {
+  display: block;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+html[dir='rtl'] .eyebrow { letter-spacing: .04em; }
+
 .sr {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-/* ---- app frame ---- */
+/* ==========================================================================
+   The flag rule
+
+   Four bands in the flag's proportions, pinned above the masthead. It is the
+   single most economical way to say where this app is from, and it costs one
+   element and no images.
+   ========================================================================== */
+
+.flagrule {
+  height: 6px;
+  flex: none;
+  display: grid;
+  /* Rows, not columns. The UAE flag is a red vertical hoist beside three
+     horizontal bands; laying the bands out side by side would be a different
+     flag entirely. Six pixels is the least that still reads as three stripes. */
+  grid-template-rows: repeat(3, 1fr);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+.flagrule i:nth-child(1) { background: var(--uae-green); }
+.flagrule i:nth-child(2) { background: var(--uae-white); }
+.flagrule i:nth-child(3) { background: var(--uae-black); }
+.flagrule::before {
+  content: '';
+  position: absolute; inset: 0 auto 0 0;
+  width: 26%;
+  background: var(--uae-red);
+  z-index: 1;
+}
+/* Deliberately NOT mirrored in RTL. Layout flips; a national flag does not.
+   The red hoist stays on the viewer's left in both directions, because that is
+   the flag — mirroring it would show a different one. */
+
+/* ==========================================================================
+   Masthead
+   ========================================================================== */
 
 .topbar {
-  position: sticky; top: 0; z-index: 30;
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px max(14px, env(safe-area-inset-left)) 10px max(14px, env(safe-area-inset-right));
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(12px);
+  position: sticky; top: 6px; z-index: 30;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px max(16px, env(safe-area-inset-left)) 12px max(16px, env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
 
-.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; letter-spacing: -.02em;
-  color: inherit; text-decoration: none; }
-.brand svg { width: 26px; height: 26px; flex: none; }
-.brand span { font-size: 1.02rem; }
-.brand small { display: block; font-size: .64rem; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; text-transform: uppercase; }
+.brand {
+  display: flex; align-items: center; gap: 11px;
+  color: inherit; text-decoration: none;
+}
+.brand .mark {
+  width: 34px; height: 34px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+}
+.brand .mark svg { width: 22px; height: 22px; }
+.brand-text { display: grid; }
+.brand-text b {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.08rem; font-weight: 600; letter-spacing: -.02em;
+}
+html[dir='rtl'] .brand-text b { font-family: 'Noto Kufi Arabic', system-ui, sans-serif; }
+.brand-text small {
+  font-size: .62rem; font-weight: 600; color: var(--ink-faint);
+  letter-spacing: .1em; text-transform: uppercase;
+}
+html[dir='rtl'] .brand-text small { letter-spacing: .02em; }
 .topbar .spacer { flex: 1; }
 
 .iconbtn {
@@ -178,56 +283,87 @@ a { color: var(--accent); }
   width: 40px; height: 40px; flex: none;
   border: 1px solid var(--line); border-radius: 11px;
   background: var(--bg-elev); color: var(--ink);
-  cursor: pointer; font-size: .8rem; font-weight: 650;
+  cursor: pointer; font-size: .82rem; font-weight: 650;
   transition: background-color .15s, border-color .15s, transform .1s;
 }
 .iconbtn:hover { border-color: var(--accent); }
 .iconbtn:active { transform: scale(.94); }
 .iconbtn svg { width: 19px; height: 19px; }
 
-main { position: relative; z-index: 1; flex: 1; width: 100%; max-width: 780px; margin: 0 auto; padding: 18px max(14px, env(safe-area-inset-left)) 96px; }
+main {
+  position: relative; z-index: 1; flex: 1; width: 100%;
+  max-width: 760px; margin: 0 auto;
+  padding: 22px max(16px, env(safe-area-inset-left)) 104px;
+}
+main.wide { max-width: 860px; }
 
-/* ---- bottom navigation ---- */
+/* ==========================================================================
+   Bottom navigation
+   ========================================================================== */
 
 .tabbar {
   position: fixed; inset: auto 0 0 0; z-index: 30;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  background: color-mix(in srgb, var(--bg-elev) 94%, transparent);
-  backdrop-filter: blur(14px);
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  background: color-mix(in srgb, var(--bg-elev) 95%, transparent);
+  backdrop-filter: blur(16px);
   border-top: 1px solid var(--line);
   padding-bottom: env(safe-area-inset-bottom);
 }
 .tabbar a {
   display: grid; justify-items: center; gap: 3px;
-  padding: 9px 4px 8px; text-decoration: none;
-  color: var(--ink-faint); font-size: .66rem; font-weight: 600; letter-spacing: .01em;
+  padding: 9px 2px 8px; text-decoration: none;
+  color: var(--ink-faint); font-size: .62rem; font-weight: 650;
 }
-.tabbar a svg { width: 21px; height: 21px; }
+.tabbar a svg { width: 20px; height: 20px; }
 .tabbar a[aria-current='page'] { color: var(--accent); }
 
-/* ---- generic surfaces ---- */
+/* ==========================================================================
+   Surfaces
+   ========================================================================== */
 
 .card {
   background: var(--bg-elev);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 18px;
   box-shadow: var(--shadow);
   margin-bottom: 14px;
 }
 
+/* A section that is *not* a card. Rules and space instead of a box — used to
+   break up the endless-cards rhythm that makes a page look machine-made. */
+.plain {
+  padding: 26px 0;
+  border-top: 1px solid var(--rule);
+  margin-bottom: 0;
+}
+.plain:first-of-type { border-top: 0; padding-top: 8px; }
+
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 13px 20px; border-radius: 13px;
+  padding: 13px 22px; border-radius: 12px;
   border: 1px solid transparent; background: var(--accent); color: var(--accent-ink);
-  font: inherit; font-weight: 650; cursor: pointer;
+  font: inherit; font-weight: 650; cursor: pointer; text-decoration: none;
   transition: filter .15s, transform .1s;
 }
-.btn:hover { filter: brightness(1.06); }
+.btn:hover { filter: brightness(1.07); }
 .btn:active { transform: scale(.98); }
 .btn svg { width: 19px; height: 19px; }
 .btn.ghost { background: var(--bg-elev); color: var(--ink); border-color: var(--line); }
 .btn.wide { width: 100%; }
+.btn.small { padding: 9px 14px; font-size: .85rem; border-radius: 10px; }
+
+/* The one call to action that should look like an invitation rather than a
+   control: large, warm, and carrying the flag's red. */
+.btn.hero-cta {
+  padding: 17px 30px;
+  font-size: 1.05rem;
+  border-radius: 14px;
+  background: var(--uae-red);
+  color: #fff;
+  box-shadow: 0 10px 28px -14px var(--uae-red);
+}
+.btn.hero-cta:hover { filter: brightness(1.05); }
 
 :where(a, button, input, select, [tabindex]):focus-visible {
   outline: 3px solid var(--accent);
@@ -235,145 +371,440 @@ main { position: relative; z-index: 1; flex: 1; width: 100%; max-width: 780px; m
   border-radius: 8px;
 }
 
+/* Inline interface icons.
+   These are used both inside buttons and loose in a line of text. Without an
+   explicit size a loose one inherits the SVG default of 300x150 and takes over
+   the page, which is exactly what happened to the opening-hours clock. */
+svg.i { width: 1.05em; height: 1.05em; flex: none; vertical-align: -.16em; }
+.btn svg.i { width: 17px; height: 17px; }
+
 .muted { color: var(--ink-soft); }
-.faint { color: var(--ink-faint); font-size: .8rem; }
+.faint { color: var(--ink-faint); font-size: .82rem; }
 .row { display: flex; gap: 10px; flex-wrap: wrap; }
-.stack > * + * { margin-top: 12px; }
+.center { text-align: center; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
 
 /* ==========================================================================
-   Scan view
+   Hero
    ========================================================================== */
 
 .hero {
+  position: relative;
   background: var(--hero);
-  border-radius: 20px;
-  padding: 22px;
-  margin-bottom: 16px;
+  border-radius: 18px;
+  padding: 30px 26px;
+  margin-bottom: 20px;
   border: 1px solid var(--line);
+  overflow: hidden;
 }
-.hero h1 { margin-bottom: .3em; }
-.hero p { margin: 0; color: var(--ink-soft); max-width: 46ch; }
+/* A geometric field borrowed from Islamic tiling, drawn in CSS gradients rather
+   than shipped as an image. Nearly invisible, but it gives the panel a surface
+   instead of a flat wash. */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(60deg, var(--pattern) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(-60deg, var(--pattern) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(0deg, var(--pattern) 0 1px, transparent 1px 22px);
+  pointer-events: none;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero h1 { margin-bottom: .35em; }
+.hero p { margin: 0; color: var(--ink-soft); max-width: 44ch; }
+
+/* ==========================================================================
+   Scan
+   ========================================================================== */
 
 .dropzone {
   position: relative;
   display: grid; place-items: center; gap: 10px;
-  min-height: 260px; padding: 26px;
-  border: 2px dashed var(--line); border-radius: 18px;
+  min-height: 250px; padding: 26px;
+  border: 2px dashed var(--rule); border-radius: 16px;
   background: var(--bg-sunk); text-align: center;
   cursor: pointer;
   transition: border-color .18s, background-color .18s;
 }
 .dropzone:hover, .dropzone.hot { border-color: var(--accent); background: var(--accent-soft); }
-.dropzone svg { width: 46px; height: 46px; color: var(--accent); }
+.dropzone svg { width: 44px; height: 44px; color: var(--accent); }
 .dropzone strong { font-size: 1.05rem; }
 
-#preview-wrap { position: relative; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #000; }
-#preview-wrap img, #preview-wrap video, #preview-wrap canvas { display: block; width: 100%; height: auto; }
-#preview-wrap canvas.overlay { position: absolute; inset: 0; height: 100%; }
-
-/* The scanning sweep and every other animation live in anim.css. */
+#preview-wrap {
+  position: relative; border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--line); background: #000;
+}
+#preview-wrap img, #preview-wrap video, #preview-wrap canvas {
+  display: block; width: 100%; height: auto;
+}
 
 /* ==========================================================================
    Results
    ========================================================================== */
 
-.verdict { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+.verdict { display: flex; align-items: center; gap: 15px; margin-bottom: 4px; }
 .verdict .glyph {
-  width: 54px; height: 54px; flex: none; border-radius: 15px;
-  display: grid; place-items: center; font-size: 1.7rem;
+  width: 58px; height: 58px; flex: none; border-radius: 14px;
+  display: grid; place-items: center;
   background: var(--accent-soft); border: 1px solid var(--line);
+  color: var(--accent);
 }
+.verdict .glyph svg { width: 34px; height: 34px; }
 .verdict h2 { margin: 0; }
-.verdict .latin { font-style: italic; color: var(--ink-soft); font-size: .87rem; }
+.verdict .latin { font-style: italic; color: var(--ink-soft); font-size: .88rem; }
 
-.confbar { height: 9px; border-radius: 99px; background: var(--bg-sunk); overflow: hidden; border: 1px solid var(--line); }
-.confbar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.confbar {
+  height: 8px; border-radius: 99px; background: var(--bg-sunk);
+  overflow: hidden; border: 1px solid var(--line);
+}
+.confbar i {
+  display: block; height: 100%; background: var(--accent); border-radius: 99px;
+  transition: width .5s cubic-bezier(.2,.8,.2,1);
+}
 
-.ranks { display: grid; gap: 9px; margin-top: 6px; }
+.ranks { display: grid; gap: 10px; margin-top: 6px; }
 .rank { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; font-size: .88rem; }
 .rank .confbar { grid-column: 1 / -1; height: 6px; }
 .rank b { font-weight: 600; }
 .rank span { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 
-/* health */
-.health-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.dial { width: 68px; height: 68px; flex: none; }
-.dial text { font: 700 22px/1 system-ui, sans-serif; fill: var(--ink); }
+/* ---- the "I don't know" state ---- */
 
-.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; }
-.metric { background: var(--bg-sunk); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
-.metric dt { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); margin-bottom: 3px; }
-.metric dd { margin: 0; font-size: 1.24rem; font-weight: 660; font-variant-numeric: tabular-nums; }
-.metric .unit { font-size: .78rem; font-weight: 500; color: var(--ink-faint); }
-
-.pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 11px; border-radius: 99px;
-  font-size: .78rem; font-weight: 650;
-  border: 1px solid currentColor;
+/* Given real visual weight on purpose. Refusing to answer is the app's most
+   important behaviour, and it should look like a considered verdict rather than
+   an error the user caused. */
+.unknown {
+  border: 1px solid var(--warn);
+  border-radius: 14px;
+  padding: 22px;
+  background: var(--bg-elev);
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
 }
-.pill.ok { color: var(--ok); }
-.pill.warn { color: var(--warn); }
-.pill.bad { color: var(--bad); }
+.unknown .mark {
+  width: 52px; height: 52px; border-radius: 99px;
+  display: grid; place-items: center; margin-bottom: 14px;
+  background: var(--accent-soft); color: var(--warn);
+  border: 1px solid var(--warn);
+  font-size: 1.6rem; font-weight: 700;
+}
+.unknown h2 { margin-bottom: .35em; }
+.unknown .why {
+  list-style: none; padding: 0; margin: 14px 0 0;
+  display: grid; gap: 7px; font-size: .87rem; color: var(--ink-soft);
+}
+.unknown .why li { display: grid; grid-template-columns: auto 1fr; gap: 9px; }
+.unknown .why li::before { content: '·'; color: var(--warn); font-weight: 700; }
 
-.findings { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
-.findings li { display: grid; grid-template-columns: auto 1fr; gap: 9px; align-items: start; font-size: .9rem; }
-.findings .dot { width: 8px; height: 8px; border-radius: 99px; margin-top: 7px; background: var(--ink-faint); }
+/* ---- health ---- */
+
+.health-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.dial { width: 72px; height: 72px; flex: none; }
+.dial text { font: 700 22px/1 'Inter', system-ui, sans-serif; fill: var(--ink); }
+
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; }
+.metric { background: var(--bg-sunk); border: 1px solid var(--line); border-radius: 11px; padding: 11px 13px; }
+.metric dt { font-size: .66rem; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-faint); margin-bottom: 3px; }
+.metric dd { margin: 0; font-size: 1.28rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.metric .unit { font-size: .78rem; font-weight: 500; color: var(--ink-faint); margin-inline-start: 2px; }
+.metric dd b { font-weight: inherit; }
+
+.findings { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 9px; }
+.findings li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; font-size: .9rem; }
+.findings .dot { width: 8px; height: 8px; border-radius: 99px; margin-top: 8px; background: var(--ink-faint); }
 .findings li.ok .dot { background: var(--ok); }
 .findings li.warn .dot { background: var(--warn); }
 .findings li.bad .dot { background: var(--bad); }
 
 /* ==========================================================================
-   Library / About / Team
+   Treatment and suppliers
    ========================================================================== */
 
-.species-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.treatment { border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 16px; }
+.treatment:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+.treatment .cause { color: var(--ink-soft); font-size: .9rem; margin-bottom: 14px; }
+
+.products { display: grid; gap: 10px; }
+.product {
+  display: grid; gap: 3px;
+  padding: 13px 15px;
+  background: var(--bg-sunk);
+  border: 1px solid var(--line);
+  border-inline-start: 3px solid var(--accent);
+  border-radius: 10px;
+}
+.product b { font-size: .95rem; }
+.product span { font-size: .83rem; color: var(--ink-soft); }
+
+.alert {
+  border: 1px solid var(--bad);
+  border-inline-start-width: 4px;
+  border-radius: 11px;
+  padding: 15px 17px;
+  background: color-mix(in srgb, var(--bad) 7%, var(--bg-elev));
+  margin-bottom: 16px;
+}
+.alert h3 { color: var(--bad); margin-bottom: .4em; }
+.alert p { margin: 0; font-size: .9rem; }
+
+.supplier {
+  display: grid; gap: 4px;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+}
+.supplier:first-of-type { border-top: 0; }
+.supplier .head { display: flex; align-items: baseline; gap: 10px; justify-content: space-between; }
+.supplier b { font-size: .97rem; }
+.supplier .km {
+  font-size: .8rem; font-weight: 650; color: var(--accent);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.supplier .meta { font-size: .84rem; color: var(--ink-soft); }
+.helpline .meta { display: flex; align-items: center; gap: 7px; font-size: .84rem; color: var(--ink-soft); }
+.supplier .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+.helpline {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px 17px;
+  margin-bottom: 10px;
+  background: var(--bg-sunk);
+}
+.helpline b { display: block; font-size: .95rem; margin-bottom: 3px; }
+.helpline p { font-size: .85rem; color: var(--ink-soft); margin: 0 0 10px; }
+
+/* ==========================================================================
+   Library
+   ========================================================================== */
+
+.species-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
 .species-card {
-  display: grid; gap: 6px; padding: 15px;
-  background: var(--bg-elev); border: 1px solid var(--line); border-radius: 15px;
-  text-align: start; cursor: pointer; color: inherit; font: inherit;
+  display: grid; gap: 5px; padding: 17px;
+  background: var(--bg-elev); border: 1px solid var(--line); border-radius: 14px;
+  text-align: start; color: inherit; text-decoration: none;
   box-shadow: var(--shadow);
   transition: border-color .15s, transform .12s;
 }
 .species-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.species-card .em { font-size: 1.6rem; }
-.species-card b { font-size: 1rem; }
-.species-card i { font-size: .78rem; color: var(--ink-soft); }
-.species-card .ar { font-size: .95rem; color: var(--ink-soft); }
+.species-card .em { color: var(--accent); margin-bottom: 4px; }
+.species-card .em svg { width: 30px; height: 30px; }
+.species-card b { font-size: 1rem; font-family: 'Fraunces', Georgia, serif; font-weight: 600; }
+html[dir='rtl'] .species-card b { font-family: 'Noto Kufi Arabic', system-ui, sans-serif; }
+.species-card i { font-size: .76rem; color: var(--ink-soft); }
+.species-card .ar { font-size: .92rem; color: var(--ink-soft); }
 
-.team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-.member { display: flex; gap: 12px; align-items: center; padding: 14px; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 15px; box-shadow: var(--shadow); }
+/* ==========================================================================
+   About Us — the long read
+   ========================================================================== */
+
+.aboutus-hero {
+  position: relative;
+  border-radius: 18px;
+  padding: 40px 28px 34px;
+  margin-bottom: 8px;
+  background: var(--hero);
+  border: 1px solid var(--line);
+  text-align: center;
+  overflow: hidden;
+}
+.aboutus-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(60deg, var(--pattern) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(-60deg, var(--pattern) 0 1px, transparent 1px 26px);
+  pointer-events: none;
+}
+.aboutus-hero > * { position: relative; z-index: 1; }
+.aboutus-hero .flagchip {
+  display: inline-grid; grid-template-rows: repeat(3, 1fr);
+  width: 60px; height: 30px; border-radius: 3px; overflow: hidden;
+  margin: 0 auto 18px; position: relative;
+  border: 1px solid var(--line);
+}
+.aboutus-hero .flagchip i:nth-child(1) { background: var(--uae-green); }
+.aboutus-hero .flagchip i:nth-child(2) { background: var(--uae-white); }
+.aboutus-hero .flagchip i:nth-child(3) { background: var(--uae-black); }
+.aboutus-hero .flagchip::before {
+  content: ''; position: absolute; inset: 0 auto 0 0; width: 25%;
+  background: var(--uae-red); z-index: 1;
+}
+
+.aboutus-hero h1 { margin-bottom: .3em; }
+.aboutus-hero p { color: var(--ink-soft); max-width: 42ch; margin: 0 auto 22px; }
+
+/* Portraits. Framed and captioned like a plate in a book, not like an avatar. */
+.leaders {
+  display: grid;
+  /* Three portraits, three columns, at every width. Letting them reflow put two
+     on one row and one orphaned beneath, which reads as an accident. */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 6px 0 4px;
+}
+.leader { text-align: center; }
+.leader img {
+  display: block;
+  width: 100%;
+  /* `height: auto` is load-bearing. An <img> with a height attribute has that
+     height as a presentational hint, and aspect-ratio only applies when the
+     other axis is auto -- without this the 440-pixel attribute wins and every
+     portrait renders as a tall column. */
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  padding: 4px;
+  background: var(--bg-elev);
+  box-shadow: var(--shadow);
+}
+.leader b {
+  display: block; margin-top: 11px; font-size: .8rem; line-height: 1.3;
+  font-family: 'Fraunces', Georgia, serif; font-weight: 600;
+}
+html[dir='rtl'] .leader b { font-family: 'Noto Kufi Arabic', system-ui, sans-serif; }
+.leader span { display: block; font-size: .7rem; color: var(--ink-faint); margin-top: 3px; }
+
+/* Pull quotes. The whole point of the About page, so they get scale and air. */
+.quote {
+  margin: 0 0 24px;
+  padding: 26px 0 0;
+  border-top: 3px solid var(--uae-red);
+}
+.quote blockquote {
+  margin: 0 0 16px;
+  font-family: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  font-size: clamp(1.15rem, 3.2vw, 1.45rem);
+  line-height: 1.45;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+html[dir='rtl'] .quote blockquote {
+  font-family: 'Noto Kufi Arabic', 'Noto Sans Arabic', system-ui, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.75;
+}
+.quote .ar-line {
+  font-family: 'Noto Sans Arabic', system-ui, sans-serif;
+  direction: rtl; text-align: start;
+  font-size: 1.02rem; line-height: 1.85;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+html[dir='rtl'] .quote .ar-line { direction: rtl; }
+.quote cite {
+  display: block; font-style: normal;
+  font-size: .9rem; font-weight: 650;
+}
+.quote cite span { display: block; font-weight: 400; color: var(--ink-faint); font-size: .82rem; margin-top: 2px; }
+
+/* A bilingual passage: English, then the Arabic beneath it, separated by a rule
+   rather than a tab. Both judges read the same page at the same time. */
+.bilingual { margin-bottom: 34px; }
+.bilingual h2 { margin-bottom: .55em; }
+.bilingual .en p { margin: 0 0 1.05em; }
+.bilingual .ar {
+  direction: rtl; text-align: right;
+  font-family: 'Noto Sans Arabic', system-ui, sans-serif;
+  border-top: 1px solid var(--rule);
+  margin-top: 20px; padding-top: 20px;
+  color: var(--ink-soft);
+  line-height: 1.95;
+}
+html[dir='rtl'] .bilingual .en {
+  direction: ltr; text-align: left;
+  font-family: 'Inter', system-ui, sans-serif;
+  border-top: 1px solid var(--rule);
+  margin-top: 20px; padding-top: 20px;
+  color: var(--ink-soft);
+}
+html[dir='rtl'] .bilingual .ar { border-top: 0; margin-top: 0; padding-top: 0; color: var(--ink); }
+/* In RTL the Arabic leads and the English follows, without reordering the DOM. */
+html[dir='rtl'] .bilingual { display: flex; flex-direction: column; }
+html[dir='rtl'] .bilingual .ar { order: 1; }
+html[dir='rtl'] .bilingual .en { order: 2; }
+html[dir='rtl'] .bilingual h2 { order: 0; }
+
+.langtag {
+  display: inline-block;
+  font-size: .6rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px solid var(--line); border-radius: 99px;
+  padding: 2px 9px; margin-bottom: 12px;
+  font-family: 'Inter', system-ui, sans-serif;
+  direction: ltr;
+}
+
+/* ==========================================================================
+   Team
+   ========================================================================== */
+
+.team-list { display: grid; gap: 2px; }
+.member {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4px 14px;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
+}
+.member:first-child { border-top: 0; }
 .member .avatar {
+  grid-row: span 2;
   width: 46px; height: 46px; flex: none; border-radius: 99px;
-  display: grid; place-items: center; font-weight: 700; font-size: .95rem;
+  display: grid; place-items: center; font-weight: 700; font-size: .9rem;
   background: var(--accent-soft); color: var(--accent); border: 1px solid var(--line);
 }
-.member b { display: block; font-size: .95rem; }
-.member span { font-size: .76rem; color: var(--ink-soft); }
+.member .who b { display: block; font-size: 1rem; }
+.member .who span { font-size: .8rem; color: var(--ink-faint); }
+.member .pct {
+  font-size: 1.15rem; font-weight: 700; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.member .contribution {
+  grid-column: 2 / -1;
+  font-size: .85rem; color: var(--ink-soft);
+  margin-top: 2px;
+}
+.member .share {
+  grid-column: 2 / -1;
+  height: 6px; border-radius: 99px; background: var(--bg-sunk);
+  border: 1px solid var(--line); overflow: hidden; margin-top: 9px;
+}
+.member .share i {
+  display: block; height: 100%; background: var(--accent); border-radius: 99px;
+  transition: width .6s cubic-bezier(.2,.8,.2,1);
+}
+/* The two leads carry the flag's red so the hierarchy reads at a glance. */
+.member.lead .share i { background: var(--uae-red); }
+.member.lead .pct { color: var(--uae-red); }
+.member.lead .avatar { color: var(--uae-red); border-color: var(--uae-red); }
 
 .qr-wrap { display: grid; justify-items: center; gap: 12px; text-align: center; }
-.qr-wrap img { width: min(240px, 70vw); border-radius: 14px; background: #fff; padding: 12px; border: 1px solid var(--line); }
+.qr-wrap img { width: min(230px, 68vw); border-radius: 12px; background: #fff; padding: 12px; border: 1px solid var(--line); }
 
-/* ---- theme + language sheet ---- */
+/* ==========================================================================
+   Settings sheet
+   ========================================================================== */
 
 dialog.sheet {
-  border: 1px solid var(--line); border-radius: 20px; padding: 0;
+  border: 1px solid var(--line); border-radius: 18px; padding: 0;
   background: var(--bg-elev); color: var(--ink);
   width: min(430px, calc(100vw - 28px)); max-height: 82dvh;
   box-shadow: var(--shadow);
 }
-dialog.sheet::backdrop { background: rgba(0, 0, 0, .5); backdrop-filter: blur(3px); }
-dialog.sheet .sheet-body { padding: 18px; overflow: auto; }
-dialog.sheet h2 { margin-bottom: 12px; }
+dialog.sheet::backdrop { background: rgba(0, 0, 0, .55); backdrop-filter: blur(3px); }
+dialog.sheet .sheet-body { padding: 20px; overflow: auto; }
+dialog.sheet h2 { margin-bottom: 14px; }
 
 .theme-list { display: grid; gap: 9px; margin-bottom: 20px; }
 .theme-opt {
   display: flex; align-items: center; gap: 12px; width: 100%;
-  padding: 11px 13px; border-radius: 13px;
+  padding: 11px 13px; border-radius: 12px;
   border: 1px solid var(--line); background: var(--bg); color: inherit;
   font: inherit; cursor: pointer; text-align: start;
 }
@@ -383,22 +814,178 @@ dialog.sheet h2 { margin-bottom: 12px; }
 .theme-opt span { font-size: .74rem; color: var(--ink-soft); }
 .theme-opt .tick { margin-inline-start: auto; color: var(--accent); font-weight: 700; }
 
-.seg { display: flex; gap: 6px; padding: 4px; background: var(--bg-sunk); border: 1px solid var(--line); border-radius: 12px; }
-.seg button { flex: 1; padding: 9px; border: 0; border-radius: 9px; background: transparent; color: var(--ink-soft); font: inherit; font-weight: 650; cursor: pointer; }
+.seg { display: flex; gap: 6px; padding: 4px; background: var(--bg-sunk); border: 1px solid var(--line); border-radius: 11px; }
+.seg button { flex: 1; padding: 9px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-soft); font: inherit; font-weight: 650; cursor: pointer; }
 .seg button[aria-pressed='true'] { background: var(--accent); color: var(--accent-ink); }
 
-/* ---- loading + toast ---- */
+/* ==========================================================================
+   Loading + toast
+   ========================================================================== */
 
 .bar { height: 5px; border-radius: 99px; background: var(--bg-sunk); overflow: hidden; }
 .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
 
 #toast {
-  position: fixed; left: 50%; bottom: 88px; transform: translate(-50%, 20px);
-  background: var(--ink); color: var(--bg); padding: 11px 18px; border-radius: 12px;
+  position: fixed; left: 50%; bottom: 92px; transform: translate(-50%, 20px);
+  background: var(--ink); color: var(--bg); padding: 11px 18px; border-radius: 11px;
   font-size: .88rem; font-weight: 600; z-index: 60;
   opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-.metric dd b { font-weight: inherit; }
-.metric dd .unit { margin-inline-start: 2px; }
+/* ==========================================================================
+   Responsive layout
+
+   The app is designed phone-first, because that is how it is used at the
+   kiosk — but it is also opened on a laptop by anyone marking it, and shown on
+   a tablet on the stand. A fixed bottom tab bar and a 760px column are right on
+   a phone and wrong on a 27-inch screen, so the navigation changes shape rather
+   than merely stretching.
+   ========================================================================== */
+
+/* ---- large phone and tablet portrait ---- */
+
+@media (min-width: 620px) {
+  main { padding-inline: 26px; }
+
+  .hero { padding: 36px 32px; }
+  .aboutus-hero { padding: 52px 36px 44px; }
+
+  .species-grid { grid-template-columns: repeat(3, 1fr); }
+  .leaders { gap: 20px; }
+  .leader b { font-size: .92rem; }
+  .leader span { font-size: .78rem; }
+
+  /* Two suppliers to a row once there is room for them to stay readable. */
+  #nearby-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 26px;
+  }
+  .supplier:nth-of-type(2) { border-top: 0; }
+}
+
+/* ---- desktop: navigation moves to the top ---- */
+
+@media (min-width: 960px) {
+  body { font-size: 17px; }
+
+  .topbar {
+    position: fixed;
+    top: 6px; left: 0; right: 0;
+    padding-inline: 32px;
+  }
+
+  /* The tab bar is a sibling *after* <main> in the document, which is correct
+     for a phone. Fixing it to the top on desktop repositions it without moving
+     it in the DOM, so the reading order stays sensible for a screen reader. */
+  .tabbar {
+    inset: 69px 0 auto 0;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    grid-template-columns: none;
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 32px;
+  }
+  .tabbar a {
+    grid-auto-flow: column;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 18px;
+    font-size: .84rem;
+    border-radius: 0;
+  }
+  .tabbar a svg { width: 18px; height: 18px; }
+  /* The indicator underlines the active tab instead of capping it. */
+  .tabbar::before { top: auto; bottom: 0; border-radius: 3px 3px 0 0; }
+  .tabbar a[aria-current='page'] svg { transform: none; }
+
+  main {
+    max-width: 800px;
+    padding-top: 140px;
+    padding-bottom: 72px;
+  }
+  main.wide { max-width: 1080px; }
+
+  h1 { font-size: clamp(2rem, 3vw, 2.7rem); }
+
+  .species-grid { grid-template-columns: repeat(4, 1fr); }
+
+  /* Both languages side by side rather than stacked. On a phone the Arabic sits
+     below the English and you scroll to it; on a wide screen there is room to
+     set them as facing columns, which is how a bilingual document is meant to
+     be read. */
+  .bilingual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 40px;
+    align-items: start;
+  }
+  .bilingual h2 { grid-column: 1 / -1; }
+  .bilingual .ar {
+    border-top: 0;
+    border-inline-start: 1px solid var(--rule);
+    margin-top: 0;
+    padding-top: 0;
+    padding-inline-start: 40px;
+  }
+  html[dir='rtl'] .bilingual .en {
+    border-top: 0;
+    border-inline-start: 1px solid var(--rule);
+    margin-top: 0;
+    padding-top: 0;
+    padding-inline-start: 40px;
+  }
+  html[dir='rtl'] .bilingual { display: grid; }
+  html[dir='rtl'] .bilingual .ar { order: 0; }
+  html[dir='rtl'] .bilingual .en { order: 1; }
+
+  .leaders { max-width: 620px; margin-inline: auto; gap: 26px; }
+
+  /* Quotes get a measure rather than running the full width of a wide page.
+     The limit goes on the figure, not on the blockquote: constraining only the
+     English left the Arabic line free to travel to the far right edge, where it
+     no longer read as the same quotation. */
+  .quote { max-width: 34em; }
+  .quote blockquote { font-size: clamp(1.4rem, 2vw, 1.8rem); }
+  .aboutus-hero p { max-width: 46ch; }
+
+  #toast { bottom: 32px; }
+}
+
+/* ---- roomy desktop ---- */
+
+@media (min-width: 1280px) {
+  main { max-width: 860px; }
+  main.wide { max-width: 1140px; }
+  .metrics { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---- short landscape windows ---- */
+
+/* A phone held sideways has almost no vertical room. Shrinking the hero keeps
+   the capture button reachable without scrolling, which is the one thing that
+   has to stay on screen. */
+@media (max-height: 520px) and (max-width: 959px) {
+  main { padding-top: 12px; }
+  .hero { padding: 12px 18px; margin-bottom: 10px; }
+  .hero h1 { font-size: 1.15rem; margin-bottom: 0; }
+  .hero p { display: none; }
+  .dropzone { min-height: 112px; padding: 16px; }
+  .dropzone svg { width: 30px; height: 30px; }
+  .dropzone strong { font-size: .95rem; }
+  .aboutus-hero { padding: 22px 20px; }
+  .leaders { max-width: 480px; margin-inline: auto; }
+}
+
+/* ---- printing the About page for a report ---- */
+
+@media print {
+  .topbar, .tabbar, .flagrule, #toast, .btn { display: none !important; }
+  main { max-width: none; padding: 0; }
+  .card, .hero, .aboutus-hero { box-shadow: none; border-color: #ccc; break-inside: avoid; }
+  .bilingual { break-inside: avoid; }
+}

@@ -6,7 +6,7 @@
  * Bump CACHE when anything in the app changes; the activate step deletes every
  * older cache so a stale model can never linger.
  */
-const CACHE = 'green-trace-v1';
+const CACHE = 'green-trace-v2';
 
 const SHELL = [
   './',
@@ -21,15 +21,24 @@ const SHELL = [
   './js/i18n.js',
   './js/themes.js',
   './js/motion.js',
+  './js/icons.js',
+  './js/nearby.js',
   './js/data/species.js',
   './js/data/team.js',
+  './js/data/about.js',
+  './js/data/treatments.js',
+  './js/data/suppliers.js',
   './assets/icons/icon.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/icon-180.png',
   './assets/icons/icon-maskable.png',
   './assets/qr.svg',
+  './img/zayed.jpg',
+  './img/mbz.jpg',
+  './img/mbr.jpg',
   './model/metadata.json',
+  './model/ood.json',
   './model/head/model.json',
   './model/head/weights.bin',
   './model/mobilenet/model.json',

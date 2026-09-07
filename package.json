@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Tooling for the Green-Trace UAE leaf identifier (dataset fetch + model training).",
+  "description": "Tooling for the Green-Trace UAE leaf identifier (dataset fetch, model training, and health-analyser calibration).",
   "scripts": {
     "fetch": "node tools/fetch-dataset.mjs",
     "train": "node tools/train.mjs",
     "qr": "node tools/make-qr.mjs",
     "test": "node tools/smoke-test.mjs",
-    "serve": "node tools/serve.mjs"
+    "serve": "node tools/serve.mjs",
+    "calibrate": "node tools/health-calibrate.mjs --kiosk",
+    "sensitivity": "node tools/health-sensitivity.mjs"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",

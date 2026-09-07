@@ -7,10 +7,18 @@
  */
 import { SPECIES, SPECIES_BY_KEY } from './data/species.js';
 import { TEAM, PROJECT } from './data/team.js';
+import { SECTIONS, QUOTES, LEADERS } from './data/about.js';
+import { TREATMENTS, SPECIES_ALERTS, treatmentsFor } from './data/treatments.js';
+import { SUPPLIERS, HELPLINES, categoryFor } from './data/suppliers.js';
 import { t, lang, setLang, initLang } from './i18n.js';
 import { THEMES, currentTheme, applyTheme, initTheme } from './themes.js';
-import { loadModel, classify, isUncertain, getMetadata } from './model.js';
+import { loadModel, classify, isUncertain, recognitionState, getMetadata } from './model.js';
 import { analyseLeaf, FINDING_TEXT } from './health.js';
+import { speciesIcon, UI_ICON } from './icons.js';
+import {
+  locate, knownPosition, rankSuppliers, formatDistance,
+  mapsSearchURL, directionsURL, telURL,
+} from './nearby.js';
 import {
   applyMotion, motionPref, setMotion, transitionView, stagger, countUp,
   fillBars, drawDial, initRipples, moveTabIndicator, flashThemeShift,
@@ -30,6 +38,9 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const pct = (x) => `${Math.round(x * 100)}`;
+
+/** Picks the current language out of a `{en, ar}` pair. */
+const L = (pair) => (pair ? (pair[lang()] ?? pair.en) : '');
 
 function toast(msg) {
   toastEl.textContent = msg;
@@ -94,36 +105,157 @@ function scanView() {
 }
 
 function dial(score) {
-  const r = 26;
+  const r = 27;
   const circ = 2 * Math.PI * r;
   const colour = score >= 70 ? 'var(--ok)' : score >= 45 ? 'var(--warn)' : 'var(--bad)';
   return `
-    <svg class="dial" viewBox="0 0 68 68" role="img" aria-label="${score} out of 100">
-      <circle cx="34" cy="34" r="${r}" fill="none" stroke="var(--bg-sunk)" stroke-width="7"/>
-      <circle cx="34" cy="34" r="${r}" fill="none" stroke="${colour}" stroke-width="7"
+    <svg class="dial" viewBox="0 0 70 70" role="img" aria-label="${score} out of 100">
+      <circle cx="35" cy="35" r="${r}" fill="none" stroke="var(--bg-sunk)" stroke-width="7"/>
+      <circle cx="35" cy="35" r="${r}" fill="none" stroke="${colour}" stroke-width="7"
               stroke-linecap="round" stroke-dasharray="${circ}"
               stroke-dashoffset="${circ * (1 - score / 100)}"
-              transform="rotate(-90 34 34)"/>
-      <text x="34" y="41" text-anchor="middle" data-score="${score}">${score}</text>
+              transform="rotate(-90 35 35)"/>
+      <text x="35" y="42" text-anchor="middle" data-score="${score}">${score}</text>
     </svg>`;
 }
 
-function resultView() {
-  const { image, overlayURL, prediction, health } = lastScan;
+/* ---------------------------------------------------------------- result */
+
+/**
+ * The species half of the result — or an honest refusal.
+ *
+ * The 'unknown' branch is the important one. A judge's first move is to point
+ * the camera at something that is not one of the four trees, and answering
+ * "Ghaf, 61%" to a photograph of a coffee cup discredits everything else on
+ * the screen. Saying "I don't recognise this" is a feature, so it is presented
+ * as a verdict rather than as an error.
+ */
+function speciesSection() {
+  const { prediction, recognition, health } = lastScan;
   const top = prediction.top;
   const sp = SPECIES_BY_KEY[top.key];
-  const L = lang();
-  const copy = sp[L] || sp.en;
-  const uncertain = isUncertain(prediction);
-  const words = FINDING_TEXT[L] || FINDING_TEXT.en;
 
+  if (recognition.state === 'unknown') {
+    const REASON_TEXT = {
+      noFoliage: t('unknown.noFoliage'),
+      unfamiliar: t('unknown.unfamiliar'),
+      lowProbability: t('unknown.lowProbability'),
+      spreadEvenly: t('unknown.spreadEvenly'),
+    };
+    return `
+      <div class="unknown">
+        <div class="mark" aria-hidden="true">?</div>
+        <h2>${esc(t('unknown.title'))}</h2>
+        <p class="muted" style="margin-bottom:0">${esc(t('unknown.body'))}</p>
+        <ul class="why">
+          ${recognition.reasons.map((r) => `<li><span>${esc(REASON_TEXT[r] || r)}</span></li>`).join('')}
+        </ul>
+        <div class="row" style="margin-top:18px">
+          <button class="btn" id="btn-rescan-2" type="button">${esc(t('scan.again'))}</button>
+          <a class="btn ghost" href="#/library">${esc(t('unknown.seeFour'))}</a>
+        </div>
+      </div>`;
+  }
+
+  const copy = L(sp);
   const alternatives = prediction.ranked.slice(1).map((r) => {
     const s = SPECIES_BY_KEY[r.key];
     return `<div class="rank">
-        <b>${esc((s[L] || s.en).name)}</b><span>${pct(r.p)}%</span>
+        <b>${esc(L(s).name)}</b><span>${pct(r.p)}%</span>
         <div class="confbar"><i style="width:${pct(r.p)}%"></i></div>
       </div>`;
   }).join('');
+
+  return `
+    <div class="card">
+      <span class="eyebrow">${esc(t('result.species'))}</span>
+      <div class="verdict">
+        <div class="glyph" aria-hidden="true">${speciesIcon(sp.key)}</div>
+        <div>
+          <h2>${esc(copy.name)}</h2>
+          <div class="latin">${esc(sp.latin)}</div>
+        </div>
+      </div>
+      <div class="row" style="justify-content:space-between;align-items:baseline;margin:16px 0 6px">
+        <span class="faint">${esc(t('result.confidence'))}</span>
+        <strong style="font-variant-numeric:tabular-nums" data-count-confidence="${pct(top.p)}">${pct(top.p)}%</strong>
+      </div>
+      <div class="confbar"><i style="width:${pct(top.p)}%"></i></div>
+      ${recognition.state === 'uncertain'
+        ? `<p class="muted" style="margin-top:12px;font-size:.88rem">${esc(t('result.lowConf'))}</p>` : ''}
+      <h3 style="margin-top:20px">${esc(t('result.alternatives'))}</h3>
+      <div class="ranks">${alternatives}</div>
+      <a class="btn ghost wide" style="margin-top:16px" href="#/tree/${sp.key}">${esc(t('result.readMore'))}</a>
+    </div>`;
+}
+
+/** The treatment plan, plus where to buy it. Only rendered when something is wrong. */
+function treatmentSection() {
+  const { health, prediction, recognition } = lastScan;
+  if (!health.valid) return '';
+
+  const problems = health.findings.filter((f) => f.level !== 'ok');
+  if (!problems.length) return '';
+
+  const keys = treatmentsFor(problems);
+  if (!keys.length) return '';
+
+  // A notifiable pest outranks any shopping list.
+  let alert = '';
+  if (recognition.state !== 'unknown') {
+    const sa = SPECIES_ALERTS[prediction.top.key];
+    if (sa && problems.some((f) => sa.when.includes(f.key))) {
+      alert = `<div class="alert">
+          <h3>${esc(L(sa.title))}</h3>
+          <p>${esc(L(sa.body))}</p>
+        </div>`;
+    }
+  }
+
+  const blocks = keys.map((key) => {
+    const tr = TREATMENTS[key];
+    return `
+      <div class="treatment">
+        <h3>${esc(t(`treat.${key}`))}</h3>
+        <p class="cause">${esc(L(tr.cause))}</p>
+        <div class="products">
+          ${tr.products.map((p) => `
+            <div class="product">
+              <b>${esc(L(p))}</b>
+              <span>${esc(L(p.note))}</span>
+              <div style="margin-top:9px">
+                <a class="btn small ghost" target="_blank" rel="noopener"
+                   href="${esc(mapsSearchURL(p.search, knownPosition()))}">
+                  ${UI_ICON.search}${esc(t('nearby.findOnMaps'))}
+                </a>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  const category = categoryFor(TREATMENTS[keys[0]].products[0].search);
+
+  return `
+    ${alert}
+    <div class="card">
+      <span class="eyebrow">${esc(t('treat.title'))}</span>
+      ${blocks}
+    </div>
+
+    <div class="card" id="nearby-card" data-category="${esc(category)}">
+      <span class="eyebrow">${esc(t('nearby.title'))}</span>
+      <p class="muted" style="font-size:.9rem">${esc(t('nearby.lede'))}</p>
+      <div id="nearby-list">${supplierList(category, knownPosition())}</div>
+      <button class="btn ghost wide" id="btn-locate" style="margin-top:14px">
+        ${UI_ICON.pin}${esc(t('nearby.useLocation'))}
+      </button>
+    </div>`;
+}
+
+function resultView() {
+  const { image, overlayURL, health, recognition } = lastScan;
+  const words = FINDING_TEXT[lang()] || FINDING_TEXT.en;
 
   const metricCard = (key, value, unit = '%') => `
     <div class="metric">
@@ -137,7 +269,7 @@ function resultView() {
         ${dial(health.score)}
         <div>
           <div class="faint">${esc(t('result.healthScore'))}</div>
-          <strong style="font-size:1.15rem">${esc(t(`health.${health.band}`))}</strong>
+          <strong style="font-size:1.2rem">${esc(t(`health.${health.band}`))}</strong>
         </div>
       </div>
       <dl class="metrics">
@@ -148,7 +280,7 @@ function resultView() {
         ${metricCard('texture', pct(m.texture))}
         ${metricCard('coverage', pct(m.coverage))}
       </dl>
-      <h3 style="margin-top:16px">${esc(t('result.findings'))}</h3>
+      <h3 style="margin-top:18px">${esc(t('result.findings'))}</h3>
       <ul class="findings">
         ${health.findings.map((f) => {
           const w = words[f.key];
@@ -162,41 +294,21 @@ function resultView() {
     <div id="preview-wrap">
       <img src="${overlayURL || image}" alt="Analysed leaf" id="result-img">
     </div>
-    <div class="row" style="margin:10px 0 16px">
+    <div class="row" style="margin:12px 0 18px">
       <button class="btn ghost" id="btn-toggle-overlay" type="button" aria-pressed="true">
-        ${L === 'ar' ? 'إظهار الصورة الأصلية' : 'Show original photo'}
+        ${esc(t('result.showOriginal'))}
       </button>
       <button class="btn" id="btn-rescan" type="button">${esc(t('scan.again'))}</button>
     </div>
 
-    <div class="card">
-      <div class="faint" style="text-transform:uppercase;letter-spacing:.06em;font-size:.68rem;margin-bottom:8px">
-        ${esc(t('result.species'))}
-      </div>
-      <div class="verdict">
-        <div class="glyph" aria-hidden="true">${sp.emoji}</div>
-        <div>
-          <h2>${esc(copy.name)}</h2>
-          <div class="latin">${esc(sp.latin)}</div>
-        </div>
-      </div>
-      <div class="row" style="justify-content:space-between;align-items:baseline;margin:14px 0 6px">
-        <span class="faint">${esc(t('result.confidence'))}</span>
-        <strong style="font-variant-numeric:tabular-nums" data-count-confidence="${pct(top.p)}">${pct(top.p)}%</strong>
-      </div>
-      <div class="confbar"><i style="width:${pct(top.p)}%"></i></div>
-      ${uncertain ? `<p class="muted" style="margin-top:12px;font-size:.88rem">${esc(t('result.lowConf'))}</p>` : ''}
-      <h3 style="margin-top:18px">${esc(t('result.alternatives'))}</h3>
-      <div class="ranks">${alternatives}</div>
-      <a class="btn ghost wide" style="margin-top:14px" href="#/tree/${sp.key}">${esc(t('result.readMore'))}</a>
-    </div>
+    ${speciesSection()}
 
     <div class="card">
-      <div class="faint" style="text-transform:uppercase;letter-spacing:.06em;font-size:.68rem;margin-bottom:8px">
-        ${esc(t('result.health'))}
-      </div>
+      <span class="eyebrow">${esc(t('result.health'))}</span>
       ${healthBody}
     </div>
+
+    ${treatmentSection()}
 
     <details class="card">
       <summary style="cursor:pointer;font-weight:650">${esc(t('result.method'))}</summary>
@@ -206,18 +318,89 @@ function resultView() {
   `;
 }
 
+/* ---------------------------------------------------------------- nearby */
+
+function supplierRow(s, showDistance) {
+  const km = showDistance && s.km != null ? formatDistance(s.km, lang()) : null;
+  const bits = [L(s.emirate)];
+  if (s.hours) bits.push(L(s.hours));
+
+  return `
+    <div class="supplier">
+      <div class="head">
+        <b>${esc(L(s.name))}</b>
+        ${km ? `<span class="km">${esc(km)}</span>` : ''}
+      </div>
+      <div class="meta">${esc(bits.join(' · '))}</div>
+      ${!s.hours ? `<div class="meta faint">${esc(t('nearby.hoursUnknown'))}</div>` : ''}
+      <div class="acts">
+        ${s.phone
+          ? `<a class="btn small" href="${esc(telURL(s.phone))}">${UI_ICON.phone}${esc(s.phone)}</a>`
+          : ''}
+        <a class="btn small ghost" target="_blank" rel="noopener"
+           href="${esc(directionsURL(s))}">${UI_ICON.pin}${esc(t('nearby.directions'))}</a>
+        ${s.site
+          ? `<a class="btn small ghost" target="_blank" rel="noopener" href="${esc(s.site)}">${UI_ICON.globe}${esc(t('nearby.website'))}</a>`
+          : ''}
+      </div>
+    </div>`;
+}
+
+function supplierList(category, from, limit = 5) {
+  const ranked = rankSuppliers(SUPPLIERS, category, from).slice(0, limit);
+  if (!ranked.length) return `<p class="muted">${esc(t('nearby.none'))}</p>`;
+  return ranked.map((s) => supplierRow(s, Boolean(from))).join('');
+}
+
+function helplineBlock() {
+  return HELPLINES.map((h) => `
+    <div class="helpline">
+      <b>${esc(L(h.name))}</b>
+      <p>${esc(L(h.role))}</p>
+      ${h.hours ? `<div class="meta faint" style="margin-bottom:9px">${UI_ICON.clock} ${esc(L(h.hours))}</div>` : ''}
+      <div class="acts">
+        <a class="btn small" href="${esc(telURL(h.phone))}">${UI_ICON.phone}${esc(h.phone)}</a>
+        ${h.altPhone ? `<a class="btn small ghost" href="${esc(telURL(h.altPhone))}">${esc(h.altPhone)}</a>` : ''}
+        ${h.site ? `<a class="btn small ghost" target="_blank" rel="noopener" href="${esc(h.site)}">${UI_ICON.globe}${esc(t('nearby.website'))}</a>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function nearbyView() {
+  const from = knownPosition();
+  return `
+    <h1>${esc(t('nearby.pageTitle'))}</h1>
+    <p class="muted">${esc(t('nearby.pageLede'))}</p>
+
+    <div class="card">
+      <span class="eyebrow">${esc(t('nearby.official'))}</span>
+      ${helplineBlock()}
+    </div>
+
+    <div class="card" id="nearby-card" data-category="">
+      <span class="eyebrow">${esc(t('nearby.shops'))}</span>
+      <div id="nearby-list">${supplierList(null, from, 50)}</div>
+      <button class="btn ghost wide" id="btn-locate" style="margin-top:14px">
+        ${UI_ICON.pin}${esc(t('nearby.useLocation'))}
+      </button>
+      <p class="faint" style="margin:14px 0 0">${esc(t('nearby.osmCredit'))}</p>
+    </div>`;
+}
+
+/* --------------------------------------------------------------- library */
+
 function libraryView() {
-  const L = lang();
   return `
     <h1>${esc(t('library.title'))}</h1>
     <p class="muted">${esc(t('library.lede'))}</p>
     <div class="species-grid">
       ${SPECIES.map((s) => {
-        const c = s[L] || s.en;
+        const c = L(s);
+        const other = lang() === 'en' ? s.ar.name : s.en.name;
         return `<a class="species-card" href="#/tree/${s.key}">
-            <span class="em" aria-hidden="true">${s.emoji}</span>
+            <span class="em" aria-hidden="true">${speciesIcon(s.key)}</span>
             <b>${esc(c.name)}</b>
-            ${L === 'en' ? `<span class="ar">${esc(s.ar.name)}</span>` : `<span class="ar">${esc(s.en.name)}</span>`}
+            <span class="ar">${esc(other)}</span>
             <i>${esc(s.latin)}</i>
           </a>`;
       }).join('')}
@@ -227,16 +410,16 @@ function libraryView() {
 function treeView(key) {
   const sp = SPECIES_BY_KEY[key];
   if (!sp) return libraryView();
-  const L = lang();
-  const c = sp[L] || sp.en;
-  const section = (title, body) => `<div class="card"><h3>${esc(title)}</h3><p style="margin:0">${esc(body)}</p></div>`;
+  const c = L(sp);
+  const section = (title, body) =>
+    `<div class="card"><h3>${esc(title)}</h3><p style="margin:0">${esc(body)}</p></div>`;
   return `
-    <a class="btn ghost" href="#/library" style="margin-bottom:14px">← ${esc(t('library.back'))}</a>
+    <a class="btn ghost small" href="#/library" style="margin-bottom:16px">← ${esc(t('library.back'))}</a>
     <div class="hero">
       <div class="verdict">
-        <div class="glyph" aria-hidden="true" style="font-size:2rem">${sp.emoji}</div>
+        <div class="glyph" aria-hidden="true">${speciesIcon(sp.key)}</div>
         <div>
-          <h1 style="margin:0">${esc(c.name)}</h1>
+          <h1 style="margin:0;font-size:1.7rem">${esc(c.name)}</h1>
           <div class="latin">${esc(sp.latin)} · ${esc(c.family)}</div>
         </div>
       </div>
@@ -247,98 +430,170 @@ function treeView(key) {
     ${section(t('library.health'), c.health)}`;
 }
 
-function aboutView() {
-  const L = lang();
+/* -------------------------------------------------------------- about us */
+
+function quoteBlock(q, withRule = true) {
+  const en = lang() === 'en';
+  // Both languages, always: the primary language first at full size, the other
+  // beneath it. A quotation from the Sheikhs should be readable to whoever is
+  // standing at the kiosk without anybody reaching for a toggle.
+  const primary = en ? q.en : q.ar;
+  const secondary = en ? q.ar : q.en;
+  return `
+    <figure class="quote" ${withRule ? '' : 'style="border-top:0;padding-top:0"'}>
+      <blockquote>“${esc(primary)}”</blockquote>
+      <div class="${en ? 'ar-line' : ''}" ${en ? '' : 'style="font-family:Inter,system-ui,sans-serif;direction:ltr;text-align:start;color:var(--ink-soft);margin-bottom:16px"'}>${esc(secondary)}</div>
+      <cite>${esc(L(q.who))}<span>${esc(L(q.title))}</span></cite>
+    </figure>`;
+}
+
+function aboutUsView() {
+  const en = lang() === 'en';
+
+  const leaders = `
+    <div class="leaders">
+      ${LEADERS.map((p) => `
+        <figure class="leader" style="margin:0">
+          <img src="${esc(p.img)}" alt="${esc(L(p.name))}" width="440" height="440" loading="lazy">
+          <b>${esc(L(p.name))}</b>
+          <span>${esc(L(p.title))}</span>
+        </figure>`).join('')}
+    </div>`;
+
+  const sections = SECTIONS.map((s) => `
+    <section class="bilingual" id="about-${s.id}">
+      <h2>${esc(L(s.heading))}</h2>
+      <div class="en">
+        <span class="langtag">English</span>
+        ${s.body.en.map((p) => `<p>${esc(p)}</p>`).join('')}
+      </div>
+      <div class="ar">
+        <span class="langtag">العربية</span>
+        ${s.body.ar.map((p) => `<p>${esc(p)}</p>`).join('')}
+      </div>
+    </section>`).join('');
+
+  return `
+    <section class="aboutus-hero">
+      <span class="flagchip" aria-label="Flag of the United Arab Emirates"><i></i><i></i><i></i></span>
+      <h1>${esc(t('aboutus.title'))}</h1>
+      <p>${esc(t('aboutus.lede'))}</p>
+      <a class="btn hero-cta" href="#/scan">${esc(t('aboutus.tryIt'))}</a>
+    </section>
+
+    <div class="plain">
+      ${quoteBlock(QUOTES.zayedAgriculture, false)}
+      ${leaders}
+      <p class="faint center" style="margin-top:14px">${esc(t('aboutus.portraitCredit'))}</p>
+    </div>
+
+    ${sections}
+
+    <div class="plain">
+      ${quoteBlock(QUOTES.zayedEnvironment)}
+      ${quoteBlock(QUOTES.mbrFuture)}
+    </div>
+
+    <div class="plain center">
+      <h2>${esc(t('aboutus.tryHeading'))}</h2>
+      <p class="muted" style="max-width:40ch;margin:0 auto 22px">${esc(t('aboutus.tryBody'))}</p>
+      <a class="btn hero-cta" href="#/scan">${esc(t('aboutus.tryIt'))}</a>
+      <p style="margin-top:26px">
+        <a href="#/model">${esc(t('aboutus.seeNumbers'))}</a> ·
+        <a href="#/team">${esc(t('aboutus.meetTeam'))}</a>
+      </p>
+    </div>`;
+}
+
+/* ---------------------------------------------------- model / technical */
+
+function modelView() {
   const meta = getMetadata();
   const acc = meta ? `${(meta.validationAccuracy * 100).toFixed(1)}%` : '—';
   const samples = meta ? meta.trainingSamples.toLocaleString() : '—';
+  const en = lang() === 'en';
 
   const perClass = meta ? SPECIES.map((s) => {
     const a = meta.perClassAccuracy?.[s.key] ?? 0;
-    const name = (s[L] || s.en).name;
     return `<div class="rank">
-        <b>${esc(name)}</b><span>${(a * 100).toFixed(0)}%</span>
+        <b>${esc(L(s).name)}</b><span>${(a * 100).toFixed(0)}%</span>
         <div class="confbar"><i style="width:${a * 100}%"></i></div>
       </div>`;
   }).join('') : '';
 
-  const en = L === 'en';
-
   return `
-    <h1>${esc(t('about.title'))}</h1>
+    <h1>${esc(t('model.title'))}</h1>
 
     <div class="card">
-      <p>${en
-        ? 'Green-Trace UAE identifies four native Emirati trees from a photograph of a single leaf, and then measures how healthy that leaf is. It was built as a graduation project to show that meaningful environmental AI does not need a data centre — this entire system runs inside your phone\'s browser.'
-        : 'يتعرّف «الأثر الأخضر» على أربع أشجار إماراتية أصيلة من صورة ورقة واحدة، ثم يقيس مدى صحة تلك الورقة. بُني كمشروع تخرج لإثبات أن الذكاء الاصطناعي البيئي المفيد لا يحتاج مركز بيانات — فالنظام كله يعمل داخل متصفح هاتفك.'}</p>
-      <p style="margin:0">${en
-        ? 'Nothing you photograph is uploaded anywhere. There is no server, no account and no tracking; after the first visit the app works with the network switched off.'
-        : 'لا تُرفع أي صورة تلتقطها إلى أي مكان. لا يوجد خادم ولا حساب ولا تتبّع، وبعد الزيارة الأولى يعمل التطبيق دون اتصال بالإنترنت.'}</p>
-    </div>
-
-    <div class="card">
-      <h3>${en ? 'How it works' : 'كيف يعمل'}</h3>
+      <h3>${esc(t('model.how'))}</h3>
       <ul class="findings">
-        <li class="ok"><i class="dot"></i><span>${en
-          ? 'A MobileNetV2 convolutional neural network, pre-trained on ImageNet, converts the leaf photo into a 1,280-number description of its shape, texture and pattern.'
-          : 'شبكة عصبية التفافية MobileNetV2 مدرَّبة مسبقاً على ImageNet تحوّل صورة الورقة إلى وصف رقمي من ١٢٨٠ قيمة يمثل شكلها وملمسها ونمطها.'}</span></li>
-        <li class="ok"><i class="dot"></i><span>${en
-          ? 'A small classifier, trained by us on openly-licensed field photographs of the four species, maps that description onto a tree.'
-          : 'مصنّف صغير دربناه على صور ميدانية مفتوحة الترخيص للأنواع الأربعة يربط هذا الوصف بالشجرة المناسبة.'}</span></li>
-        <li class="ok"><i class="dot"></i><span>${en
-          ? 'Health is measured separately, without a neural network, so every number can be explained: the leaf is cut out of the background using the Excess Green vegetation index, then each pixel is graded as healthy, chlorotic (yellowing) or necrotic (dead).'
-          : 'تُقاس الصحة بشكل منفصل ودون شبكة عصبية حتى يمكن تفسير كل رقم: تُفصل الورقة عن الخلفية بمؤشر الأخضر الزائد، ثم تُصنَّف كل بكسل كسليمة أو مصفرّة أو متنخرة.'}</span></li>
+        <li class="ok"><i class="dot"></i><span>${esc(t('model.how1'))}</span></li>
+        <li class="ok"><i class="dot"></i><span>${esc(t('model.how2'))}</span></li>
+        <li class="ok"><i class="dot"></i><span>${esc(t('model.how3'))}</span></li>
+        <li class="ok"><i class="dot"></i><span>${esc(t('model.how4'))}</span></li>
       </ul>
     </div>
 
     <div class="card">
-      <h3>${en ? 'Model performance' : 'أداء النموذج'}</h3>
+      <h3>${esc(t('model.performance'))}</h3>
       <dl class="metrics">
-        <div class="metric"><dt>${en ? 'Validation accuracy' : 'دقة التحقق'}</dt><dd>${acc}</dd></div>
-        <div class="metric"><dt>${en ? 'Training samples' : 'عينات التدريب'}</dt><dd>${samples}</dd></div>
-        <div class="metric"><dt>${en ? 'Species' : 'الأنواع'}</dt><dd>${SPECIES.length}</dd></div>
+        <div class="metric"><dt>${esc(t('model.valAcc'))}</dt><dd>${acc}</dd></div>
+        <div class="metric"><dt>${esc(t('model.samples'))}</dt><dd>${samples}</dd></div>
+        <div class="metric"><dt>${esc(t('model.species'))}</dt><dd>${SPECIES.length}</dd></div>
       </dl>
-      ${perClass ? `<h3 style="margin-top:16px">${en ? 'Accuracy per species' : 'الدقة لكل نوع'}</h3><div class="ranks">${perClass}</div>` : ''}
-      <p class="faint" style="margin:14px 0 0">${en
-        ? 'Measured on a held-out validation split the model never trained on.'
-        : 'قيست على مجموعة تحقق منفصلة لم يتدرب عليها النموذج.'}</p>
+      ${perClass ? `<h3 style="margin-top:18px">${esc(t('model.perSpecies'))}</h3><div class="ranks">${perClass}</div>` : ''}
+      <p class="faint" style="margin:16px 0 0">${esc(t('model.heldOut'))}</p>
     </div>
 
     <div class="card qr-wrap">
       <h3 style="margin:0">${esc(t('about.qr'))}</h3>
-      <img src="./assets/qr.svg" alt="QR code linking to ${esc(PROJECT.site)}" width="240" height="240">
+      <img src="./assets/qr.svg" alt="QR code linking to ${esc(PROJECT.site)}" width="230" height="230">
       <p class="faint" style="margin:0">${esc(t('about.qrHint'))}</p>
-      <button class="btn ghost" id="btn-copy" type="button">${en ? 'Copy link' : 'نسخ الرابط'}</button>
+      <button class="btn ghost small" id="btn-copy" type="button">${en ? 'Copy link' : 'نسخ الرابط'}</button>
     </div>
 
     <div class="card">
-      <h3>${en ? 'Credits & licence' : 'المصادر والترخيص'}</h3>
-      <p class="faint" style="margin:0">${en
-        ? 'Training photographs come from iNaturalist contributors under Creative Commons licences; every photo used is credited in dataset/inaturalist/CREDITS.json in the repository. The base network is Google\'s MobileNetV2 (Apache 2.0). Source code:'
-        : 'صور التدريب من مساهمي iNaturalist بتراخيص المشاع الإبداعي، وكل صورة مستخدمة موثقة في ملف CREDITS.json داخل المستودع. الشبكة الأساسية هي MobileNetV2 من جوجل بترخيص Apache 2.0. الشيفرة المصدرية:'}
+      <h3>${esc(t('model.credits'))}</h3>
+      <p class="faint" style="margin:0 0 8px">${esc(t('model.creditsBody'))}
         <a href="${PROJECT.repo}" target="_blank" rel="noopener">github.com/vsoultann/green-trace-uae</a></p>
+      <p class="faint" style="margin:0">${esc(t('nearby.osmCredit'))}</p>
+      <p class="faint" style="margin:8px 0 0">${esc(t('aboutus.portraitCredit'))}</p>
     </div>`;
 }
 
+/* ------------------------------------------------------------------ team */
+
 function teamView() {
-  const L = lang();
   const initials = (n) => n.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+  // Only the two Team Leaders take the flag's red. Matching on "Leader" would
+  // sweep the Co-Leader in with them and flatten the distinction the team drew.
+  const isLead = (m) => m.role.en === 'Team Leader';
+
   return `
     <h1>${esc(t('team.title'))}</h1>
     <p class="muted">${esc(t('team.lede'))}</p>
-    <div class="team-grid">
-      ${TEAM.map((m) => `
-        <div class="member">
-          <div class="avatar" aria-hidden="true">${esc(initials(m.name))}</div>
-          <div>
-            <b>${esc(L === 'ar' ? m.ar : m.name)}</b>
-            <span>${esc(m.role[L] || m.role.en)}</span>
-          </div>
-        </div>`).join('')}
+
+    <div class="card">
+      <span class="eyebrow">${esc(t('team.split'))}</span>
+      <div class="team-list">
+        ${TEAM.map((m) => `
+          <div class="member${isLead(m) ? ' lead' : ''}">
+            <div class="avatar" aria-hidden="true">${esc(initials(m.name))}</div>
+            <div class="who">
+              <b>${esc(lang() === 'ar' ? m.ar : m.name)}</b>
+              <span>${esc(L(m.role))}</span>
+            </div>
+            <div class="pct">${m.share}%</div>
+            <div class="contribution">${esc(L(m.contribution))}</div>
+            <div class="share"><i data-fill="${m.share}" style="width:0"></i></div>
+          </div>`).join('')}
+      </div>
+      <p class="faint" style="margin:16px 0 0">${esc(t('team.splitNote'))}</p>
     </div>
-    <div class="card" style="margin-top:16px;text-align:center">
-      <strong>${esc(L === 'ar' ? PROJECT.nameAr : PROJECT.name)}</strong>
-      <p class="faint" style="margin:6px 0 0">${PROJECT.year} · ${L === 'ar' ? 'مشروع تخرج' : 'Graduation Project'}</p>
+
+    <div class="card center">
+      <strong>${esc(lang() === 'ar' ? PROJECT.nameAr : PROJECT.name)}</strong>
+      <p class="faint" style="margin:6px 0 0">${PROJECT.year} · ${esc(t('team.gradProject'))}</p>
     </div>`;
 }
 
@@ -348,7 +603,9 @@ const ROUTES = {
   scan: scanView,
   result: resultView,
   library: libraryView,
-  about: aboutView,
+  nearby: nearbyView,
+  about: aboutUsView,
+  model: modelView,
   team: teamView,
 };
 
@@ -364,8 +621,11 @@ function render() {
 
   if (name === 'result' && !lastScan) { location.hash = '#/scan'; return; }
 
-  // Highlight the matching tab; tree pages belong to the library tab.
-  const tab = name === 'tree' ? 'library' : (ROUTES[name] ? name : 'scan');
+  // Highlight the matching tab; tree pages belong to the library tab and the
+  // technical page belongs to About.
+  const tab = name === 'tree' ? 'library'
+    : name === 'model' ? 'about'
+    : (ROUTES[name] ? name : 'scan');
   document.querySelectorAll('.tabbar a').forEach((a) => {
     if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
@@ -374,6 +634,9 @@ function render() {
 
   transitionView(view, () => {
     view.innerHTML = name === 'tree' ? treeView(arg) : (ROUTES[name] || scanView)();
+    // `view` *is* the <main>, so the class goes on it directly. Reaching for
+    // parentElement put it on <body>, where the width rule does nothing.
+    view.classList.toggle('wide', name === 'about' || name === 'nearby');
 
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const k = el.dataset.i18n;
@@ -390,12 +653,24 @@ function render() {
 
 /** Post-render motion: stagger the cards, then play the per-view flourishes. */
 function animateView(name) {
-  stagger(view.querySelectorAll(':scope > .card, :scope > .hero, :scope > .species-grid, :scope > .team-grid, :scope > details'));
+  stagger(view.querySelectorAll(
+    ':scope > .card, :scope > .hero, :scope > .species-grid, :scope > .plain, ' +
+    ':scope > .bilingual, :scope > .aboutus-hero, :scope > .unknown, :scope > details'
+  ));
   stagger(view.querySelectorAll('.findings li'), 55, 220);
 
-  if (name === 'result' || name === 'about') {
+  if (name === 'result' || name === 'model') {
     fillBars(view);
     drawDial(view);
+  }
+
+  if (name === 'team') {
+    // Grow each contribution bar to its share once the row is on screen.
+    requestAnimationFrame(() => {
+      view.querySelectorAll('.share i[data-fill]').forEach((el, i) => {
+        setTimeout(() => { el.style.width = `${el.dataset.fill}%`; }, 90 + i * 70);
+      });
+    });
   }
 
   if (name === 'result') {
@@ -411,8 +686,35 @@ function animateView(name) {
 
 /* -------------------------------------------------------------- behaviour */
 
+/** Wires the "use my location" button on whichever view is showing one. */
+function wireLocate() {
+  const btn = document.getElementById('btn-locate');
+  const card = document.getElementById('nearby-card');
+  if (!btn || !card) return;
+
+  btn.addEventListener('click', async () => {
+    btn.disabled = true;
+    btn.textContent = t('nearby.locating');
+    const fix = await locate();
+    btn.disabled = false;
+
+    if (!fix) {
+      btn.textContent = t('nearby.useLocation');
+      toast(t('nearby.denied'));
+      return;
+    }
+
+    const category = card.dataset.category || null;
+    const isPage = currentRoute().name === 'nearby';
+    document.getElementById('nearby-list').innerHTML =
+      supplierList(category, fix, isPage ? 50 : 5);
+    btn.textContent = t('nearby.sorted');
+    btn.disabled = true;
+  });
+}
+
 function wireView(name) {
-  if (name === 'about') {
+  if (name === 'model') {
     document.getElementById('btn-copy')?.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(PROJECT.site);
@@ -421,13 +723,15 @@ function wireView(name) {
         toast(PROJECT.site);
       }
     });
-    // The About page quotes live model numbers, so load the model if the user
-    // landed here first and re-render once the metadata arrives.
+    // This page quotes live model numbers, so load the model if the user landed
+    // here first and re-render once the metadata arrives.
     if (!getMetadata()) {
-      loadModel().then(() => { if (currentRoute().name === 'about') render(); }).catch(() => {});
+      loadModel().then(() => { if (currentRoute().name === 'model') render(); }).catch(() => {});
     }
     return;
   }
+
+  if (name === 'nearby') { wireLocate(); return; }
 
   if (name === 'result') {
     const img = document.getElementById('result-img');
@@ -439,11 +743,12 @@ function wireView(name) {
       void img.offsetWidth; // restart the wipe animation
       img.classList.add('wiping');
       btn.setAttribute('aria-pressed', String(!showingOverlay));
-      btn.textContent = showingOverlay
-        ? (lang() === 'ar' ? 'إظهار تحليل الصحة' : 'Show health analysis')
-        : (lang() === 'ar' ? 'إظهار الصورة الأصلية' : 'Show original photo');
+      btn.textContent = showingOverlay ? t('result.showAnalysis') : t('result.showOriginal');
     });
-    document.getElementById('btn-rescan')?.addEventListener('click', () => { location.hash = '#/scan'; });
+    const rescan = () => { location.hash = '#/scan'; };
+    document.getElementById('btn-rescan')?.addEventListener('click', rescan);
+    document.getElementById('btn-rescan-2')?.addEventListener('click', rescan);
+    wireLocate();
     return;
   }
 
@@ -521,7 +826,7 @@ async function startCamera() {
     <div id="preview-wrap"><video id="cam" playsinline muted autoplay></video></div>
     <div class="row" style="margin-top:12px">
       <button class="btn" id="btn-shoot" type="button">${esc(t('scan.capture'))}</button>
-      <button class="btn ghost" id="btn-cancel-cam" type="button">${lang() === 'ar' ? 'إلغاء' : 'Cancel'}</button>
+      <button class="btn ghost" id="btn-cancel-cam" type="button">${esc(t('scan.cancel'))}</button>
     </div>`;
 
   const video = document.getElementById('cam');
@@ -567,7 +872,7 @@ async function handleFile(fileOrBlob) {
   const area = document.getElementById('capture-area');
   if (area) {
     area.innerHTML = `<div id="preview-wrap" class="scanning"><img src="${objectURL}" alt=""></div>
-      <p class="muted" style="text-align:center;margin-top:12px">${esc(t('scan.analysing'))}</p>`;
+      <p class="muted center" style="margin-top:12px">${esc(t('scan.analysing'))}</p>`;
   }
   announce(t('scan.analysing'));
 
@@ -593,13 +898,21 @@ async function handleFile(fileOrBlob) {
     return;
   }
 
+  // The health pass knows whether there is foliage in the frame at all, which
+  // is the strongest single reason to refuse to name a species.
+  const recognition = recognitionState(prediction, health.leafConfidence);
+
   const overlayURL = health.overlay ? health.overlay.toDataURL('image/jpeg', 0.86) : null;
 
   if (lastScan?.image?.startsWith('blob:')) URL.revokeObjectURL(lastScan.image);
-  lastScan = { image: objectURL, overlayURL, prediction, health };
+  lastScan = { image: objectURL, overlayURL, prediction, health, recognition };
 
-  const sp = SPECIES_BY_KEY[prediction.top.key];
-  announce(`${(sp[lang()] || sp.en).name}, ${pct(prediction.top.p)}%`);
+  if (recognition.state === 'unknown') {
+    announce(t('unknown.title'));
+  } else {
+    const sp = SPECIES_BY_KEY[prediction.top.key];
+    announce(`${L(sp).name}, ${pct(prediction.top.p)}%`);
+  }
 
   // Assigning the hash fires hashchange, which renders. Only render by hand
   // when we were already on #/result and the assignment would be a no-op.
@@ -607,7 +920,7 @@ async function handleFile(fileOrBlob) {
   else location.hash = '#/result';
 }
 
-/* ------------------------------------------------------- settings sheet */
+/* --------------------------------------------------------- settings sheet */
 
 const sheet = document.getElementById('sheet');
 
@@ -667,7 +980,7 @@ document.getElementById('btn-lang').addEventListener('click', () => {
 
 window.addEventListener('gt:lang', () => { paintLangSeg(); paintThemeList(); paintMotionSeg(); render(); });
 
-/* -------------------------------------------------------------------- go */
+/* --------------------------------------------------------------------- go */
 
 initLang();
 initTheme();

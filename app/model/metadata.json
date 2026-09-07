@@ -1,6 +1,6 @@
 {
   "name": "Green-Trace UAE species classifier",
-  "trainedAt": "2026-09-02T11:05:17.940Z",
+  "trainedAt": "2026-09-07T06:05:51.882Z",
   "architecture": "MobileNetV2 (frozen, ImageNet) + 192-96-4 dense head",
   "inputSize": 224,
   "featureNode": "module_apply_default/MobilenetV2/Logits/AvgPool",
@@ -16,41 +16,42 @@
     "nakhl": "Date Palm",
     "samar": "Samar"
   },
-  "validationAccuracy": 0.8276,
+  "validationAccuracy": 0.8147,
   "perClassAccuracy": {
-    "ghaf": 0.7692,
-    "sidr": 0.7667,
-    "nakhl": 0.9667,
-    "samar": 0.8
+    "ghaf": 0.8846,
+    "sidr": 0.7833,
+    "nakhl": 0.9167,
+    "samar": 0.6833
   },
   "confusionMatrix": [
     [
-      40,
-      5,
-      2,
-      5
-    ],
-    [
-      5,
       46,
-      2,
-      7
-    ],
-    [
+      5,
       0,
-      1,
-      58,
       1
     ],
     [
       7,
-      4,
+      47,
       1,
-      48
+      5
+    ],
+    [
+      2,
+      3,
+      55,
+      0
+    ],
+    [
+      11,
+      7,
+      1,
+      41
     ]
   ],
   "trainingSamples": 10528,
   "validationSamples": 232,
+  "oodThreshold": 0.5898,
   "sourceCounts": {
     "ghaf": {
       "reference": 348,
