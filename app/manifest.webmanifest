@@ -1,13 +1,13 @@
 {
-  "name": "Green-Trace UAE — Leaf Identification & Health AI",
-  "short_name": "Green-Trace",
-  "description": "Identify Ghaf, Sidr, Date Palm and Samar trees from a leaf, and measure that leaf's health — entirely on your device.",
+  "name": "Warif — وارف",
+  "short_name": "Warif",
+  "description": "Identify a UAE tree from one leaf, check that leaf's health, and find the treatment near you — entirely on your device, even offline.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#fbf6ec",
-  "theme_color": "#b8791f",
+  "orientation": "any",
+  "background_color": "#EEF1EA",
+  "theme_color": "#EEF1EA",
   "lang": "en",
   "dir": "auto",
   "categories": ["education", "utilities"],
@@ -16,5 +16,10 @@
     { "src": "./assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "./assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "./assets/icons/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Scan a leaf", "url": "./#/", "description": "Point the camera at one leaf" },
+    { "name": "Trees", "url": "./#/trees", "description": "The tree library" },
+    { "name": "Help", "url": "./#/help", "description": "Helplines and nearby suppliers" }
   ]
 }

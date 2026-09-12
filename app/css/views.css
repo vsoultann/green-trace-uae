@@ -909,8 +909,11 @@
     display: flex;
     flex-direction: column;
     /* Everything below is in millimetres so the browser lays out what the print
-       shop receives, rather than something that only resembles it. */
-    font-size: 3.4mm;
+       shop receives, rather than something that only resembles it. An A1 is read
+       standing a metre away: 4.6mm of body text is about 13pt, which is the
+       floor for that distance, and the first draft at 3.4mm was unreadable from
+       anywhere except directly in front of it. */
+    font-size: 4.6mm;
     line-height: 1.45;
   }
   .poster .sadu-band { --band-h: 8mm; }
@@ -921,30 +924,35 @@
     align-items: start;
     padding: 12mm 14mm 8mm;
   }
-  .poster-head .lockup { --lockup-w: 52mm; --lockup-h: 14mm; }
-  .poster-title h1 { font-size: 13mm; line-height: 1.05; margin-block-end: 3mm; }
-  .poster-tagline { font-family: var(--font-display); font-weight: 600; font-size: 6mm; color: var(--sadu-red); }
-  .poster-descriptor { font-size: 4.2mm; color: #4A5B51; }
-  .poster-credits { text-align: end; font-size: 3.2mm; line-height: 1.6; }
-  .poster-credits p { max-width: 62mm; }
+  .poster-head .lockup { --lockup-w: 62mm; --lockup-h: 17mm; }
+  .poster-title h1 { font-size: 17mm; line-height: 1.05; margin-block-end: 3mm; }
+  .poster-tagline { font-family: var(--font-display); font-weight: 600; font-size: 8mm; color: var(--sadu-red); }
+  .poster-descriptor { font-size: 5.4mm; color: #4A5B51; }
+  .poster-credits { text-align: end; font-size: 3.9mm; line-height: 1.6; }
+  .poster-credits p { max-width: 72mm; }
 
   .poster-grid {
     flex: 1 1 auto;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 7mm;
+    gap: 8mm;
     padding: 0 14mm 8mm;
-    align-content: start;
+    /* Spread the blocks down the sheet rather than stacking them at the top and
+       leaving the bottom third of an A1 empty. */
+    align-content: space-between;
   }
-  .poster-wide, .poster-shots, .poster-qr-block { grid-column: 1 / -1; }
+  .poster-wide, .poster-shots { grid-column: 1 / -1; }
+  /* The QR sits beside Impact rather than under it: one code alone on a full
+     A1 row is a lot of paper spent on a square. */
+  .poster-qr-block { align-content: end; justify-content: end; }
   .poster-block h2 {
-    font-size: 6mm;
+    font-size: 8mm;
     margin-block-end: 3mm;
     padding-block-end: 2mm;
     border-block-end: 0.6mm solid var(--ghaf);
   }
   .poster-block p { max-width: none; margin-block-end: 2.5mm; }
-  .poster-note { font-size: 3mm; color: #4A5B51; }
+  .poster-note { font-size: 3.7mm; color: #4A5B51; }
 
   .poster-stages { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3mm; list-style: none; padding: 0; margin: 0; }
   .poster-stages li {
@@ -952,9 +960,9 @@
     gap: 1mm;
     padding-block-start: 3mm;
     border-block-start: 1.2mm solid var(--ghaf-light);
-    font-size: 3.1mm;
+    font-size: 3.9mm;
   }
-  .poster-stages b { font-size: 3.6mm; }
+  .poster-stages b { font-size: 4.6mm; }
 
   .poster-pipeline {
     display: grid;
@@ -967,9 +975,9 @@
   }
   .poster-pipeline li {
     position: relative;
-    padding: 3mm 3mm 3mm 9mm;
+    padding: 3mm 3mm 3mm 10mm;
     border: 0.4mm solid var(--ghaf-light);
-    font-size: 3.1mm;
+    font-size: 3.9mm;
   }
   .poster-pipeline li::before {
     counter-increment: step;
@@ -984,21 +992,60 @@
   .poster-kv { display: grid; gap: 2mm; margin-block-end: 3mm; }
   .poster-kv > div { display: flex; justify-content: space-between; gap: 4mm; border-block-end: 0.3mm dotted #C5CFC2; padding-block-end: 1mm; }
   .poster-kv dt { color: #4A5B51; }
+  /* Ten leaves, drawn. The most immediate thing on the sheet from across a hall,
+     and the only place the poster shows what the library actually contains. */
+  .poster-trees {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 4mm;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .poster-trees li {
+    display: grid;
+    justify-items: center;
+    gap: 0.8mm;
+    text-align: center;
+    color: var(--ghaf);
+    font-size: 3.4mm;
+  }
+  .poster-trees b { font-family: var(--font-display); font-size: 4.2mm; color: var(--ink-core); }
+  .poster-trees span { color: #4A5B51; }
+  .poster-trees em {
+    font-style: normal;
+    font-size: 2.9mm;
+    padding: 0.5mm 1.5mm;
+    border: 0.3mm solid var(--ghaf);
+    border-radius: 0.5mm;
+  }
+  .poster-trees li[data-reference='1'] { color: #7d8a80; }
+  .poster-trees li[data-reference='1'] em { border-style: dashed; border-color: #7d8a80; color: #7d8a80; }
   .poster-kv dd { margin: 0; font-family: var(--font-display); font-weight: 600; font-variant-numeric: tabular-nums; }
 
-  .poster-shot-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5mm; }
-  .poster-shot-row img { width: 100%; border: 0.4mm solid #C5CFC2; border-radius: 2mm; }
+  /* Sized by height, not by column width. A phone screenshot is taller than it
+     is wide by more than two to one, so stretching three of them across an A1
+     column produced three images a third of a metre tall. */
+  .poster-shot-row { display: flex; gap: 6mm; justify-content: start; align-items: start; }
+  .poster-shot-row img {
+    height: 150mm;
+    width: auto;
+    object-fit: cover;
+    object-position: top;
+    border: 0.4mm solid #C5CFC2;
+    border-radius: 2mm;
+  }
 
   .poster-qr-block { display: flex; gap: 10mm; }
-  .poster-qr { display: grid; gap: 2mm; justify-items: center; font-size: 3.2mm; }
-  .poster-qr img { width: 34mm; height: 34mm; }
+  .poster-qr { display: grid; gap: 2mm; justify-items: center; font-size: 4mm; }
+  .poster-qr img { width: 42mm; height: 42mm; }
 
   .poster-foot {
     display: flex;
     justify-content: space-between;
     gap: 8mm;
     padding: 5mm 14mm 8mm;
-    font-size: 2.8mm;
+    font-size: 3.4mm;
     color: #4A5B51;
   }
 

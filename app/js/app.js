@@ -164,9 +164,6 @@ document.addEventListener('click', (e) => {
 
 /* --------------------------------------------------------------- router */
 
-let currentCleanup = null;
-let currentCtx = null;
-
 /**
  * Paints a view.
  *
@@ -203,7 +200,6 @@ async function paint(ctx) {
   }
 
   markActive(ctx.pathname);
-  currentCtx = ctx;
 
   const cleanup = await output.mount?.(viewEl, ctx);
 
@@ -233,19 +229,6 @@ function notFound(ctx) {
   markActive('/');
 }
 
-/* Re-render everything on a language change: the chrome, the settings sheet if
-   it is open, and the view — a translated app that keeps one English heading
-   until you navigate is worse than one that never translated at all. */
-onLangChange(() => {
-  renderTopbar();
-  renderTabbar();
-  if (settingsEl.open) renderSettings();
-  if (currentCtx) {
-    Promise.resolve(currentCleanup).then((fn) => { try { fn?.(); } catch { /* ignore */ } });
-    currentCleanup = paint(currentCtx);
-  }
-});
-
 renderTopbar();
 renderTabbar();
 
@@ -254,12 +237,21 @@ renderTabbar();
    later is the v1 bug wearing a new coat. */
 await loadMetadata();
 
-start({
-  onRender: async (ctx) => {
-    currentCleanup = await paint(ctx);
-    return currentCleanup;
-  },
+const refresh = start({
+  onRender: (ctx) => paint(ctx),
   onMissing: notFound,
+});
+
+/* Re-render everything on a language change: the chrome, the settings sheet if
+   it is open, and the view — a translated app that keeps one English heading
+   until you navigate is worse than one that never translated at all. The view
+   goes back through the router rather than being repainted directly, so a
+   language change during a navigation cannot win a race against it. */
+onLangChange(() => {
+  renderTopbar();
+  renderTabbar();
+  if (settingsEl.open) renderSettings();
+  refresh();
 });
 
 /* ------------------------------------------------------- after first paint */
@@ -275,10 +267,22 @@ requestAnimationFrame(() => {
   setTimeout(() => { ensureModel().catch(() => { /* the scan view reports it */ }); }, 300);
 });
 
+/**
+ * Register the service worker — the thing that makes the kiosk work offline.
+ *
+ * The readyState check is not belt and braces. This module has a top-level
+ * `await` on the model card, so its body resumes *after* the document has
+ * finished loading, and a plain `addEventListener('load', …)` here attaches a
+ * listener to an event that already fired. The app then looked perfectly
+ * healthy and had no service worker at all, which only shows up when the wifi
+ * goes — the one moment the whole offline claim is being tested.
+ */
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  const register = () => {
     navigator.serviceWorker.register('./sw.js').catch(() => { /* file:// or private mode */ });
-  });
+  };
+  if (document.readyState === 'complete') register();
+  else window.addEventListener('load', register, { once: true });
 }
 
 /* A kiosk reload must not come back holding the last visitor's leaf. */

@@ -185,6 +185,66 @@ export const ITERATIONS = [
     },
   },
   {
+    id: 'offline-service-worker',
+    severity: 'reliability',
+    problem: {
+      en: 'The app claimed to work offline and did not. The service worker was registered from a listener on the window load event, but the module that adds that listener now waits for the model card first — so by the time the line ran, load had already fired and nothing was ever registered. The app looked perfectly healthy and had no offline cache at all.',
+      ar: 'كان التطبيق يدّعي العمل دون إنترنت ولا يفعل. فقد كان عامل الخدمة يُسجَّل من مستمع لحدث تحميل الصفحة، لكن الوحدة التي تضيف ذلك المستمع صارت تنتظر بيانات النموذج أولاً، فحين وصل التنفيذ إلى ذلك السطر كان الحدث قد وقع، ولم يُسجَّل شيء. بدا التطبيق سليماً تماماً وهو بلا ذاكرة للعمل دون إنترنت.',
+    },
+    change: {
+      en: 'Register immediately when the document has already finished loading, and only wait for the event when it has not.',
+      ar: 'التسجيل فوراً إذا كان تحميل المستند قد اكتمل، وانتظار الحدث فقط إذا لم يكتمل بعد.',
+    },
+    evidence: {
+      en: 'npm run bench reported "offline reload FAIL", and a probe found no registration at all: zero caches, no controller.',
+      ar: 'أبلغ أمر npm run bench عن فشل إعادة التحميل دون إنترنت، وكشف الفحص أنه لا يوجد تسجيل أصلاً: لا ذاكرة ولا عامل متحكّم.',
+    },
+    result: {
+      en: '98 files precached, and a reload with the network switched off now renders the app. Both npm test and npm run bench check it, so the claim is a test rather than a hope.',
+      ar: 'صار 98 ملفاً محفوظاً مسبقاً، وإعادة التحميل مع قطع الشبكة تعرض التطبيق. ويتحقق من ذلك كلٌّ من npm test وnpm run bench، فصار الادعاء اختباراً لا أمنية.',
+    },
+  },
+  {
+    id: 'ood-scope',
+    severity: 'accuracy',
+    problem: {
+      en: 'We believed the unknown-leaf check would refuse a tree the model had never been trained on. It does not. Measured over the reference set it rejected 0 of 40 Mesquite and 2 of 40 Mangrove photographs — so a Mangrove leaf can be handed one of the four trained names with high confidence.',
+      ar: 'كنا نظن أن فحص الورقة غير المعروفة يرفض شجرة لم يُدرَّب عليها النموذج. وهو لا يفعل. فقياساً على المجموعة المرجعية رفض صفراً من أربعين صورة مسكيت واثنتين من أربعين صورة قرم، أي أن ورقة القرم قد تُمنح أحد الأسماء الأربعة بثقة عالية.',
+    },
+    change: {
+      en: 'The finding is stated on the How page and in the Test Lab with the measured numbers, and the demonstration sample that relied on the assumption was removed. The threshold itself was left alone: it does what it was built for, which is refusing photographs with no plant tissue in them.',
+      ar: 'أُعلنت النتيجة في صفحة «كيف يعمل» وفي مختبر الاختبار بأرقامها المقيسة، وأُزيلت العيّنة التوضيحية التي كانت تعتمد على ذلك الافتراض. أما العتبة نفسها فتُركت كما هي، فهي تؤدي ما بُنيت له: رفض الصور الخالية من النسيج النباتي.',
+    },
+    evidence: {
+      en: 'npm run bench measures it on every run, across every tree in the dataset the model was not trained on.',
+      ar: 'يقيسه أمر npm run bench في كل تشغيل، على كل شجرة في مجموعة البيانات لم يُدرَّب عليها النموذج.',
+    },
+    result: {
+      en: 'A limitation we would have been asked about is now one we state first, with a number attached.',
+      ar: 'صار القصور الذي كنا سنُسأل عنه أمراً نذكره نحن أولاً، ومعه رقمه.',
+    },
+  },
+  {
+    id: 'sensitivity-drift',
+    severity: 'accuracy',
+    problem: {
+      en: 'The sensitivity suite had been passing at 93% and 97% detection for synthetic chlorosis. Re-run across all ten reference species rather than the original four, it reports 89.4% and 93.8% — the milder case now sits below the suite\'s own 90% floor, and the tool exits non-zero because of it.',
+      ar: 'كانت مجموعة اختبار الحساسية تنجح برصد الاصفرار المصطنع بنسبتي 93٪ و97٪. وبإعادة تشغيلها على الأنواع المرجعية العشرة كلها بدل الأربعة الأصلية، صارت النسبتان 89.4٪ و93.8٪، فهبطت الحالة الأخف تحت عتبة الـ90٪ التي وضعتها الأداة لنفسها، وصارت تُنهي بخطأ.',
+    },
+    change: {
+      en: 'Nothing was re-floored and no threshold was loosened to make the red go away. The measured numbers replaced the old ones in the README and in the Test Lab, and the likely cause is recorded: six of the ten species have foliage the thresholds were never tuned against.',
+      ar: 'لم تُخفَّض العتبة ولم يُرخَ أي حد لإخفاء الإخفاق. حلّت الأرقام المقيسة محل القديمة في ملف README وفي مختبر الاختبار، وسُجّل السبب المرجّح: ستة من الأنواع العشرة لها أوراق لم تُضبط العتبات عليها قط.',
+    },
+    evidence: {
+      en: 'npm run sensitivity across 385 and 353 composited leaves per case, against 40 per species in the original run.',
+      ar: 'تشغيل npm run sensitivity على 385 و353 ورقة مركّبة لكل حالة، مقابل 40 لكل نوع في التشغيل الأصلي.',
+    },
+    result: {
+      en: 'Necrosis detection is unaffected at 99.2% and 100%. The chlorosis gap is open work, named on the page rather than hidden by a smaller sample.',
+      ar: 'لم يتأثر رصد التنخّر، وبقي عند 99.2٪ و100٪. أما فجوة الاصفرار فعملٌ مفتوح، مذكورٌ في الصفحة لا مخفيٌّ خلف عيّنة أصغر.',
+    },
+  },
+  {
     id: 'team-shares',
     severity: 'correctness',
     problem: {

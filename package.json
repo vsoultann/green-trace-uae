@@ -1,17 +1,24 @@
 {
-  "name": "green-trace-uae",
-  "version": "1.0.0",
+  "name": "warif",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "Tooling for the Green-Trace UAE leaf identifier (dataset fetch, model training, and health-analyser calibration).",
+  "description": "Warif (وارف) — AI tree identification and leaf health for the UAE. Tooling for the dataset fetch, model training, health-analyser calibration, brand assets and the evidence the workbook needs.",
   "scripts": {
+    "serve": "node tools/serve.mjs",
+    "test": "node tools/smoke-test.mjs",
     "fetch": "node tools/fetch-dataset.mjs",
     "train": "node tools/train.mjs",
-    "qr": "node tools/make-qr.mjs",
-    "test": "node tools/smoke-test.mjs",
-    "serve": "node tools/serve.mjs",
     "calibrate": "node tools/health-calibrate.mjs --kiosk",
-    "sensitivity": "node tools/health-sensitivity.mjs"
+    "sensitivity": "node tools/health-sensitivity.mjs",
+    "bench": "node tools/bench.mjs",
+    "samples": "node tools/samples.mjs",
+    "brand": "node tools/brand.mjs",
+    "qr": "node tools/make-qr.mjs",
+    "sw": "node tools/sw-manifest.mjs",
+    "shots": "node tools/shots.mjs docs/evidence/v2 --routes '#/,#/result,#/trees,#/trees/ghaf,#/help,#/project,#/project/how,#/project/lab,#/project/journey,#/team,#/feedback,#/brand,#/showcase,#/present,#/poster' --lang en,ar --theme day --flat",
+    "shots:night": "node tools/shots.mjs docs/evidence/v2-night --routes '#/,#/result,#/trees,#/project/how,#/team' --lang en,ar --theme night --flat",
+    "evidence": "node tools/evidence.mjs"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",

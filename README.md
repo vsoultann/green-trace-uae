@@ -1,8 +1,22 @@
-# Green-Trace UAE
+# Warif — وارف
 
-**Identify Emirati trees from a single leaf, measure how healthy that leaf is, and find the treatment in a shop near you — entirely inside the browser, with no server and no internet connection.**
+**Read the leaf. Keep the shade.**
 
-A graduation project by Sultan Alkaabi and Saif Alshamsi (team leaders), Mohammed Abdulla (co-leader), Hamdan Alneyemi (AI specialist) and Mohammed Rashed (programmer).
+Warif identifies a UAE tree from a single leaf, measures how healthy that leaf
+is, and points you at the treatment and the shop that sells it — entirely inside
+the browser, with no server and no internet connection.
+
+*Wārif* is an Arabic word for shade that spreads wide and greenery that is lush:
+what a healthy tree gives back.
+
+A Grade 12 graduation project at Applied Technology High School, Al Ain, by
+**Sultan Alkaabi** (team leader), **Saif Alshamsi** (data and field research),
+**Mohammed Abdulla** (content and presentation), **Hamdan Alneyemi** (AI
+specialist) and **Mohammed Rashed** (programmer), supervised by
+**Mr. Hamdy Hersi**.
+
+Shipped as *Green-Trace UAE* in version 1; renamed and rebuilt as Warif in
+version 2. The Journey page inside the app records what changed and why.
 
 🌐 **Live app:** https://vsoultann.github.io/green-trace-uae/
 
@@ -18,8 +32,9 @@ A graduation project by Sultan Alkaabi and Saif Alshamsi (team leaders), Mohamme
 | **Treatment** | Names the likely cause, recommends what to buy, and lists nurseries and agricultural suppliers with phone numbers, opening hours and directions |
 | **Runs where** | The user's phone. No API, no upload, no account. Works offline after first load. |
 | **Languages** | English and Arabic, with full right-to-left layout |
-| **Layout** | Phone, tablet and desktop — the navigation moves from a bottom tab bar to a top bar on wide screens, and the About page sets both languages as facing columns |
-| **Themes** | Sixteen, grouped: four made for this project, plus Catppuccin, Nord, Tokyo Night, Dracula, Gruvbox, Rosé Pine, Solarized, Everforest and One Dark, a high-contrast mode and "match device" |
+| **Layout** | Phone, tablet and desktop — the navigation moves from a bottom bar with a diamond scan button to a top bar on wide screens, and the home screen splits into headline and viewfinder |
+| **Themes** | Four, each a decision rather than a preference: Auto, Day, Night ("Majlis") and High contrast |
+| **Showcase kit** | Kiosk mode, an in-app slide deck with a speaker timer, a print-ready A1 poster, an evaluator feedback form, and a brand page — all at their own routes, all reading the same data as the app |
 
 ## How the AI works
 
@@ -104,12 +119,24 @@ npm run calibrate     # specificity: how often a healthy leaf is left alone
 npm run sensitivity   # sensitivity: does it still notice real damage?
 ```
 
-| | v1 | v2 (current) |
-|---|---|---|
-| Reference photos reported healthy | 11.3% | **48.1%** |
-| Median health score | 47 | **86** |
-| Synthetic necrosis detected (25% / 45% of leaf) | — | **100% / 100%** |
-| Synthetic chlorosis detected (38% / 60% of leaf) | — | **93% / 97%** |
+| | v1 | v2, 4 species | v2, all 10 species |
+|---|---|---|---|
+| Reference photos reported healthy | 11.3% | 48.1% | **57.3%** |
+| Median health score | 47 | 86 | **92** |
+| Synthetic necrosis detected (25% / 45% of leaf) | — | 100% / 100% | **99.2% / 100%** |
+| Synthetic chlorosis detected (38% / 60% of leaf) | — | 93% / 97% | **89.4% / 93.8%** |
+
+The last column is the current measurement: `npm run bench` on 800 reference
+photographs across all ten species. The middle column is the same suite when the
+reference set held only the four trained species, and it is kept because the
+difference is the interesting part — widening the set raised the healthy rate and
+lowered chlorosis detection, which says the thresholds are tuned for the four
+trees the model actually knows. The milder chlorosis case now sits below the
+suite's own 90% floor; see *Honest limitations*.
+
+The "before" column cannot be re-measured: the v1 analyser it describes was
+replaced rather than kept behind a flag, so it is quoted from the project record,
+and the Test Lab page labels it as quoted rather than measured.
 
 Four bugs caused the original false-positive rate, and each is named in the
 header comment of `app/js/health.js`: exposure leaking into every measurement,
@@ -148,35 +175,57 @@ treat it privately, because it is a notifiable pest.
 ```
 app/                    everything GitHub Pages serves
   index.html
-  css/themes.css        the sixteen palettes, one token set each
-  css/app.css           layout and components
-  css/anim.css          the motion layer
-  js/app.js             router and views
+  css/tokens.css        the design tokens and the four themes
+  css/base.css          reset, self-hosted fonts, layout primitives
+  css/components.css    shared components — the Sadu band, meters, panels
+  css/views.css         per-screen layout
+  css/print.css         Lab, Journey and Team as PDF evidence
+  js/app.js             the shell: chrome, navigation, settings, routing
+  js/router.js          hash routes, with v1's URLs kept working
+  js/config.js          every project fact, in one place  ← edit here
+  js/metadata.js        the model card, fetched before the model itself
   js/model.js           MobileNetV2 + trained head, in the browser
   js/health.js          the computer-vision health analyser
-  js/motion.js          animation orchestration, ambient leaf field
   js/i18n.js            English / Arabic strings
   js/nearby.js          geolocation, distance, Google Maps deep links
-  js/icons.js           species and interface SVGs
-  js/data/species.js    bilingual reference text for the four trees
-  js/data/team.js       group members and the work split  ← edit here
-  js/data/about.js      the long-form About Us text, in both languages
+  js/icons.js           the interface icon set
+  js/themes.js          theme, motion and text size
+  js/ui/                dom helpers, bilingual headings, meters, the weave
+  js/views/             one module per screen
+  js/data/species.js    bilingual reference text for the ten trees
+  js/data/team.js       members, responsibilities, speaking parts  ← edit here
+  js/data/about.js      the long-form project text and the limitations
+  js/data/journey.js    production stages and the iteration log
+  js/data/presentation.js  the slides, as data
   js/data/treatments.js finding → cause → what to buy
   js/data/suppliers.js  real nurseries and official helplines  ← add yours here
-  img/                  portraits used on the About page (+ CREDITS.md)
+  assets/brand/         the mark, the lockups and the Sadu band tile
+  assets/fonts/         Reem Kufi and Readex Pro, self-hosted
+  samples/              six demonstration leaves (+ credits.json)
+  data/lab.json         what npm run bench measured  ← generated
+  evidence/             the before/after screenshots the Journey page shows
   model/mobilenet/      frozen MobileNetV2 (14 MB, Apache 2.0, Google)
   model/head/           the classifier we trained
   model/metadata.json   accuracy, confusion matrix, class order
   model/ood.json        class centroids for the "I don't recognise this" check
-  sw.js                 offline cache for the kiosk
+  sw.js                 offline cache for the kiosk  ← generated
 tools/
   fetch-dataset.mjs     pulls and screens training photos
   embed.mjs             shared preprocessing contract
   train.mjs             trains and evaluates the head, writes ood.json
   health-calibrate.mjs  measures the health analyser's false-positive rate
   health-sensitivity.mjs  measures whether it still detects real damage
+  bench.mjs             measures the app and writes app/data/lab.json
   smoke-test.mjs        end-to-end browser test (npm test)
-  make-qr.mjs           kiosk QR codes
+  samples.mjs           picks and verifies the demonstration leaves
+  brand.mjs             renders the mark, lockups and icons
+  sw-manifest.mjs       regenerates the precache list and cache name
+  shots.mjs             screenshots every route, for the workbook
+  evidence.mjs          copies the comparison shots into app/
+  make-qr.mjs           kiosk and feedback QR codes
+docs/evidence/v1        screenshots of Green-Trace UAE, before the rebuild
+docs/evidence/v2        screenshots of Warif
+docs/ITERATIONS.md      what was tested, what broke, and what changed
 dataset/                training images (gitignored except CREDITS.json)
 kiosk-qr.png            2000px QR for the printed stand
 ```
@@ -186,7 +235,8 @@ kiosk-qr.png            2000px QR for the printed stand
 ```bash
 git clone https://github.com/vsoultann/green-trace-uae
 cd green-trace-uae
-npx serve app          # or: python3 -m http.server -d app 8080
+npm install
+npm run serve          # http://localhost:8080
 ```
 
 Open the printed URL. A plain `file://` open will *not* work — ES modules and
@@ -228,6 +278,19 @@ already applies eight augmentations per image (flips, crops, rotations,
 brightness and saturation shifts), so what it needs from you is genuine
 variation, not more of the same frame.
 
+## The tools, and when to run each
+
+| Command | When |
+|---|---|
+| `npm run serve` | Working on the app locally |
+| `npm test` | Before every commit. Walks every route in both languages, checks the model still classifies and still refuses, and fails on any console error |
+| `npm run bench` | After changing the model or the analyser. Writes `app/data/lab.json`, which is what the Test Lab page renders |
+| `npm run sw` | After adding or changing **any** file in `app/`. Regenerates the precache list and the cache name |
+| `npm run samples` | After retraining. Re-verifies that each demonstration leaf is still classified correctly |
+| `npm run shots` then `npm run evidence` | After a visual change. Refreshes the v2 screenshots and copies the comparison pairs into the app |
+| `npm run qr` | After changing `links.site` or `links.feedbackFormUrl` in `app/js/config.js` |
+| `npm run brand` | After editing the mark or the lockups |
+
 ## Regenerating the QR code
 
 ```bash
@@ -261,16 +324,26 @@ Worth saying out loud before a judge says it for you:
   `npm run train` have both finished, the library marks the six untrained
   species **Reference only** and the classifier will not return them. Finishing
   the job is exactly two commands.
-- The model refuses to name a species when the input looks unlike all of them,
-  but that refusal is a threshold, not a certainty: a species that genuinely
-  resembles a Ghaf can still be called a Ghaf. Mesquite is in the training set
-  precisely because it is that species.
+- **The refusal catches things that are not plants, not other trees.** The
+  out-of-distribution check reliably declines a photograph with no plant tissue
+  in it — a hand, a floor, a printed logo — which is what it was built for.
+  Measured against trees the model was never trained on, it rejected **0 of 40**
+  Mesquite and **2 of 40** Mangrove photographs. A leaf from outside the trained
+  set can still be given one of their names. `npm run bench` re-measures this
+  and the Test Lab page shows the current figures.
 - Health analysis measures *appearance*. A leaf can be discoloured for reasons
   the pipeline cannot distinguish (dust, sunburn, natural senescence, varietal
   colour), and a plant can be seriously diseased while a single leaf looks fine.
 - The calibration figures above are measured against **reference photographs**,
   not against photographs of the kiosk leaves. Shooting forty of those and
   re-running `npm run calibrate` is the honest way to confirm the numbers hold.
+- **The chlorosis sensitivity figures have drifted, and the floor is failing.**
+  Across all ten reference species, synthetic chlorosis at 38% of the leaf is
+  detected **89.4%** of the time — below the suite's own 90% floor, so
+  `npm run sensitivity` exits non-zero. Necrosis is unaffected (99.2% / 100%).
+  The likely cause is that six of the ten species have foliage the thresholds
+  were never tuned against. Nothing was re-floored to make the red go away; see
+  `docs/ITERATIONS.md`.
 - Supplier phone numbers and opening hours come from OpenStreetMap volunteers
   and can be out of date. Every entry also carries a live Google Maps link for
   that reason, and the app says "hours not recorded" rather than inventing them.

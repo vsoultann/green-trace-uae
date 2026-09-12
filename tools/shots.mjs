@@ -25,6 +25,9 @@ const routes = flag('routes', '#/').split(',');
 const langs = flag('lang', 'en').split(',');
 const themes = flag('theme', '').split(',').filter(Boolean);
 const full = args.includes('--full');
+/* With one theme there is nothing to disambiguate, and the evidence set is
+   named to match v1's screenshots so the before/after slider can pair them. */
+const flatNames = args.includes('--flat');
 
 const TYPES = {
   '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
@@ -88,9 +91,23 @@ for (const vp of VIEWPORTS) {
         }, theme).catch(() => {});
       }
       for (const route of routes) {
-        await page.evaluate((r) => { location.hash = r; }, route);
+        /* The result screen has nothing on it until something has been scanned.
+           Photographing its empty state would put "No leaf has been scanned yet"
+           on the poster, so a sample is run first. The stressed Ghaf is used
+           because it reaches the findings and the treatment advice, which is the
+           half of the screen worth showing. */
+        if (route.startsWith('#/result')) {
+          await page.evaluate(() => { location.hash = '#/?sample=ghaf-stressed.jpg'; });
+          await page.waitForFunction(
+            () => document.querySelector('#view')?.dataset.route === 'result',
+            { timeout: 180000 },
+          ).catch(() => console.error('  ! the sample scan never reached a result'));
+          await new Promise((r) => setTimeout(r, 1200));
+        } else {
+          await page.evaluate((r) => { location.hash = r; }, route);
+        }
         await new Promise((r) => setTimeout(r, 700));
-        const parts = [slug(route), lang, theme, vp.name].filter(Boolean);
+        const parts = [slug(route), lang, flatNames ? null : theme, vp.name].filter(Boolean);
         const file = path.join(outDir, `${parts.join('-')}.png`);
         await page.screenshot({ path: file, fullPage: full });
         console.log(`  ${path.relative(ROOT, file)}`);

@@ -152,7 +152,7 @@ const METRIC_KEYS = ['chlorosis', 'necrosis', 'greenness', 'uniformity', 'textur
 for (const k of METRIC_KEYS) every.metrics[k] = [];
 
 if (!AS_JSON) {
-  console.log(`Green-Trace UAE — health analyser calibration`);
+  console.log(`Warif — health analyser calibration`);
   console.log(`  implementation: ${report.impl}`);
   if (KIOSK) console.log('  mode: kiosk — foliage composited onto plain paper');
   console.log(`  sample: up to ${PER_CLASS} reference photos per species\n`);

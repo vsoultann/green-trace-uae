@@ -610,6 +610,20 @@ function initial() {
     .some((l) => String(l).toLowerCase().startsWith('ar')) ? 'ar' : 'en';
 }
 
+/**
+ * Every English key with no Arabic counterpart.
+ *
+ * A missing Arabic string does not throw — `t()` falls back to English — so an
+ * untranslated label would ship quietly and only be noticed by whoever is
+ * reading the screen in Arabic, which at this showcase is the evaluator.
+ * `npm test` calls this and fails on a gap.
+ */
+export function keyParity() {
+  const en = Object.keys(STRINGS.en);
+  const ar = new Set(Object.keys(STRINGS.ar));
+  return { count: en.length, missing: en.filter((k) => !ar.has(k)) };
+}
+
 export function lang() { return current; }
 export function dir() { return current === 'ar' ? 'rtl' : 'ltr'; }
 

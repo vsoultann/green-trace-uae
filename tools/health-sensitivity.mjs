@@ -29,6 +29,10 @@ const WORK = 384;
 
 const argv = process.argv.slice(2);
 const PER_CLASS = Number(argv[argv.indexOf('--n') + 1]) || 40;
+/* tools/bench.mjs reads these numbers rather than re-deriving them, so the
+   Test Lab page and this tool can never disagree about what was measured. */
+const AS_JSON = argv.includes('--json');
+const cases = [];
 
 /* Deterministic noise, so a failure is reproducible. */
 function mulberry32(seed) {
@@ -126,9 +130,11 @@ async function decodeRGBA(file) {
 
 /* -------------------------------------------------------------------- run */
 
-console.log('Green-Trace UAE — health analyser sensitivity\n');
-console.log('  Synthetic lesions painted onto living tissue in reference photos.');
-console.log('  "detected" = the matching finding fired at all.\n');
+if (!AS_JSON) {
+  console.log('Warif — health analyser sensitivity\n');
+  console.log('  Synthetic lesions painted onto living tissue in reference photos.');
+  console.log('  "detected" = the matching finding fired at all.\n');
+}
 
 // Each severity sits clear of the finding threshold it should trip: the point
 // is to catch an analyser that has gone blind, not to probe the exact boundary.
@@ -183,6 +189,9 @@ for (const test of CASES) {
   const pass = rate >= 90;
   if (!pass) failures++;
 
+  cases.push({ kind: test.kind, severity: test.severity, detectedPct: rate, meanScoreDrop: drop, n: usable, pass });
+
+  if (AS_JSON) continue;
   console.log(
     `  ${pass ? 'PASS' : 'FAIL'}  ${test.kind.padEnd(10)} ` +
     `${String(Math.round(test.severity * 100)).padStart(3)}% of leaf   ` +
@@ -191,9 +200,13 @@ for (const test of CASES) {
   );
 }
 
-console.log('');
+if (AS_JSON) {
+  console.log(JSON.stringify({ perClass: PER_CLASS, floorPct: 90, failures, cases }, null, 2));
+} else {
+  console.log('');
+  if (!failures) console.log('  All sensitivity cases passed.\n');
+}
 if (failures) {
   console.error(`  ${failures} case(s) below the 90% detection floor — the analyser has gone blind.`);
   process.exit(1);
 }
-console.log('  All sensitivity cases passed.\n');

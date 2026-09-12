@@ -15,10 +15,11 @@
  * show a version of the app that no longer exists.
  */
 import { html, raw } from '../ui/dom.js';
-import { t, lang, L, num, pct } from '../i18n.js';
+import { t, lang, L, num, pct, date } from '../i18n.js';
 import { CONFIG } from '../config.js';
 import { SPECIES } from '../data/species.js';
-import { metadataSync, counts } from '../metadata.js';
+import { metadataSync, counts, recognisedKeys } from '../metadata.js';
+import { leafShape } from '../ui/leaf-shapes.js';
 import { LEADER, MEMBERS, SUPERVISOR } from '../data/team.js';
 import { STAGES } from '../data/journey.js';
 
@@ -28,10 +29,18 @@ const SIZES = {
   A2: { w: 420, h: 594, scale: 0.707 },
 };
 
-export default function posterView(ctx) {
+export default async function posterView(ctx) {
   const size = SIZES[String(ctx.query.get('size') ?? 'A1').toUpperCase()] ?? SIZES.A1;
   const meta = metadataSync();
   const tally = counts(SPECIES.length);
+  const recognised = recognisedKeys();
+
+  /* Every figure on the sheet is read at render time — the model card from
+     metadata.json, the measurements from lab.json. A poster that goes to a print
+     shop with a number typed into it is a poster that will disagree with the app
+     the moment anything is re-measured, and it will do it in A1. */
+  const lab = await fetch('./data/lab.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const cal = lab?.accuracy?.calibration ?? null;
 
   return {
     html: html`<div class="poster" style="--pw:${size.w}mm; --ph:${size.h}mm; --pscale:${size.scale}">
@@ -96,13 +105,26 @@ export default function posterView(ctx) {
 
         <section class="poster-block">
           <h2>${t('lab.calibration')}</h2>
-          <dl class="poster-kv">
-            <div><dt>${t('lab.healthyReported')}</dt><dd>11.3% → 48.1%</dd></div>
-            <div><dt>${t('lab.medianScore')}</dt><dd>47 → 86</dd></div>
-            <div><dt>${t('lab.syntheticNecrosis')}</dt><dd>100%</dd></div>
-            <div><dt>${t('lab.syntheticChlorosis')}</dt><dd>93–97%</dd></div>
-          </dl>
+          ${raw(cal ? `<dl class="poster-kv">
+            <div><dt>${t('lab.healthyReported')}</dt><dd>${pct(cal.healthyReportedBefore, 1)} → ${pct(cal.healthyReportedAfter, 1)}</dd></div>
+            <div><dt>${t('lab.medianScore')}</dt><dd>${num(cal.medianScoreBefore)} → ${num(cal.medianScoreAfter)}</dd></div>
+            <div><dt>${t('lab.syntheticNecrosis')}</dt><dd>${pct(cal.syntheticNecrosis, 1)}</dd></div>
+            <div><dt>${t('lab.syntheticChlorosis')}</dt><dd>${pct(cal.syntheticChlorosisLow, 1)}–${pct(cal.syntheticChlorosisHigh, 1)}</dd></div>
+          </dl>` : `<p class="poster-note">${t('lab.noData')}</p>`)}
           <p class="poster-note">${L(POSTER.calibrationNote)}</p>
+          ${raw(lab ? `<p class="poster-note">${t('lab.measuredOn', { device: lab.device, date: date(lab.measuredAt) })}</p>` : '')}
+        </section>
+
+        <section class="poster-block poster-wide">
+          <h2>${t('scan.knows')}</h2>
+          <ul class="poster-trees">
+            ${raw(SPECIES.map((sp) => `<li${recognised.has(sp.key) ? '' : ' data-reference="1"'}>
+              ${leafShape(sp.key, { size: 92 })}
+              <b>${L(sp).name}</b>
+              <span>${lang() === 'ar' ? sp.en.name : sp.ar.name}</span>
+              <em>${recognised.has(sp.key) ? t('trees.recognised') : t('trees.reference')}</em>
+            </li>`))}
+          </ul>
         </section>
 
         <section class="poster-block poster-shots">

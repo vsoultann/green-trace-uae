@@ -1,0 +1,84 @@
+{
+  "measuredAt": "2026-09-12T09:18:07.391Z",
+  "device": "Linux x64 — headless Chromium, SwiftShader",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.0.0 Safari/537.36",
+  "runs": 30,
+  "performance": {
+    "loadColdMs": 3655,
+    "loadWarmMs": 1157,
+    "inferenceMedianMs": 920,
+    "inferenceP95Ms": 960,
+    "timeToResultMedianMs": 954
+  },
+  "reliability": {
+    "runs": 30,
+    "tensorsBefore": 131,
+    "tensorsAfter": 131,
+    "crashes": 0,
+    "offlineReload": true,
+    "repeatConsistent": true,
+    "inconsistentSamples": []
+  },
+  "accuracy": {
+    "calibration": {
+      "healthyReportedBefore": 0.113,
+      "healthyReportedAfter": 0.5725,
+      "medianScoreBefore": 47,
+      "medianScoreAfter": 92,
+      "syntheticNecrosis": 0.9923857868020305,
+      "syntheticChlorosisLow": 0.8935064935064935,
+      "syntheticChlorosisHigh": 0.9376770538243626,
+      "analysed": 800,
+      "note": {
+        "en": "The \"before\" column is quoted from the project record: the v1 analyser it describes was replaced, not kept behind a flag, so it cannot be re-run. Everything in the \"after\" column was measured by npm run bench on the date above.",
+        "ar": "عمود «قبل» منقولٌ من سجل المشروع: فمحلّل النسخة الأولى الذي يصفه استُبدل ولم يُحتفظ به خلف خيار، فلا يمكن إعادة تشغيله. أما كل ما في عمود «بعد» فقِيس بأمر npm run bench في التاريخ أعلاه."
+      }
+    },
+    "sensitivity": [
+      {
+        "kind": "necrosis",
+        "severity": 0.25,
+        "detectedPct": 99.23857868020305,
+        "meanScoreDrop": 27.68781725888325,
+        "n": 394,
+        "pass": true
+      },
+      {
+        "kind": "necrosis",
+        "severity": 0.45,
+        "detectedPct": 100,
+        "meanScoreDrop": 47.69251336898396,
+        "n": 374,
+        "pass": true
+      },
+      {
+        "kind": "chlorosis",
+        "severity": 0.38,
+        "detectedPct": 89.35064935064935,
+        "meanScoreDrop": 14.14025974025974,
+        "n": 385,
+        "pass": false
+      },
+      {
+        "kind": "chlorosis",
+        "severity": 0.6,
+        "detectedPct": 93.76770538243626,
+        "meanScoreDrop": 20.209631728045327,
+        "n": 353,
+        "pass": true
+      }
+    ]
+  },
+  "ood": {
+    "sampled": 40,
+    "threshold": 0.5898,
+    "rejected": {
+      "arak": 2,
+      "athl": 0,
+      "mesquite": 0,
+      "neem": 2,
+      "osher": 10,
+      "qurm": 2
+    }
+  }
+}

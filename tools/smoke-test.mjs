@@ -1,9 +1,12 @@
 /**
- * End-to-end smoke test: serves app/ over HTTP, drives it in real Chromium,
- * and checks that the model loads and classifies a held-out photograph.
+ * End-to-end smoke test: serves app/ over HTTP, drives it in real Chromium, and
+ * checks that the whole thing works — the model loads, a held-out photograph is
+ * classified, a photograph of something that is not a leaf is refused, every
+ * route renders in both languages, and the app survives the network going away.
  *
- * This is the test that actually matters -- unit-testing the analyser in Node
- * would not catch a broken model path, a WebGL failure or a router regression.
+ * This is the test that actually matters. Unit-testing the analyser in Node
+ * would not catch a broken model path, a WebGL failure, a router regression, or
+ * a page that claims the model recognises ten trees when it recognises four.
  *
  *   node tools/smoke-test.mjs
  */
@@ -71,7 +74,8 @@ console.log('\nLoading app...');
 await page.goto(base, { waitUntil: 'networkidle2', timeout: 60000 });
 
 check('page renders a view', await page.$eval('#view', (el) => el.children.length > 0));
-check('tab bar present', (await page.$$('.tabbar a')).length === 5);
+check('bottom bar has five destinations', (await page.$$('.tabbar a')).length === 5);
+check('top bar carries the lockup', Boolean(await page.$('.topbar .lockup')));
 
 console.log('\nLoading model (this pulls 14 MB)...');
 const loaded = await page.evaluate(async () => {
@@ -85,7 +89,7 @@ if (loaded.error) {
   check('model loads', false, loaded.error);
 } else {
   check('model loads', true, `${loaded.ms} ms on ${loaded.backend}`);
-  check('metadata has 4 classes', loaded.meta.classes.length === 4, loaded.meta.classes.join(','));
+  check('metadata lists its classes', loaded.meta.classes.length > 0, loaded.meta.classes.join(','));
   console.log(`    validation accuracy: ${(loaded.meta.validationAccuracy * 100).toFixed(1)}%`);
 }
 
@@ -230,22 +234,31 @@ check('non-leaves are refused', rejected === probes, `${rejected}/${probes} corr
 }
 
 /* ------------------------------------------------------------------------
-   Team split and supplier directory
+   Data integrity
    ------------------------------------------------------------------------ */
 
 console.log('\nData integrity...');
 {
   const team = await page.evaluate(async () => {
-    const { TEAM } = await import('./js/data/team.js');
+    const { TEAM, LEADER, MEMBERS } = await import('./js/data/team.js');
     return {
-      total: TEAM.reduce((a, m) => a + m.share, 0),
-      top: [...TEAM].sort((a, b) => b.share - a.share)[0].name,
       count: TEAM.length,
+      leaders: TEAM.filter((m) => m.leader).length,
+      leader: LEADER?.name,
+      members: MEMBERS.length,
+      /* v1 ranked the team by percentage. The assessment grades equal
+         participation, so the field is gone and must stay gone. */
+      withShare: TEAM.filter((m) => 'share' in m).length,
+      missingRole: TEAM.filter((m) => !m.role?.en || !m.role?.ar).length,
+      missingSpeaks: TEAM.filter((m) => !m.speaks?.en || !m.speaks?.ar).length,
     };
   });
-  check('team shares total 100%', team.total === 100, `${team.total}%`);
-  check('Sultan has the largest share', team.top === 'Sultan Alkaabi', team.top);
   check('five team members', team.count === 5, String(team.count));
+  check('exactly one team leader', team.leaders === 1, `${team.leaders}: ${team.leader}`);
+  check('Sultan is the leader', team.leader === 'Sultan Alkaabi', String(team.leader));
+  check('no participation percentages', team.withShare === 0, `${team.withShare} members carry a share`);
+  check('every member has a bilingual role', team.missingRole === 0);
+  check('every member has a speaking part', team.missingSpeaks === 0);
 
   const sup = await page.evaluate(async () => {
     const { SUPPLIERS, HELPLINES } = await import('./js/data/suppliers.js');
@@ -265,102 +278,235 @@ console.log('\nData integrity...');
     `${sup.withCoords} geocoded, ${sup.outOfUAE} outside`);
   check('phone numbers present', sup.withPhone >= 8, `${sup.withPhone} with a number`);
   check('official helplines listed', sup.helplines >= 2, String(sup.helplines));
+
+  /* Both languages, every key. A missing Arabic string does not throw — it
+     falls back to English — so nothing but a test will ever catch it. */
+  const strings = await page.evaluate(async () => {
+    const mod = await import('./js/i18n.js');
+    return mod.keyParity ? mod.keyParity() : null;
+  });
+  if (strings) {
+    check('every interface string exists in Arabic', strings.missing.length === 0,
+      strings.missing.slice(0, 6).join(', ') || `${strings.count} keys`);
+  }
 }
 
-/* Walk every route and make sure nothing throws. */
-console.log('\nWalking routes...');
-for (const route of ['#/scan', '#/library', '#/tree/ghaf', '#/tree/nakhl',
-                     '#/nearby', '#/about', '#/model', '#/team']) {
-  await page.evaluate((r) => { location.hash = r; }, route);
-  await new Promise((r) => setTimeout(r, 550));
-  const html = await page.$eval('#view', (el) => el.innerHTML.length);
-  check(`route ${route}`, html > 200, `${html} chars`);
+/* ------------------------------------------------------------------------
+   The count that was wrong in v1
+
+   The model page used to announce "Species: 10" beside a four-class model.
+   Anyone who scanned a mangrove leaf and got "Ghaf" had been told, by our own
+   page, that mangrove was covered. This is the check that stops it returning:
+   what the screen says has to equal what the model file says, and the badges
+   have to agree with both.
+   ------------------------------------------------------------------------ */
+
+console.log('\nRecognised-count honesty...');
+{
+  await page.evaluate(() => { location.hash = '#/trees'; });
+  await new Promise((r) => setTimeout(r, 700));
+
+  const shown = await page.evaluate(async () => {
+    const meta = await (await fetch('./model/metadata.json')).json();
+    const { SPECIES } = await import('./js/data/species.js');
+    return {
+      declared: meta.classes.length,
+      library: SPECIES.length,
+      recognisedBadges: document.querySelectorAll('.badge-on').length,
+      referenceBadges: document.querySelectorAll('.badge-ref').length,
+      lede: document.querySelector('.page-head .lede')?.textContent ?? '',
+    };
+  });
+
+  check('badges marked "recognised" match the model', shown.recognisedBadges === shown.declared,
+    `${shown.recognisedBadges} badges, ${shown.declared} classes`);
+  check('every other tree is marked reference only',
+    shown.referenceBadges === shown.library - shown.declared,
+    `${shown.referenceBadges} of ${shown.library - shown.declared}`);
+  check('the page states the model\'s own count',
+    shown.lede.includes(String(shown.declared)) && shown.lede.includes(String(shown.library)),
+    shown.lede.trim());
 }
 
-/* Themes and language. */
-console.log('\nThemes and language...');
+/* ------------------------------------------------------------------------
+   Every route, in both languages
+   ------------------------------------------------------------------------ */
 
-// getComputedStyle(body).backgroundColor reports the *propagated canvas*
-// colour, which Chromium does not update when a token changes -- it reads the
-// same for every theme and would pass a broken app. Sampling a real element's
-// resolved styles does update, and unlike comparing screenshot bytes it tells
-// us *which* colour differs when a check fails.
-await page.evaluate(() => { location.hash = '#/scan'; });
+const ROUTES = await page.evaluate(async () => (await import('./js/router.js')).routePaths);
+const SAMPLE_ROUTES = ROUTES.map((p) => (p === '/trees/:key' ? '/trees/ghaf' : p));
+
+/* v1's URLs are printed on a QR code and pasted in a workbook. They have to
+   keep working, or the rename breaks somebody's bookmark. */
+const REDIRECTS = [
+  ['#/scan', '#/'],
+  ['#/library', '#/trees'],
+  ['#/tree/ghaf', '#/trees/ghaf'],
+  ['#/nearby', '#/help'],
+  ['#/about', '#/project'],
+  ['#/model', '#/project/how'],
+];
+
+/* Run one sample scan first, so #/result has a result on it. Walking to it
+   cold shows the empty state, which is correct and proves nothing. */
+await page.evaluate(() => { location.hash = '#/?sample=ghaf.jpg'; });
+await page.waitForFunction(
+  () => document.querySelector('#view')?.dataset.route === 'result',
+  { timeout: 120000 },
+)
+  .then(() => check('a sample scan reaches a result', true))
+  .catch(() => check('a sample scan reaches a result', false, 'never rendered'));
+
+for (const language of ['en', 'ar']) {
+  console.log(`\nWalking every route in ${language}...`);
+  await page.evaluate(async (l) => (await import('./js/i18n.js')).setLang(l), language);
+  await new Promise((r) => setTimeout(r, 300));
+
+  for (const route of SAMPLE_ROUTES) {
+    const before = errors.length;
+    await page.evaluate((r) => { location.hash = `#${r}`; }, route);
+    await new Promise((r) => setTimeout(r, 650));
+
+    const state = await page.$eval('#view', (el) => ({
+      chars: el.textContent.trim().length,
+      dir: document.documentElement.dir,
+    }));
+    const fresh = errors.slice(before);
+    check(`${language} ${route}`, state.chars > 120 && fresh.length === 0,
+      fresh.length ? fresh[0] : `${state.chars} chars, dir=${state.dir}`);
+  }
+}
+
+await page.evaluate(async () => (await import('./js/i18n.js')).setLang('en'));
+
+console.log('\nOld URLs still work...');
+for (const [from, to] of REDIRECTS) {
+  await page.evaluate((r) => { location.hash = r; }, from);
+  await new Promise((r) => setTimeout(r, 400));
+  const landed = await page.evaluate(() => location.hash);
+  check(`${from} → ${to}`, landed === to, landed);
+}
+
+/* ------------------------------------------------------------------------
+   Appearance
+   ------------------------------------------------------------------------ */
+
+console.log('\nThemes, text size and language...');
+
+await page.evaluate(() => { location.hash = '#/trees'; });
 await new Promise((r) => setTimeout(r, 600));
 
 const themeIds = await page.evaluate(async () =>
-  (await import('./js/themes.js')).THEMES.map((t) => t.id).filter((id) => id !== 'system'));
+  (await import('./js/themes.js')).THEMES.map((t) => t.id));
+
+check('four themes, not sixteen', themeIds.length === 4, themeIds.join(', '));
 
 const seen = new Map();
 for (const th of themeIds) {
   await page.evaluate(async (id) => (await import('./js/themes.js')).applyTheme(id), th);
-  await new Promise((r) => setTimeout(r, 120));
+  await new Promise((r) => setTimeout(r, 140));
   const sig = await page.evaluate(() => {
-    const card = document.querySelector('.card');
+    const panel = document.querySelector('.tree-tile a');
     const cs = getComputedStyle(document.documentElement);
     return [
-      card ? getComputedStyle(card).backgroundColor : 'no-card',
-      card ? getComputedStyle(card).color : '',
+      panel ? getComputedStyle(panel).backgroundColor : 'no-panel',
+      panel ? getComputedStyle(panel).color : '',
+      cs.getPropertyValue('--primary').trim(),
       cs.getPropertyValue('--accent').trim(),
-      cs.getPropertyValue('--bad').trim(),
     ].join('|');
   });
+  // 'auto' follows the device, so it is allowed to match day or night.
   const dup = seen.get(sig);
-  check(`theme ${th} renders distinctly`, !dup && !sig.startsWith('no-card'),
-    dup ? `identical to ${dup}` : sig.split('|')[0]);
+  const ok = !sig.startsWith('no-panel') && (th === 'auto' || !dup || dup === 'auto');
+  check(`theme ${th} renders`, ok, dup && !ok ? `identical to ${dup}` : sig.split('|')[2]);
   seen.set(sig, th);
 }
-await page.evaluate(async () => (await import('./js/themes.js')).applyTheme('system'));
 
-/* Every palette must actually define every token it is asked for. A theme that
-   silently inherits another one's --ink is the sort of thing that looks fine on
-   the machine it was written on and unreadable on the kiosk. */
+/* A palette that silently inherits another one's --ink looks fine on the
+   machine it was written on and is unreadable on the kiosk. */
 const tokenReport = await page.evaluate(async () => {
   const { THEMES } = await import('./js/themes.js');
-  const REQUIRED = ['--bg', '--bg-elev', '--bg-sunk', '--ink', '--ink-soft', '--ink-faint',
-    '--line', '--rule', '--accent', '--accent-ink', '--ok', '--warn', '--bad',
-    '--accent-soft', '--hero', '--pattern'];
+  const REQUIRED = ['--bg', '--surface', '--surface-sunk', '--ink', '--ink-muted', '--line',
+    '--primary', '--on-primary', '--accent', '--healthy', '--chlorosis', '--necrosis', '--focus'];
   const root = document.documentElement;
-  const before = root.getAttribute('data-theme');
+  const before = root.dataset.theme;
   const broken = [];
   for (const th of THEMES) {
-    if (th.id === 'system') { root.removeAttribute('data-theme'); }
-    else root.setAttribute('data-theme', th.id);
+    root.dataset.theme = th.id;
     const cs = getComputedStyle(root);
     const missing = REQUIRED.filter((k) => !cs.getPropertyValue(k).trim());
     if (missing.length) broken.push(`${th.id}: ${missing.join(' ')}`);
-    if (th.swatch.length !== 4) broken.push(`${th.id}: swatch has ${th.swatch.length} colours, not 4`);
-    if (!th.note?.en || !th.note?.ar) broken.push(`${th.id}: note missing a language`);
   }
-  if (before) root.setAttribute('data-theme', before); else root.removeAttribute('data-theme');
-  return { count: THEMES.length, broken };
+  root.dataset.theme = before;
+  return broken;
 });
-check('every theme defines every token', tokenReport.broken.length === 0,
-  tokenReport.broken.length ? tokenReport.broken.join(' | ') : `${tokenReport.count} themes complete`);
-check('enough themes to be worth a picker', tokenReport.count >= 12, `${tokenReport.count} themes`);
+check('every theme defines every token', tokenReport.length === 0, tokenReport.join(' | '));
+
+const textSize = await page.evaluate(async () => {
+  const m = await import('./js/themes.js');
+  const base = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  m.applyTextSize('large');
+  const large = parseFloat(getComputedStyle(document.documentElement).fontSize);
+  m.applyTextSize('standard');
+  return { base, large };
+});
+check('large text actually gets larger', textSize.large > textSize.base,
+  `${textSize.base}px → ${textSize.large}px`);
 
 const rtl = await page.evaluate(async () => {
   const i = await import('./js/i18n.js');
   i.setLang('ar');
   await new Promise((r) => setTimeout(r, 400));
-  return { dir: document.documentElement.dir, text: document.querySelector('#view')?.textContent?.slice(0, 24) };
+  return {
+    dir: document.documentElement.dir,
+    lang: document.documentElement.lang,
+    text: document.querySelector('#view')?.textContent?.slice(0, 24),
+  };
 });
-check('Arabic switches to RTL', rtl.dir === 'rtl', rtl.text);
+check('Arabic switches to RTL', rtl.dir === 'rtl' && rtl.lang === 'ar', rtl.text);
 
 await page.evaluate(async () => (await import('./js/i18n.js')).setLang('en'));
 
-/* Service worker. */
-const sw = await page.evaluate(async () => {
-  const reg = await navigator.serviceWorker.getRegistration();
-  return !!reg;
-});
-check('service worker registered', sw);
+/* ------------------------------------------------------------------------
+   Offline
+   ------------------------------------------------------------------------ */
+
+console.log('\nOffline...');
+{
+  const sw = await page.evaluate(async () => Boolean(await navigator.serviceWorker.getRegistration()));
+  check('service worker registered', sw);
+
+  if (sw) {
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    await new Promise((r) => setTimeout(r, 4000));
+    await page.setOfflineMode(true);
+    let rendered = false;
+    try {
+      await page.reload({ waitUntil: 'domcontentloaded', timeout: 30000 });
+      await new Promise((r) => setTimeout(r, 900));
+      rendered = await page.$eval('#view', (el) => el.textContent.trim().length > 120);
+    } catch { rendered = false; }
+    await page.setOfflineMode(false);
+    check('the app renders with the network off', rendered);
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Everything still to be confirmed
+   ------------------------------------------------------------------------ */
+
+const todos = await page.evaluate(async () => (await import('./js/config.js')).openTodos());
+if (todos.length) {
+  console.log(`\nStill to confirm (${todos.length}):`);
+  for (const todo of todos) console.log(`  · ${todo.where}: ${todo.note}`);
+}
 
 console.log('');
-if (errors.length) {
+const realErrors = [...new Set(errors)];
+if (realErrors.length) {
   console.log('Console/network problems:');
-  [...new Set(errors)].slice(0, 15).forEach((e) => console.log('  ! ' + e));
+  realErrors.slice(0, 15).forEach((e) => console.log('  ! ' + e));
 }
+check('no console or network errors', realErrors.length === 0, `${realErrors.length} seen`);
 
 await browser.close();
 server.close();

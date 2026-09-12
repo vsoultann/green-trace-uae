@@ -107,9 +107,15 @@ export const routeIds = ROUTES.map((r) => r.id);
 export const routePaths = ROUTES.map((r) => r.path);
 
 /**
- * Starts routing.
+ * Starts routing. Returns a `render` function that repaints the current route.
+ *
+ * The shell calls that on a language change. It used to repaint the view it
+ * remembered instead, which raced a navigation already in flight and could leave
+ * the old screen painted under the new URL. Going back through the router means
+ * the token guard below covers every repaint, whatever asked for it.
  *
  * @param {{onRender:(ctx:object)=>Promise<void>, onMissing:(ctx:object)=>void}} handlers
+ * @returns {() => Promise<void>}
  */
 export function start(handlers) {
   let token = 0;
@@ -142,5 +148,6 @@ export function start(handlers) {
   }
 
   window.addEventListener('hashchange', render);
-  return render();
+  render();
+  return render;
 }
