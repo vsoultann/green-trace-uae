@@ -30,6 +30,14 @@ export const SPECIES = [
       health:
         'A healthy Ghaf holds an even blue-green tint. Widespread yellowing usually means salt stress from irrigation water; blackened leaflet tips point to Ghaf dieback, a fungal problem that has hit UAE plantations.',
     },
+    /* The one confusion in the library worth calling out on both pages: these
+       two are hard to separate at a glance and the consequence of getting it
+       wrong runs in opposite directions — protect one, report the other. */
+    lookalike: {
+      key: 'mesquite',
+      en: 'Mesquite (Prosopis juliflora) is an invasive import that looks very like a Ghaf. Check the thorns: a Ghaf carries short, scattered ones, while mesquite has long straight spines in pairs at the leaf node. Mesquite leaflets are also larger and a brighter green.',
+      ar: 'المسكيت (Prosopis juliflora) نوع غازٍ دخيل يشبه الغاف كثيراً. انظر إلى الأشواك: أشواك الغاف قصيرة متفرقة، أما المسكيت فله أشواك طويلة مستقيمة مزدوجة عند عقدة الورقة، ووريقاته أكبر وأشدّ خضرة.',
+    },
     ar: {
       name: 'الغاف',
       family: 'الفصيلة البقولية',
@@ -280,6 +288,11 @@ export const SPECIES = [
         'أُدرج في هذا التطبيق عن قصد. فمعرّف أشجار للإمارات لا يفرّق بين الغاف المحلي والمسكيت الغازي يكون قد تهرّب من سؤال التعريف الوحيد الذي تترتب عليه نتائج.',
       health:
         'المسكيت غالباً أصحّ ما في المشهد المتدهور مظهراً، وهذا هو بيت القصيد: قوة النمو ليست علامة جيدة هنا. وإذا تعرّفت على مسكيت في منطقة غاف محلي، فالإجراء المفيد هو الإبلاغ لا المعالجة.',
+    },
+    lookalike: {
+      key: 'ghaf',
+      en: 'The native Ghaf (Prosopis cineraria) is the tree mesquite is usually mistaken for, and the mistake matters: one is a protected national symbol and the other should be reported. The Ghaf has short scattered thorns and smaller, blue-green leaflets; mesquite has long paired spines and larger, brighter foliage.',
+      ar: 'الغاف المحلي (Prosopis cineraria) هو الشجرة التي يُخلط بينها وبين المسكيت غالباً، والخلط هنا مهم: إحداهما رمز وطني محمي، والأخرى يجب الإبلاغ عنها. للغاف أشواك قصيرة متفرقة ووريقات أصغر خضراء مزرقة، وللمسكيت أشواك طويلة مزدوجة وأوراق أكبر وأشدّ خضرة.',
     },
   },
 ];

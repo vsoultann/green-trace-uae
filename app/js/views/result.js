@@ -21,7 +21,8 @@ import { TREATMENTS, SPECIES_ALERTS, treatmentsFor } from '../data/treatments.js
 import { SUPPLIERS } from '../data/suppliers.js';
 import { FINDING_TEXT } from '../health.js';
 import { getMetadata } from '../model.js';
-import { rankSuppliers, knownPosition, formatDistance, directionsURL, telURL } from '../nearby.js';
+import { rankSuppliers, knownPosition } from '../nearby.js';
+import { supplierRow } from '../ui/supplier.js';
 import { lastScan } from '../state.js';
 import { CONFIG } from '../config.js';
 
@@ -261,23 +262,6 @@ function supplierSection(keys) {
       ${raw(near.map((s) => supplierRow(s)))}
     </ul>
   </section>`;
-}
-
-export function supplierRow(s) {
-  const distance = formatDistance(s.km, lang());
-  return `<li class="supplier">
-    <div class="supplier-name">
-      <b>${L(s.name)}</b>
-      <span class="small muted">${L(s.emirate)}${distance ? ` — ${distance}` : ''}</span>
-      ${!s.hours ? `<span class="small muted">${t('help.noHours')}</span>` : `<span class="small muted">${L(s.hours) ?? ''}</span>`}
-    </div>
-    <div class="supplier-actions">
-      ${s.phone ? `<a class="btn btn-outline" href="${telURL(s.phone)}">${icon('call', { size: 'sm' })}${t('help.call')}</a>` : ''}
-      <a class="btn btn-outline" href="${directionsURL(s, lang())}" target="_blank" rel="noopener">
-        ${icon('directions', { size: 'sm' })}${t('help.directions')}
-      </a>
-    </div>
-  </li>`;
 }
 
 /** The single supplier category that best covers the recommended treatments. */

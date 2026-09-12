@@ -305,4 +305,74 @@
 
   .tips { display: grid; gap: .5rem; padding-inline-start: 1.25rem; margin: 0; }
   .result-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+
+  /* ======================================================= trees =========== */
+  .tree-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  @media (min-width: 700px) { .tree-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .tree-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; } }
+
+  .tree-tile a {
+    display: grid;
+    gap: .6rem;
+    height: 100%;
+    align-content: start;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    background: var(--surface);
+    text-decoration: none;
+  }
+  .tree-tile a:hover { background: var(--surface-sunk); }
+  .tile-shape { color: var(--primary); }
+  .tile-names { display: grid; }
+  .tile-names b { font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem; }
+  .tile-names small { color: var(--ink-muted); font-size: .8125rem; justify-self: start; }
+  .tile-tags { display: flex; gap: .35rem; flex-wrap: wrap; }
+
+  /* ==================================================== one tree =========== */
+  .tree-page { padding-block: clamp(1.25rem, 3vw, 2rem); }
+  .tree-head {
+    display: flex;
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: center;
+    flex-wrap: wrap;
+    padding-block-end: clamp(1.25rem, 3vw, 2rem);
+  }
+  .tree-mark { color: var(--primary); flex: none; }
+  .tree-body {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 900px) { .tree-body { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .lookalike { grid-column: 1 / -1; }
+  .lookalike-body { display: flex; gap: 1.25rem; align-items: start; flex-wrap: wrap; }
+  .lookalike-mark { color: var(--accent); flex: none; }
+  .accuracy-value {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--t-display-l);
+    line-height: 1;
+    margin-block-end: .5rem;
+  }
+  .tree-actions { margin-block-start: 1.5rem; }
+
+  /* ======================================================== help =========== */
+  .help-page { padding-block-end: 2rem; }
+  .help-official { margin-block-end: clamp(2rem, 5vw, 3rem); }
+  .helplines { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .helplines { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .helpline h3 { font-size: var(--t-subtitle); margin-block-end: .5rem; }
+  .helpline p { margin-block-end: .6rem; }
+  .helpline-numbers { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .helpline-numbers .btn { min-height: 40px; }
+  .emirate-filter { max-width: 320px; margin-block: 1.25rem; }
+  #supplier-list { padding: clamp(1rem, 2vw, 1.5rem); }
 }
