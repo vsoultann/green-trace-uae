@@ -181,6 +181,15 @@ function nearestSimilarity(features) {
   return best;
 }
 
+/**
+ * How far below the out-of-distribution threshold is decisive on its own.
+ *
+ * Derived from measurement rather than taste: see the note in recognitionState.
+ * Re-measure with `node tools/bench.mjs` after retraining — the threshold in
+ * ood.json moves with the model, and this margin is relative to it.
+ */
+const DECISIVE_MARGIN = 0.12;
+
 /** True when the prediction is too uncertain to state plainly. */
 export function isUncertain(result) {
   return result.top.p < 0.55 || result.entropy > 0.72;
@@ -221,7 +230,19 @@ export function recognitionState(prediction, leafConfidence = null) {
   // One weak signal is noise; a genuine ghaf photographed badly can trip any
   // single test. Two independent ones agreeing is a real refusal. A total
   // absence of foliage is decisive on its own -- there is nothing to identify.
-  if (reasons.includes('noFoliage') || reasons.length >= 2) {
+  //
+  // So is a similarity that is not merely under the threshold but nowhere near
+  // it. Requiring two signals let a photograph of a wooden desk through as
+  // "Ghaf, 98%": its similarity was 0.36 against a 0.59 threshold, but the
+  // brown filled the frame solidly enough that the foliage check did not object,
+  // and one reason alone only downgrades to 'uncertain'. Measured over 480
+  // photographs of the four trained species, exactly one sits below
+  // threshold - 0.12; the non-leaf probes in the smoke test sit at 0.32 to 0.38.
+  // A margin that costs 1 real leaf in 480 and catches the desk is worth taking.
+  const farOutside = ood && prediction.similarity != null
+    && prediction.similarity < ood.threshold - DECISIVE_MARGIN;
+
+  if (reasons.includes('noFoliage') || farOutside || reasons.length >= 2) {
     return { state: 'unknown', reasons, similarity: prediction.similarity };
   }
   if (reasons.length === 1 || isUncertain(prediction)) {

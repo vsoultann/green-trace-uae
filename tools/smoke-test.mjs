@@ -143,6 +143,10 @@ check(`species predictions`, tried > 0, `${correct}/${tried} correct on this tin
 console.log('\nRejecting things that are not leaves...');
 
 const NOT_LEAVES = {
+  /* The one that found the bug. A wood-grain desk fills the frame with a solid,
+     warm, slightly green-ish brown, which the foliage check does not object to,
+     and it used to come back "Ghaf, 98%, healthy 93/100". */
+  'wood-grain desk': () => {},
   'flat grey': (ctx, w, h) => {
     ctx.fillStyle = '#8a8a8a'; ctx.fillRect(0, 0, w, h);
   },
@@ -174,7 +178,16 @@ for (const [label, _] of Object.entries(NOT_LEAVES)) {
     const ctx = cv.getContext('2d');
     const w = cv.width, hh = cv.height;
 
-    if (name === 'flat grey') {
+    if (name === 'wood-grain desk') {
+      const g = ctx.createLinearGradient(0, 0, w, hh);
+      g.addColorStop(0, '#8d7b63');
+      g.addColorStop(1, '#6f5f4a');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, hh);
+      ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 3;
+      for (let y = 20; y < hh; y += 34) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y + 6); ctx.stroke();
+      }
+    } else if (name === 'flat grey') {
       ctx.fillStyle = '#8a8a8a'; ctx.fillRect(0, 0, w, hh);
     } else if (name === 'random noise') {
       const img = ctx.createImageData(w, hh);
@@ -230,6 +243,37 @@ check('non-leaves are refused', rejected === probes, `${rejected}/${probes} corr
       return m.recognitionState(pred, health.leafConfidence).state;
     }, `data:image/jpeg;base64,${b64}`);
     check('a real leaf is still recognised', out !== 'unknown', out);
+  }
+
+  /* The refusal is only worth having if it costs almost nothing. A decisive
+     similarity floor was added after a photograph of a desk came back as a
+     healthy Ghaf; this is the measurement that says the floor is safe. */
+  const sweep = { tried: 0, refused: 0 };
+  for (const key of ['ghaf', 'sidr', 'nakhl', 'samar']) {
+    const dir = path.join(ROOT, 'dataset', 'inaturalist', key);
+    let files = [];
+    try { files = (await fs.readdir(dir)).filter((f) => f.endsWith('.jpg')).slice(0, 20); } catch {}
+    for (const file of files) {
+      const b64 = (await fs.readFile(path.join(dir, file))).toString('base64');
+      const state = await page.evaluate(async (dataUrl) => {
+        const m = await import('./js/model.js');
+        const h = await import('./js/health.js');
+        const img = await new Promise((res, rej) => {
+          const i = new Image();
+          i.onload = () => res(i); i.onerror = rej; i.src = dataUrl;
+        });
+        const pred = await m.classify(img);
+        const health = h.analyseLeaf(img);
+        return m.recognitionState(pred, health.leafConfidence).state;
+      }, `data:image/jpeg;base64,${b64}`);
+      sweep.tried++;
+      if (state === 'unknown') sweep.refused++;
+    }
+  }
+  if (sweep.tried) {
+    const rate = sweep.refused / sweep.tried;
+    check('genuine leaves are almost never refused', rate <= 0.02,
+      `${sweep.refused}/${sweep.tried} refused (${(rate * 100).toFixed(1)}%)`);
   }
 }
 

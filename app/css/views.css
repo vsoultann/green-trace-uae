@@ -484,7 +484,11 @@
 
   .model-card { display: grid; gap: 1rem; }
   .model-card .arch { margin: 0; }
-  .bars { display: grid; gap: .55rem; }
+  .bars { display: grid; gap: .55rem; margin-block-end: .5rem; }
+  /* A sub-heading inside a panel needs air above it or it collides with the
+     block it follows — which on the Lab page was a row of accuracy bars. */
+  .panel h3.section-title { margin-block-start: 1.75rem; }
+  .panel h3.section-title:first-child { margin-block-start: 0; }
   .bar-row {
     display: grid;
     grid-template-columns: minmax(84px, 1fr) minmax(0, 3fr) auto;
@@ -665,8 +669,14 @@
   }
 
   /* ==================================================== feedback =========== */
-  .feedback-layout { display: grid; gap: 1.25rem; align-items: start; }
-  @media (min-width: 900px) { .feedback-layout { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+  /* One column by default, two only when there is a side column to fill. */
+  .feedback-layout { display: grid; gap: 1.25rem; align-items: start; max-width: 44rem; }
+  @media (min-width: 900px) {
+    .feedback-layout:has(.feedback-side) {
+      max-width: none;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
   .feedback-form { display: grid; gap: 1.25rem; }
   .feedback-side { display: grid; gap: 1.25rem; }
 

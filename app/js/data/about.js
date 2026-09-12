@@ -189,8 +189,8 @@ export const LIMITS = [
   },
   {
     id: 'ood-scope',
-    en: 'The "I don’t know" check refuses photographs with no plant tissue in them, which is what it was built for. It does not reliably refuse another tree’s leaf: measured over the reference set it rejected 0 of 40 Mesquite and 2 of 40 Mangrove photographs. A leaf from a tree outside the four can still be given one of their names.',
-    ar: 'يرفض فحص «لا أعرف» الصور التي لا تحوي نسيجاً نباتياً، وهو ما بُني له. لكنه لا يرفض بالضرورة ورقة شجرة أخرى: فقياساً على المجموعة المرجعية رفض صفراً من أربعين صورة مسكيت، واثنتين من أربعين صورة قرم. وقد تُمنح ورقةٌ من خارج الأنواع الأربعة اسم أحدها.',
+    en: 'The "I don’t know" check refuses photographs that are nothing like a leaf — no plant tissue, or a feature vector far outside every tree it knows. It does not reliably refuse another tree’s leaf: measured over the reference set it rejected 0 of 40 Mesquite and 2 of 40 Mangrove photographs. A leaf from a tree outside the four can still be given one of their names.',
+    ar: 'يرفض فحص «لا أعرف» الصور التي لا تشبه الورقة إطلاقاً: إمّا لخلوّها من النسيج النباتي، وإمّا لوقوع سماتها بعيداً عن كل شجرة يعرفها. لكنه لا يرفض بالضرورة ورقة شجرة أخرى: فقياساً على المجموعة المرجعية رفض صفراً من أربعين صورة مسكيت، واثنتين من أربعين صورة قرم. وقد تُمنح ورقةٌ من خارج الأنواع الأربعة اسم أحدها.',
   },
   {
     id: 'appearance',

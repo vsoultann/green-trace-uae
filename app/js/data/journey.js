@@ -205,6 +205,26 @@ export const ITERATIONS = [
     },
   },
   {
+    id: 'desk-as-ghaf',
+    severity: 'correctness',
+    problem: {
+      en: 'A photograph of a wooden desk came back as "Ghaf, 98% — Leaf health 93 out of 100, healthy", with treatment advice and three shops to buy it from. Its similarity to every trained tree was 0.36 against a 0.59 threshold, so the app knew the image was nothing like a leaf; but a single objection only downgrades the answer to "treat with caution", and the warm brown filled the frame solidly enough that the foliage check did not object at all.',
+      ar: 'أعادت صورة مكتب خشبي نتيجة «الغاف، 98٪ — صحة الورقة 93 من 100، سليمة»، ومعها إرشاد علاجي وثلاثة متاجر لشرائه. وكان تشابهها مع كل شجرة مدرَّبة 0.36 مقابل عتبة 0.59، أي أن التطبيق كان يعلم أن الصورة لا تشبه ورقة؛ لكن اعتراضاً واحداً لا يخفض الجواب إلا إلى «تعامل بحذر»، والبني الدافئ ملأ الإطار بتماسكٍ كافٍ لئلا يعترض فحص النسيج النباتي أصلاً.',
+    },
+    change: {
+      en: 'A similarity that is not merely under the threshold but nowhere near it now refuses on its own, the way an absence of plant tissue already did. The margin is 0.12 below the threshold.',
+      ar: 'صار التشابه الذي لا يقلّ عن العتبة فحسب بل يبتعد عنها كثيراً سبباً كافياً للرفض وحده، كما كان غياب النسيج النباتي. والهامش 0.12 تحت العتبة.',
+    },
+    evidence: {
+      en: 'Measured over 480 photographs of the four trained species, exactly one sits below that margin. The non-leaf probes in the smoke test sit between 0.32 and 0.38. The cost is 1 real leaf in 480; the catch is every one of them.',
+      ar: 'قياساً على 480 صورة للأنواع الأربعة المدرَّبة، واحدة فقط تقع تحت ذلك الهامش. أما صور الاختبار غير النباتية فتقع بين 0.32 و0.38. الكلفة ورقة حقيقية واحدة من كل 480، والمكسب رفضها جميعاً.',
+    },
+    result: {
+      en: 'The desk is refused. npm test now includes it as a probe and also sweeps 80 genuine leaves to check the floor did not start refusing those.',
+      ar: 'صار المكتب مرفوضاً. ويتضمن npm test هذه الصورة اختباراً، ويمسح كذلك 80 ورقة حقيقية للتأكد أن الحدّ الجديد لم يبدأ برفضها.',
+    },
+  },
+  {
     id: 'ood-scope',
     severity: 'accuracy',
     problem: {

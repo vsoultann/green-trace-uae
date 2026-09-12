@@ -51,6 +51,11 @@ export default function feedbackView(ctx) {
   const admin = ctx.query.get('admin') === '1';
   const stored = read();
 
+  /* The side column only exists when there is something to put in it — a QR to
+     the form on a phone, or the admin export. An empty aside would leave half a
+     laptop screen blank next to a narrow form. */
+  const side = [phonePanel(), admin ? adminPanel(stored) : ''].filter(Boolean).join('');
+
   return {
     html: html`<div class="shell feedback-page">
       <header class="page-head">
@@ -83,10 +88,7 @@ export default function feedbackView(ctx) {
           <button class="btn btn-primary btn-lg btn-wide" type="submit">${t('feedback.submit')}</button>
         </form>
 
-        <aside class="feedback-side">
-          ${raw(phonePanel())}
-          ${raw(admin ? adminPanel(stored) : '')}
-        </aside>
+        ${raw(side ? `<aside class="feedback-side">${side}</aside>` : '')}
       </div>
     </div>`,
 

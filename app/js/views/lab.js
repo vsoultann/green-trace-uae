@@ -118,7 +118,7 @@ function accuracy(lab, meta) {
       <div class="table-scroll">
         <table class="data-table">
           <thead><tr>
-            <th>${t('journey.screen')}</th>
+            <th>${t('lab.measure')}</th>
             <th class="num">${t('lab.before')}</th>
             <th class="num">${t('lab.after')}</th>
           </tr></thead>
