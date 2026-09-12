@@ -7,8 +7,11 @@
  * wrong the first time the model is retrained, and nobody will notice until an
  * evaluator compares the slide with the screen.
  *
- * Durations add up to 6:45 of content against a 7:30 target, leaving room for
- * the demonstration to take longer than planned — which it will.
+ * Durations add up to 7:15 of content against a 7:30 target, inside the
+ * assessment's 4:00 floor and 10:00 ceiling, and leaving a little room for the
+ * demonstration to take longer than planned — which it will. Every member has
+ * exactly one part; `npm test` has the team data and the slide data in front of
+ * it, so an unassigned member cannot go unnoticed.
  */
 
 export const SLIDES = [

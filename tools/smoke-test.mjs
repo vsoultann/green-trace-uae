@@ -304,6 +304,27 @@ console.log('\nData integrity...');
   check('every member has a bilingual role', team.missingRole === 0);
   check('every member has a speaking part', team.missingSpeaks === 0);
 
+  /* The deck is graded on length and on everyone speaking. Both are data, so
+     both are checkable before anyone stands up in front of an audience. */
+  const deck = await page.evaluate(async () => {
+    const { SLIDES, totalSeconds } = await import('./js/data/presentation.js');
+    const { TEAM } = await import('./js/data/team.js');
+    const { CONFIG } = await import('./js/config.js');
+    const speakers = new Set(SLIDES.map((s) => s.speaker));
+    return {
+      totalSeconds,
+      min: CONFIG.presentation.minSeconds,
+      max: CONFIG.presentation.maxSeconds,
+      silent: TEAM.filter((m) => !speakers.has(m.id)).map((m) => m.name),
+      unknown: [...speakers].filter((id) => !TEAM.some((m) => m.id === id)),
+    };
+  });
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  check('the deck runs between four and ten minutes',
+    deck.totalSeconds >= deck.min && deck.totalSeconds <= deck.max, mmss(deck.totalSeconds));
+  check('every member speaks', deck.silent.length === 0, deck.silent.join(', '));
+  check('every slide has a real speaker', deck.unknown.length === 0, deck.unknown.join(', '));
+
   const sup = await page.evaluate(async () => {
     const { SUPPLIERS, HELPLINES } = await import('./js/data/suppliers.js');
     const bad = SUPPLIERS.filter((s) =>
