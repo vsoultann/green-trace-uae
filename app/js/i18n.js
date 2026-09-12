@@ -200,6 +200,11 @@ const STRINGS = {
     'lab.benchDone': 'Median {ms} ms over {n} inferences on this device.',
     'lab.measuredOn': 'Measured on {device}, {date}.',
     'lab.noData': 'No benchmark file yet. Run npm run bench to generate app/data/lab.json.',
+    'lab.oodTitle': 'What the refusal actually catches',
+    'lab.oodTree': 'Tree the model was never trained on',
+    'lab.oodRejected': 'Refused as unfamiliar',
+    'lab.oodNote': 'The check was built to stop the app naming a species for a photograph of something that is not a leaf, and it does that. Measured against other trees’ leaves it mostly does not — so a leaf from outside the four can still be given one of their names.',
+    'lab.benchWhy': 'The figures above were measured on one machine. This runs the same inference on yours, now.',
 
     /* ----------------------------------------------------------- journey */
     'journey.title': 'Journey',
@@ -482,6 +487,11 @@ const STRINGS = {
     'lab.benchDone': 'الوسيط {ms} ملّي ثانية عبر {n} عملية استدلال على هذا الجهاز.',
     'lab.measuredOn': 'قيس على {device} بتاريخ {date}.',
     'lab.noData': 'لا يوجد ملف قياس بعد. شغّل npm run bench لإنشاء app/data/lab.json.',
+    'lab.oodTitle': 'ما الذي يلتقطه الرفض فعلاً',
+    'lab.oodTree': 'شجرة لم يُدرَّب عليها النموذج',
+    'lab.oodRejected': 'رُفضت بوصفها غير مألوفة',
+    'lab.oodNote': 'بُني هذا الفحص ليمنع التطبيق من تسمية نوعٍ لصورةٍ ليست ورقة شجر، وهو يفعل ذلك. أما مع أوراق الأشجار الأخرى فلا يفعل غالباً، فقد تُمنح ورقةٌ من خارج الأنواع الأربعة اسم أحدها.',
+    'lab.benchWhy': 'قِيست الأرقام أعلاه على جهاز واحد. وهذا الزر يشغّل القياس نفسه على جهازك الآن.',
 
     'journey.title': 'المسيرة',
     'journey.stages': 'مراحل الإنتاج',

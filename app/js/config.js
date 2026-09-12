@@ -38,7 +38,12 @@ export const CONFIG = {
     short: 'ATS',
     shortAr: 'مدارس التكنولوجيا التطبيقية',
     logo: './img/ats-logo.png',
-    todo: 'Add app/img/ats-logo.png from the workbook — the Team and Poster pages fall back to a text lockup until it exists.',
+    /* Flip to true once the file is in place. Until then the Team and Poster
+       pages set the school's name in type rather than requesting a file that is
+       not there — a missing image is a console error and a broken frame on a
+       page an evaluator is reading. */
+    hasLogo: false,
+    todo: 'Add app/img/ats-logo.png from the workbook, then set school.hasLogo to true in app/js/config.js.',
   },
 
   programme: {

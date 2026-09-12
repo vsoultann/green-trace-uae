@@ -1,10 +1,12 @@
 /**
- * Long-form content for the "About Us" page.
+ * Long-form content for the Project page.
  *
- * Every block carries BOTH languages and the page renders both together,
- * English first and Arabic beneath it. That is deliberate: at the kiosk the
- * panel may be read by an Arabic-speaking judge and an English-speaking one
- * standing side by side, and neither should have to touch the language toggle.
+ * Every block carries both languages and the page renders whichever one is
+ * active. v1 stacked the two translations on top of each other on the grounds
+ * that two judges might be reading over one shoulder; what that produced was a
+ * page of doubled paragraphs where neither reader could find their thread.
+ * Headings are bilingual, in the manner of UAE road signage, and body prose is
+ * single-language with a toggle one tap away.
  *
  * >>> BEFORE THE PRESENTATION: read the QUOTES block below out loud and check
  *     the wording against an official source. The attributions here are the
@@ -25,6 +27,7 @@ export const QUOTES = {
 
   /** Zayed on agriculture — the line every Emirati schoolchild knows. */
   zayedAgriculture: {
+    todo: 'Check this wording against an official source before it is printed or projected.',
     en: 'Give me agriculture, and I will guarantee you civilisation.',
     ar: 'أعطوني زراعة، أضمن لكم حضارة.',
     who: { en: 'H.H. Sheikh Zayed bin Sultan Al Nahyan', ar: 'الشيخ زايد بن سلطان آل نهيان' },
@@ -101,12 +104,12 @@ export const SECTIONS = [
     body: {
       en: [
         'The UAE our generation grew up in made a deliberate bet: that artificial intelligence should be built here, not merely bought here, and that it should be pointed at real problems — water, food, health, climate — rather than at novelty.',
-        'Green-Trace UAE is our small answer to that call. It uses the same family of neural network that powers commercial vision systems, but it runs entirely inside the phone of whoever is holding it. No account. No upload. No server. The photograph you take of a leaf never leaves your hand.',
+        'Warif is our small answer to that call. It uses the same family of neural network that powers commercial vision systems, but it runs entirely inside the phone of whoever is holding it. No account. No upload. No server. The photograph you take of a leaf never leaves your hand.',
         'That matters beyond privacy. A farm in Al Dhafra or a school in Fujairah does not always have a reliable connection, and a tool that stops working when the signal drops is a tool that fails exactly when it is needed. Ours does not stop.',
       ],
       ar: [
         'راهنت الإمارات التي نشأ فيها جيلنا رهاناً واعياً: أن يُبنى الذكاء الاصطناعي هنا لا أن يُشترى فحسب، وأن يُوجَّه إلى مشكلات حقيقية — الماء والغذاء والصحة والمناخ — لا إلى الطرافة.',
-        '«الأثر الأخضر» هو جوابنا الصغير على هذا النداء. يستخدم العائلة نفسها من الشبكات العصبية التي تشغّل أنظمة الرؤية التجارية، لكنه يعمل بالكامل داخل هاتف من يحمله: بلا حساب، وبلا رفع، وبلا خادم. الصورة التي تلتقطها لورقة الشجر لا تغادر يدك أبداً.',
+        '«وارف» هو جوابنا الصغير على هذا النداء. يستخدم العائلة نفسها من الشبكات العصبية التي تشغّل أنظمة الرؤية التجارية، لكنه يعمل بالكامل داخل هاتف من يحمله: بلا حساب، وبلا رفع، وبلا خادم. الصورة التي تلتقطها لورقة الشجر لا تغادر يدك أبداً.',
         'وهذا أمرٌ يتجاوز الخصوصية. فمزرعة في الظفرة أو مدرسة في الفجيرة قد لا يتوفّر فيها اتصال موثوق، والأداة التي تتوقف عند انقطاع الشبكة أداةٌ تخذل صاحبها في اللحظة التي يحتاجها فيها. أداتنا لا تتوقف.',
       ],
     },
@@ -114,7 +117,7 @@ export const SECTIONS = [
 
   {
     id: 'what',
-    heading: { en: 'What Green-Trace does', ar: 'ماذا يفعل الأثر الأخضر' },
+    heading: { en: 'What Warif does', ar: 'ماذا يفعل «وارف»' },
     body: {
       en: [
         'Photograph one leaf. The app answers two separate questions about it.',
@@ -163,5 +166,50 @@ export const SECTIONS = [
         'كل شيء هنا مفتوح: الشيفرة المصدرية، وبرنامج التدريب، ومصادر البيانات، وهذا النص نفسه، كلها في مستودع عام، والتطبيق بأكمله هو المجلد الذي يقدّمه GitHub — لا خطوة بناء خفية ولا شيء لا يمكنك تفحّصه.',
       ],
     },
+  },
+];
+
+/* ------------------------------------------------------ honest limitations */
+
+/**
+ * What the app cannot do, in its own words.
+ *
+ * Kept here rather than only in the README because a judge reads the screen, not
+ * the repository. Every entry is either measured or structural — nothing on this
+ * list is hedging for its own sake, and the numbers in it come from the tools in
+ * tools/ rather than from an estimate.
+ *
+ * Keep in step with the "Honest limitations" section of README.md.
+ */
+export const LIMITS = [
+  {
+    id: 'four-classes',
+    en: 'The library documents ten trees and the deployed model recognises four. The other six are reference material and are marked "Reference only" everywhere they appear; a scan will never return one. Finishing the training is two commands, and the interface reads the count from the model rather than from a heading.',
+    ar: 'تُوثّق المكتبة عشر أشجار، ويتعرّف النموذج المنشور على أربع منها. والست الباقية مادة مرجعية تحمل شارة «للاطّلاع فقط» أينما ظهرت، ولن يعيدها المسح أبداً. وإكمال التدريب أمران اثنان، والواجهة تقرأ العدد من النموذج لا من عنوان مكتوب.',
+  },
+  {
+    id: 'ood-scope',
+    en: 'The "I don’t know" check refuses photographs with no plant tissue in them, which is what it was built for. It does not reliably refuse another tree’s leaf: measured over the reference set it rejected 0 of 40 Mesquite and 2 of 40 Mangrove photographs. A leaf from a tree outside the four can still be given one of their names.',
+    ar: 'يرفض فحص «لا أعرف» الصور التي لا تحوي نسيجاً نباتياً، وهو ما بُني له. لكنه لا يرفض بالضرورة ورقة شجرة أخرى: فقياساً على المجموعة المرجعية رفض صفراً من أربعين صورة مسكيت، واثنتين من أربعين صورة قرم. وقد تُمنح ورقةٌ من خارج الأنواع الأربعة اسم أحدها.',
+  },
+  {
+    id: 'appearance',
+    en: 'Health analysis measures appearance. A leaf can be discoloured by dust, sunburn, natural senescence or simply its variety, and a seriously diseased tree can carry a leaf that looks fine. The score describes one leaf in one photograph, not the tree it came from.',
+    ar: 'يقيس تحليل الصحة المظهر. فقد يتغيّر لون الورقة بفعل الغبار أو حروق الشمس أو الشيخوخة الطبيعية أو صنف الشجرة نفسه، وقد تحمل شجرةٌ مريضة بشدّة ورقةً تبدو سليمة. الدرجة تصف ورقة واحدة في صورة واحدة، لا الشجرة التي جاءت منها.',
+  },
+  {
+    id: 'calibration-set',
+    en: 'The calibration figures were measured against reference photographs, not against photographs of leaves taken at the kiosk. Shooting forty of those and re-running the calibration is the honest way to confirm the numbers hold.',
+    ar: 'قِيست أرقام المعايرة على صور مرجعية، لا على صور أوراق ملتقطة عند الكشك. وتصوير أربعين ورقة من هذه ثم إعادة المعايرة هو الطريق الأمين للتأكد من ثبات الأرقام.',
+  },
+  {
+    id: 'supplier-data',
+    en: 'Shop phone numbers and opening hours come from OpenStreetMap volunteers and can be out of date. Every entry also carries a live map link for that reason, and a shop with no recorded hours says so rather than inventing them.',
+    ar: 'تأتي أرقام المحال وأوقات عملها من متطوّعي OpenStreetMap وقد تكون قديمة. ولهذا يحمل كل مدخل رابطاً حياً للخريطة، ويقول المحل الذي لا تُعرف ساعاته ذلك بدل اختلاقها.',
+  },
+  {
+    id: 'classroom',
+    en: 'It is a classroom demonstration, not an agricultural inspection tool. Anything that matters should be confirmed by the Ministry of Climate Change and Environment or a municipality agronomist.',
+    ar: 'هذا عرضٌ مدرسي لا أداة فحص زراعي. وما يهمّ فعلاً ينبغي تأكيده من وزارة التغير المناخي والبيئة أو من مهندس زراعي في البلدية.',
   },
 ];
