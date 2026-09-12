@@ -37,13 +37,13 @@ export const CONFIG = {
     ar: 'مدارس التكنولوجيا التطبيقية — العين',
     short: 'ATS',
     shortAr: 'مدارس التكنولوجيا التطبيقية',
+    /* The official Applied Technology Schools lockup, taken from the ATS site
+       and credited in app/img/CREDITS.md. `hasLogo` stays a flag so the pages
+       that use it fall back to type rather than requesting a file that is not
+       there — a missing image is a console error and a broken frame on a page
+       an evaluator is reading. */
     logo: './img/ats-logo.png',
-    /* Flip to true once the file is in place. Until then the Team and Poster
-       pages set the school's name in type rather than requesting a file that is
-       not there — a missing image is a console error and a broken frame on a
-       page an evaluator is reading. */
-    hasLogo: false,
-    todo: 'Add app/img/ats-logo.png from the workbook, then set school.hasLogo to true in app/js/config.js.',
+    hasLogo: true,
   },
 
   programme: {
@@ -56,7 +56,6 @@ export const CONFIG = {
     name: 'Mr. Hamdy Hersi',
     nameAr: 'الأستاذ حمدي حرسي',
     role: { en: 'Project Supervisor', ar: 'مشرف المشروع' },
-    todo: 'Confirm the Arabic spelling of the supervisor\'s name with him before printing.',
   },
 
   links: {

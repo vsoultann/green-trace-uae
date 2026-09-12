@@ -56,6 +56,7 @@ export default async function posterView(ctx) {
           <p class="poster-descriptor">${L(CONFIG.product.descriptor)}</p>
         </div>
         <div class="poster-credits">
+          ${raw(CONFIG.school.hasLogo ? `<img class="poster-school-logo" src="${CONFIG.school.logo}" alt="${L(CONFIG.school)}">` : '')}
           <p><b>${L(CONFIG.school)}</b></p>
           <p>${L(CONFIG.programme)} — ${CONFIG.programme.year}</p>
           <p>${t('team.leader')}: ${L({ en: LEADER.name, ar: LEADER.ar })}</p>

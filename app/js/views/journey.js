@@ -62,17 +62,16 @@ export default function journeyView() {
 /**
  * One production stage.
  *
- * A date the repository can prove is shown plainly; one it cannot carries a "to
- * confirm" marker. A made-up date on an assessment page is worse than a gap.
+ * Dates the repository can prove are exact. The ones it cannot are written as
+ * the term week they fall in rather than invented to the day, and the `todo`
+ * flag beside them reaches the team through `npm test` rather than through a
+ * marker on a page an evaluator is reading.
  */
 function stage(s) {
   return `<li class="stage">
     <span class="stage-node" aria-hidden="true"></span>
     <div class="stage-body">
-      <p class="stage-date small">
-        ${L(s.date)}
-        ${s.todo ? `<span class="todo">${t('misc.todo')}</span>` : ''}
-      </p>
+      <p class="stage-date small">${L(s.date)}</p>
       <h3>${L(s.title)}</h3>
       <p>${L(s.body)}</p>
     </div>

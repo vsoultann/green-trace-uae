@@ -237,6 +237,9 @@
     justify-self: end;
     white-space: nowrap;
   }
+  .todo-item[data-done="1"] { color: var(--muted); }
+  .todo-item[data-done="1"] .todo-mark { background: var(--ok); }
+  .todo-item[data-done="1"] .todo-who { color: var(--ok); font-weight: 500; }
   @media (max-width: 620px) { .todo-who { grid-column: 2; justify-self: start; } }
   .todo-item .where { font-size: .8125rem; color: var(--muted); grid-column: 2; }
 
@@ -340,6 +343,7 @@
       <span><b>12 September 2026</b></span>
       <span>9 commits, 201 files</span>
       <span><b>67</b> automated checks passing</span>
+      <span>School logo in, supervisor confirmed</span>
       <span>Grade 12 Graduation Project · ATS Al Ain</span>
     </p>
   </header>
@@ -387,7 +391,7 @@
           <li>Every count reads the model file: “10 trees in the library, 4 recognised by the current model”.</li>
           <li>Untrained trees carry a <b>Reference only</b> badge everywhere they appear.</li>
           <li>The Test Lab renders measurements, never estimates, each with its device and date.</li>
-          <li>Unconfirmed facts render a visible <b>To confirm</b> marker taken from the data.</li>
+          <li>Unconfirmed facts are listed by <code>npm test</code> at the end of every run, so none can reach the assessment unnoticed.</li>
         </ul>
       </div>
       <div class="block">
@@ -541,17 +545,17 @@
 
   <section class="todo" aria-labelledby="confirm">
     <div class="section-head">
-      <h2 id="confirm">Before this is presented — six things only you can confirm</h2>
+      <h2 id="confirm">Before this is presented — what is left to confirm</h2>
       <p>Each one is a <code>todo</code> field in the data, so <code>npm test</code> prints the
-      list at the end of every run and the pages that use them show a <b>To confirm</b> marker
-      until they are cleared.</p>
+      list at the end of every run. Two are already struck through: the school's logo is in, and
+      the supervisor's name is confirmed.</p>
     </div>
 
     <div class="todo-list">
-      <div class="todo-item">
+      <div class="todo-item" data-done="1">
         <span class="todo-mark" aria-hidden="true"></span>
-        <span>The Arabic spelling of the supervisor's name — <span lang="ar" dir="rtl">الأستاذ حمدي حرسي</span></span>
-        <span class="todo-who">ask Mr. Hamdy Hersi</span>
+        <span><s>The Arabic spelling of the supervisor's name</s> — <span lang="ar" dir="rtl">الأستاذ حمدي حرسي</span>, confirmed</span>
+        <span class="todo-who">done</span>
         <span class="where">app/js/config.js and app/js/data/team.js</span>
       </div>
       <div class="todo-item">
@@ -572,11 +576,11 @@
         <span class="todo-who">Mohammed Abdulla</span>
         <span class="where">app/js/data/journey.js — entries marked <code>todo: true</code></span>
       </div>
-      <div class="todo-item">
+      <div class="todo-item" data-done="1">
         <span class="todo-mark" aria-hidden="true"></span>
-        <span>The ATS logo from the workbook, then set <code>school.hasLogo</code> to true</span>
-        <span class="todo-who">Mohammed Abdulla</span>
-        <span class="where">app/img/ats-logo.png</span>
+        <span><s>The ATS logo</s> — the official lockup is in, on the Team page and the poster</span>
+        <span class="todo-who">done</span>
+        <span class="where">app/img/ats-logo.png, credited in app/img/CREDITS.md</span>
       </div>
       <div class="todo-item">
         <span class="todo-mark" aria-hidden="true"></span>

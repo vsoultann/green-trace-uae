@@ -12,6 +12,19 @@ next to the images, and keep the on-screen credit line on the About page.
 Each file was cropped to a square and resized to 440x440; no other alteration
 was made.
 
+## The school's logo
+
+`ats-logo.png` is the official Applied Technology Schools lockup, taken from the
+ATS half of the combined ACTVET / ATS logo published at
+[ats.sch.ae](https://www.ats.sch.ae/) (`ACTVET-ATS-Logos.svg`). It was rendered
+from that SVG, cropped to the ATS half, trimmed and saved at 560 px wide with a
+transparent background; the artwork itself was not altered.
+
+It is the mark of the school this project was built at, used by its own students
+to identify it. It belongs to Applied Technology Schools and is not covered by
+this repository's licence — remove it before reusing this code for anything that
+is not an ATS project.
+
 ## Sample leaves
 
 The six photographs in `app/samples/` ship with the app so the kiosk can

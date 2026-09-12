@@ -10,7 +10,7 @@
  * anything in app/, and the cache name changes with the contents. Editing
  * either by hand will work until the next time somebody runs the tool.
  */
-const CACHE = 'warif-v1-350d4e47';
+const CACHE = 'warif-v1-4e15bb7b';
 
 const SHELL = [
   './',
@@ -57,6 +57,7 @@ const SHELL = [
   './evidence/v2/team-en-desktop.jpg',
   './evidence/v2/trees-en-desktop.jpg',
   './img/CREDITS.md',
+  './img/ats-logo.png',
   './img/mbr.jpg',
   './img/mbz.jpg',
   './img/zayed.jpg',

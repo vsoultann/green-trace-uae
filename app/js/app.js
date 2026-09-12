@@ -57,7 +57,7 @@ function renderTopbar() {
     <span class="spacer"></span>
     <a class="btn btn-primary desk-only" href="#/">${raw(icon('scan', { size: 20 }))}${t('scan.start')}</a>
     <button class="iconbtn" id="lang-toggle" type="button" aria-label="${t('nav.language')}">
-      <span aria-hidden="true" class="lang-glyph">${lang() === 'ar' ? 'EN' : 'ع'}</span>
+      <span aria-hidden="true" class="lang-glyph" data-script="${lang() === 'ar' ? 'latin' : 'arabic'}">${lang() === 'ar' ? 'EN' : 'ع'}</span>
     </button>
     <button class="iconbtn" id="settings-open" type="button" aria-label="${t('nav.settings')}">
       ${raw(icon('settings'))}

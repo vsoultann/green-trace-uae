@@ -90,10 +90,9 @@ function section(s) {
 /**
  * A quotation, set as one.
  *
- * The `todo` carried in the data becomes a visible marker rather than a comment
- * nobody reads: a line attributed to the Founding Father on a screen in front of
- * evaluators is worth thirty seconds of verification, and the page says so until
- * somebody has done it.
+ * The `todo` carried in the data is not drawn here. It reaches the team through
+ * `npm test`, which prints every unconfirmed fact at the end of a run — the page
+ * an evaluator reads is not the place to keep a note to ourselves.
  */
 function quoteBlock(q) {
   return `<figure class="quote">
@@ -101,7 +100,6 @@ function quoteBlock(q) {
     <figcaption>
       <b>${L(q.who)}</b>
       <span class="small muted">${L(q.title)}</span>
-      ${q.todo ? `<span class="todo" title="${q.todo}">${t('misc.todo')}</span>` : ''}
     </figcaption>
   </figure>`;
 }

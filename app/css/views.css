@@ -24,7 +24,24 @@
   body[data-chrome='bare'] > .tabbar { display: none; }
   body[data-chrome='bare'] #view { padding-block: 0; }
 
-  .lang-glyph { font-family: var(--font-display); font-weight: 600; font-size: .9375rem; }
+  /* Reem Kufi gives ع a tall line box with the glyph low inside it, so grid
+     centring the span centred the box and not the letter. A flat line-height
+     and a block display make the box the glyph's own size again. */
+  /* The button holds one of two labels, in two scripts that sit in completely
+     different places relative to the baseline. Measured in Reem Kufi at 100px:
+     ع inks from 32 above the baseline to 21 below it, while EN inks from 76
+     above to 3 below. Centring the line box therefore centres EN and leaves ع
+     riding 0.295em low, which is what it was doing. Each is centred on its own
+     ink instead. Re-measure if the display face ever changes. */
+  .lang-glyph {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1875rem;
+    line-height: 1;
+  }
+  .lang-glyph[data-script='arabic'] { transform: translateY(-0.295em); }
+  .lang-glyph[data-script='latin'] { transform: translateY(0.015em); font-size: 1rem; }
   .seg-wrap { flex-wrap: wrap; }
   .seg-wrap button { flex: 1 1 40%; }
 
@@ -40,7 +57,15 @@
   .page-head .lede { color: var(--ink-muted); max-width: 56ch; margin-block-start: .6rem; }
 
   /* Sub-navigation for the Project pages, which are one story in five parts. */
-  .subnav { display: flex; gap: .35rem; flex-wrap: wrap; margin-block-end: 1.5rem; }
+  /* Clear of the sticky top bar. Without the top padding the first chip sat
+     against the bar's underside and read as part of it. */
+  .subnav {
+    display: flex;
+    gap: .35rem;
+    flex-wrap: wrap;
+    padding-block-start: clamp(1rem, 2.5vw, 1.75rem);
+    margin-block-end: 1.5rem;
+  }
   .subnav a {
     padding: .45rem .85rem;
     border: 1px solid var(--line);
@@ -588,7 +613,14 @@
 
   /* ======================================================== team =========== */
   .school { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; margin-block-end: 2rem; }
-  .school-logo { width: 88px; height: 88px; object-fit: contain; }
+  /* A wide lockup, sized by height. Letterboxing it into a square left the
+     school's name too small to read. */
+  .school-logo {
+    height: 62px;
+    width: auto;
+    max-width: min(210px, 100%);
+    object-fit: contain;
+  }
   .team-section { margin-block-end: clamp(1.5rem, 3vw, 2.5rem); }
   .member-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
   @media (min-width: 700px) { .member-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -946,8 +978,16 @@
   .poster-title h1 { font-size: 17mm; line-height: 1.05; margin-block-end: 3mm; }
   .poster-tagline { font-family: var(--font-display); font-weight: 600; font-size: 8mm; color: var(--sadu-red); }
   .poster-descriptor { font-size: 5.4mm; color: #4A5B51; }
-  .poster-credits { text-align: end; font-size: 3.9mm; line-height: 1.6; }
+  .poster-credits {
+    display: grid;
+    justify-items: end;
+    gap: 1.5mm;
+    text-align: end;
+    font-size: 3.9mm;
+    line-height: 1.6;
+  }
   .poster-credits p { max-width: 72mm; }
+  .poster-school-logo { height: 16mm; width: auto; margin-block-end: 2mm; }
 
   .poster-grid {
     flex: 1 1 auto;

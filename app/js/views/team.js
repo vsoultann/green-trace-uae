@@ -33,14 +33,12 @@ export default function teamView() {
         <div class="section-head"><h2 id="supervisor-title">${t('team.supervisor')}</h2></div>
         <article class="panel person person-supervisor">
           <div class="person-head">
-            ${raw(avatar(initials(SUPERVISOR.name)))}
             <div>
               ${raw(bilingual({ en: SUPERVISOR.name, ar: SUPERVISOR.ar }, { size: 'm', tag: 'h3' }))}
               <p class="small muted">${L(SUPERVISOR.role)}</p>
             </div>
           </div>
           <p>${L(SUPERVISOR.note)}</p>
-          ${raw(CONFIG.supervisor.todo ? `<p><span class="todo">${t('misc.todo')}</span> <span class="small muted">${CONFIG.supervisor.todo}</span></p>` : '')}
         </article>
       </section>
 
@@ -62,9 +60,9 @@ export default function teamView() {
 /**
  * The school lockup.
  *
- * Falls back to type when app/img/ats-logo.png has not been added yet, rather
- * than showing a broken image on a page an evaluator is reading. The file is
- * listed in CONFIG with a note, and `npm test` prints that note.
+ * Falls back to the school's initials set in the display face if the logo file
+ * is ever missing, rather than showing a broken image on a page an evaluator is
+ * reading.
  */
 function schoolCard() {
   return html`<section class="panel school" aria-labelledby="school-title">
@@ -74,7 +72,6 @@ function schoolCard() {
     <div>
       ${raw(bilingual({ en: CONFIG.school.en, ar: CONFIG.school.ar }, { size: 'm', tag: 'h2', id: 'school-title' }))}
       <p class="small muted">${L(CONFIG.programme)} — ${CONFIG.programme.year}</p>
-      ${raw(CONFIG.school.todo ? `<p class="small muted"><span class="todo">${t('misc.todo')}</span> ${CONFIG.school.todo}</p>` : '')}
     </div>
   </section>`;
 }
@@ -112,9 +109,4 @@ function person(m) {
  */
 function avatar(text) {
   return `<span class="avatar" aria-hidden="true">${text}</span>`;
-}
-
-function initials(name) {
-  return name.replace(/^(Mr|Mrs|Ms|Dr)\.?\s+/i, '')
-    .split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('');
 }

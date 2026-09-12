@@ -567,7 +567,29 @@ console.log('\nOffline...');
    Everything still to be confirmed
    ------------------------------------------------------------------------ */
 
-const todos = await page.evaluate(async () => (await import('./js/config.js')).openTodos());
+/* The app used to print a "To confirm" chip beside every unverified fact. It no
+   longer does — that marker belongs in our workflow, not on a page an evaluator
+   is reading — so this is the only thing left that will nag about them. It has
+   to reach every one of them, not just the ones that live in config.js. */
+const todos = await page.evaluate(async () => {
+  const { openTodos } = await import('./js/config.js');
+  const { QUOTES } = await import('./js/data/about.js');
+  const { STAGES } = await import('./js/data/journey.js');
+
+  const out = openTodos();
+  for (const [key, quote] of Object.entries(QUOTES)) {
+    if (quote.todo) out.push({ where: `about.QUOTES.${key}`, note: quote.todo });
+  }
+  const undated = STAGES.filter((stage) => stage.todo).map((stage) => stage.title.en);
+  if (undated.length) {
+    out.push({
+      where: 'journey.STAGES',
+      note: `Confirm the dates for: ${undated.join(', ')}. They are written as term weeks because the repository cannot know them.`,
+    });
+  }
+  return out;
+});
+
 if (todos.length) {
   console.log(`\nStill to confirm (${todos.length}):`);
   for (const todo of todos) console.log(`  · ${todo.where}: ${todo.note}`);
