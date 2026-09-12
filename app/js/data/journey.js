@@ -15,7 +15,7 @@
 export const STAGES = [
   {
     id: 'research',
-    date: { en: 'Term 1, weeks 1–2', ar: 'الفصل الأول، الأسبوعان ١–٢' },
+    date: { en: 'Term 1, weeks 1–2', ar: 'الفصل الأول، الأسبوعان 1–2' },
     todo: true,
     title: { en: 'Research', ar: 'البحث' },
     body: {
@@ -25,7 +25,7 @@ export const STAGES = [
   },
   {
     id: 'design',
-    date: { en: 'Term 1, week 3', ar: 'الفصل الأول، الأسبوع ٣' },
+    date: { en: 'Term 1, week 3', ar: 'الفصل الأول، الأسبوع 3' },
     todo: true,
     title: { en: 'Design', ar: 'التصميم' },
     body: {
@@ -35,7 +35,7 @@ export const STAGES = [
   },
   {
     id: 'build',
-    date: { en: '2–7 September 2026', ar: '٢–٧ سبتمبر ٢٠٢٦' },
+    date: { en: '2–7 September 2026', ar: '2–7 سبتمبر 2026' },
     fromGit: true,
     title: { en: 'Build — v1, Green-Trace UAE', ar: 'البناء — النسخة الأولى، الأثر الأخضر' },
     body: {
@@ -45,7 +45,7 @@ export const STAGES = [
   },
   {
     id: 'testing',
-    date: { en: '7 September 2026', ar: '٧ سبتمبر ٢٠٢٦' },
+    date: { en: '7 September 2026', ar: '7 سبتمبر 2026' },
     fromGit: true,
     title: { en: 'Testing & calibration', ar: 'الاختبار والمعايرة' },
     body: {
@@ -55,7 +55,7 @@ export const STAGES = [
   },
   {
     id: 'iteration',
-    date: { en: '11 September 2026', ar: '١١ سبتمبر ٢٠٢٦' },
+    date: { en: '11 September 2026', ar: '11 سبتمبر 2026' },
     fromGit: true,
     title: { en: 'Iteration — v2, Warif', ar: 'التحسين — النسخة الثانية، وارف' },
     body: {
@@ -86,7 +86,7 @@ export const ITERATIONS = [
     severity: 'correctness',
     problem: {
       en: 'The model page announced "Species: 10" while the deployed model was trained on four. Anybody who scanned a mangrove leaf and got "Ghaf" had been told, by our own page, that mangrove was covered.',
-      ar: 'كانت صفحة النموذج تعلن «١٠ أنواع» بينما النموذج المنشور مدرَّب على أربعة. فمن مسح ورقة قرم وحصل على «الغاف» كانت صفحتنا نفسها قد أخبرته أن القرم مشمول.',
+      ar: 'كانت صفحة النموذج تعلن «10 أنواع» بينما النموذج المنشور مدرَّب على أربعة. فمن مسح ورقة قرم وحصل على «الغاف» كانت صفحتنا نفسها قد أخبرته أن القرم مشمول.',
     },
     change: {
       en: 'Every count is now written as two numbers: how many trees are in the library, and how many the current model recognises. The second comes from metadata.classes.length, so it cannot drift from the model again. Untrained trees carry a "Reference only" badge wherever they appear.',
@@ -94,7 +94,7 @@ export const ITERATIONS = [
     },
     evidence: {
       en: 'app/model/metadata.json lists 4 classes and a 0.8147 validation accuracy; data/species.js lists 10.',
-      ar: 'يذكر ملف app/model/metadata.json أربعة أصناف ودقة تحقق ٠٫٨١٤٧، بينما يذكر data/species.js عشرة أنواع.',
+      ar: 'يذكر ملف app/model/metadata.json أربعة أصناف ودقة تحقق 0٫8147، بينما يذكر data/species.js عشرة أنواع.',
     },
     result: {
       en: 'The smoke test now fails if the number shown on screen and the number in the metadata disagree.',
@@ -107,7 +107,7 @@ export const ITERATIONS = [
     severity: 'accuracy',
     problem: {
       en: 'The first health analyser reported only 11.3% of known-healthy reference leaves as healthy. It was reading the dark background around a leaf as dead tissue, and a leaf photographed on a desk was condemned for the desk.',
-      ar: 'صنّف محلّل الصحة الأول ١١٫٣٪ فقط من الأوراق المرجعية السليمة على أنها سليمة. كان يقرأ الخلفية الداكنة حول الورقة على أنها نسيج ميت، فتُدان الورقة المصوَّرة على طاولة بسبب الطاولة.',
+      ar: 'صنّف محلّل الصحة الأول 11٫3٪ فقط من الأوراق المرجعية السليمة على أنها سليمة. كان يقرأ الخلفية الداكنة حول الورقة على أنها نسيج ميت، فتُدان الورقة المصوَّرة على طاولة بسبب الطاولة.',
     },
     change: {
       en: 'White-balance the photo against its own background, segment the leaf out first, and measure colour and texture only inside the blade. Then calibrate the thresholds against the reference set with tools/health-calibrate.mjs.',
@@ -119,7 +119,7 @@ export const ITERATIONS = [
     },
     result: {
       en: 'Healthy leaves reported healthy rose from 11.3% to 48.1%, and the median score on them from 47 to 86. Synthetic necrosis is detected 100% of the time and synthetic chlorosis 93–97%.',
-      ar: 'ارتفعت نسبة الأوراق السليمة المصنَّفة سليمة من ١١٫٣٪ إلى ٤٨٫١٪، ووسيط درجاتها من ٤٧ إلى ٨٦. ويُرصد التنخّر المصطنع بنسبة ١٠٠٪ والاصفرار المصطنع بنسبة ٩٣–٩٧٪.',
+      ar: 'ارتفعت نسبة الأوراق السليمة المصنَّفة سليمة من 11٫3٪ إلى 48٫1٪، ووسيط درجاتها من 47 إلى 86. ويُرصد التنخّر المصطنع بنسبة 100٪ والاصفرار المصطنع بنسبة 93–97٪.',
     },
   },
   {
@@ -148,15 +148,15 @@ export const ITERATIONS = [
     severity: 'design',
     problem: {
       en: 'On a 1366px laptop — which is what an evaluator uses — v1 was a narrow phone column stranded in the middle of the screen with empty space on both sides.',
-      ar: 'على شاشة حاسوب بعرض ١٣٦٦ بكسل، وهي ما يستخدمه المقيّم، كانت النسخة الأولى عموداً ضيّقاً بعرض هاتف تائهاً في منتصف الشاشة وعلى جانبيه فراغ.',
+      ar: 'على شاشة حاسوب بعرض 1366 بكسل، وهي ما يستخدمه المقيّم، كانت النسخة الأولى عموداً ضيّقاً بعرض هاتف تائهاً في منتصف الشاشة وعلى جانبيه فراغ.',
     },
     change: {
       en: 'A 12-column grid to 1240px, and a split home screen: the bilingual hero on the start side, a large viewfinder on the end side.',
-      ar: 'شبكة من ١٢ عموداً حتى ١٢٤٠ بكسل، وشاشة رئيسية مقسومة: العنوان ثنائي اللغة في الجهة الأولى، وعدسة كبيرة في الجهة المقابلة.',
+      ar: 'شبكة من 12 عموداً حتى 1240 بكسل، وشاشة رئيسية مقسومة: العنوان ثنائي اللغة في الجهة الأولى، وعدسة كبيرة في الجهة المقابلة.',
     },
     evidence: {
       en: 'Side-by-side desktop screenshots at 1366×860 in docs/evidence.',
-      ar: 'لقطات متجاورة لشاشة الحاسوب بمقاس ١٣٦٦×٨٦٠ في docs/evidence.',
+      ar: 'لقطات متجاورة لشاشة الحاسوب بمقاس 1366×860 في docs/evidence.',
     },
     result: {
       en: 'The camera is visible without scrolling on a laptop, which is the first thing a judge does.',
@@ -173,7 +173,7 @@ export const ITERATIONS = [
     },
     change: {
       en: 'Both families are self-hosted as variable woff2, Latin and Arabic subsets only, 86 KB in total, precached by the service worker with everything else.',
-      ar: 'صار الخطّان مستضافَين محلياً بصيغة woff2 المتغيّرة، بمجموعتي اللاتينية والعربية فقط، بحجم ٨٦ كيلوبايت إجمالاً، ويحفظهما عامل الخدمة مع بقية الملفات.',
+      ar: 'صار الخطّان مستضافَين محلياً بصيغة woff2 المتغيّرة، بمجموعتي اللاتينية والعربية فقط، بحجم 86 كيلوبايت إجمالاً، ويحفظهما عامل الخدمة مع بقية الملفات.',
     },
     evidence: {
       en: 'The smoke test reloads the app with the network disabled and checks the shell still renders.',

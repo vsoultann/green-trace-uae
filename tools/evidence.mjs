@@ -29,6 +29,11 @@ const pairs = [...block.matchAll(/v1:\s*'([^']+)',\s*v2:\s*'([^']+)'/g)]
 
 if (!pairs.length) { console.error('No COMPARISONS found in journey.js'); process.exit(1); }
 
+/* The poster prints three phone screenshots of the finished app. They are the
+   real ones, so the poster cannot show a version that no longer exists. */
+const POSTER_SHOTS = ['home-en-phone.png', 'result-en-phone.png', 'project-how-en-phone.png'];
+for (const file of POSTER_SHOTS) pairs.push({ v2: file });
+
 await fs.rm(OUT, { recursive: true, force: true });
 await fs.mkdir(path.join(OUT, 'v1'), { recursive: true });
 await fs.mkdir(path.join(OUT, 'v2'), { recursive: true });
@@ -38,6 +43,7 @@ const missing = [];
 
 for (const pair of pairs) {
   for (const version of ['v1', 'v2']) {
+    if (!pair[version]) continue;
     const from = path.join(DOCS, version, pair[version]);
     const to = path.join(OUT, version, pair[version].replace(/\.png$/, '.jpg'));
     try {

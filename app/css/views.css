@@ -663,4 +663,357 @@
     font-variant-numeric: tabular-nums;
     font-weight: 600;
   }
+
+  /* ==================================================== feedback =========== */
+  .feedback-layout { display: grid; gap: 1.25rem; align-items: start; }
+  @media (min-width: 900px) { .feedback-layout { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+  .feedback-form { display: grid; gap: 1.25rem; }
+  .feedback-side { display: grid; gap: 1.25rem; }
+
+  .rating { border: 0; padding: 0; margin: 0; display: grid; gap: .5rem; }
+  .rating legend { padding: 0; font-weight: 500; }
+  .rating-scale { display: flex; gap: .6rem; }
+
+  /* A real radio input, visually replaced by a diamond — the motif at the heart
+     of the mark. Stars would make a school project look like an app store. */
+  .diamond-radio {
+    position: relative;
+    display: grid;
+    place-items: center;
+    gap: .3rem;
+    min-width: var(--tap);
+    min-height: var(--tap);
+    cursor: pointer;
+  }
+  .diamond-radio input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .diamond-mark {
+    width: 24px; height: 24px;
+    rotate: 45deg;
+    border: 2px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface);
+    transition: background var(--dur-ui) var(--ease), border-color var(--dur-ui) var(--ease);
+  }
+  .diamond-radio:hover .diamond-mark { border-color: var(--primary); }
+  .diamond-radio input:checked ~ .diamond-mark { background: var(--primary); border-color: var(--primary); }
+  .diamond-radio input:focus-visible ~ .diamond-mark { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .diamond-num { font-size: .75rem; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+
+  .feedback-thanks { display: grid; gap: .75rem; justify-items: start; }
+  .thanks-mark { color: var(--primary); margin: 0; }
+  .admin-list { display: grid; gap: .6rem; list-style: none; padding: 0; margin-block-start: 1rem; }
+  .admin-list li { display: grid; gap: .1rem; padding-block-end: .6rem; border-block-end: 1px solid var(--line); }
+
+  /* ======================================================= brand =========== */
+  .brand-page > section { margin-block-end: 1.25rem; }
+  .brand-mark-row { display: flex; gap: clamp(1rem, 3vw, 2.5rem); align-items: center; flex-wrap: wrap; }
+  .variant-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-block-start: 1.5rem; }
+  .variant { margin: 0; display: grid; gap: .5rem; justify-items: center; padding: 1rem; border-radius: var(--r-ctl); }
+  .variant[data-on='light'] { background: var(--wool); color: var(--ink-core); }
+  .variant[data-on='dark'] { background: var(--night); color: var(--wool); }
+  .variant[data-on='mono'] { background: var(--surface-sunk); color: var(--ink); }
+  .variant[data-on='app'] { background: var(--surface-sunk); }
+
+  .lockup-row { display: flex; gap: 2rem; flex-wrap: wrap; align-items: end; }
+  .lockup-row figure { margin: 0; display: grid; gap: .6rem; justify-items: start; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+  .swatch { margin: 0; display: grid; gap: .5rem; }
+  .swatch-chip { display: block; height: 64px; border-radius: var(--r-woven); border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); }
+  .swatch figcaption { display: grid; }
+
+  .type-specimen { display: grid; gap: .35rem; }
+  .specimen-display { font-family: var(--font-display); font-weight: 700; font-size: var(--t-display-l); line-height: 1.1; }
+  .specimen-text { font-size: var(--t-subtitle); }
+
+  .icon-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: .75rem; }
+  .icon-cell {
+    margin: 0;
+    display: grid;
+    gap: .4rem;
+    justify-items: center;
+    padding: .75rem .25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-ctl);
+    color: var(--primary);
+  }
+  .icon-cell figcaption { color: var(--ink-muted); word-break: break-all; }
+
+  /* ====================================================== kiosk ============ */
+  .kiosk {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+  /* Sized against the viewport *height*, not its width. A kiosk screen is
+     whatever the school has spare — a 24" monitor turned portrait, a laptop, a
+     borrowed TV — and the one thing that must never happen is the "Tap to scan"
+     button falling below the fold on a screen nobody can scroll. */
+  .kiosk-body {
+    flex: 1 1 auto;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: clamp(.6rem, 1.8vh, 1.5rem);
+    padding: clamp(.75rem, 1.5vh, 2rem) clamp(1.5rem, 4vw, 4rem);
+    text-align: center;
+  }
+  .kiosk-logo { cursor: pointer; padding: 0; }
+  .kiosk-logo .lockup-stacked { --lockup-w: clamp(110px, 17vh, 240px); }
+  .kiosk-tagline {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.125rem, 2.6vh, 2rem);
+    color: var(--accent);
+    margin: 0;
+  }
+
+  .kiosk-fact {
+    max-width: 62ch;
+    display: grid;
+    gap: .3rem;
+    font-size: clamp(.875rem, 1.7vh, 1.0625rem);
+    transition: opacity 200ms var(--ease);
+  }
+  .kiosk-fact[data-swap='1'] { opacity: 0; }
+  .fact-label { color: var(--ink-muted); text-transform: none; margin: 0; }
+  .fact-name { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.125rem, 2.2vh, 1.5rem); margin: 0; }
+  .fact-text { margin: 0 auto; }
+  .fact-alt { color: var(--ink-muted); font-size: var(--t-small); }
+
+  .kiosk-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: clamp(.75rem, 1.8vh, 1.1rem) clamp(1.25rem, 3vw, 2.2rem);
+    border-radius: var(--r-sheet);
+    background: var(--primary);
+    color: var(--on-primary);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.125rem, 3vh, 2rem);
+    box-shadow: var(--shadow-scan);
+  }
+  .kiosk-cta .ico { width: clamp(28px, 4vh, 44px); height: clamp(28px, 4vh, 44px); }
+  .kiosk-qr { display: grid; gap: .4rem; justify-items: center; }
+  .kiosk-qr .qr { --qr-size: clamp(84px, 13vh, 150px); padding: 8px; }
+  .kiosk-qr img { width: var(--qr-size); height: var(--qr-size); }
+  .kiosk-exit { text-align: center; color: var(--ink-muted); padding-block: .5rem; margin: 0; font-size: .75rem; }
+
+  /* ======================================================= deck ============ */
+  .deck {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+  .deck-stage {
+    flex: 1 1 auto;
+    display: grid;
+    place-items: center;
+    padding: clamp(.75rem, 2vw, 2rem);
+    min-height: 0;
+  }
+  /* 16:9, letterboxed inside whatever the projector actually gives us. The
+     subtraction is the chrome around it: the Sadu band, the deck bar, the key
+     hint and the stage's own padding. Get it wrong and the controls fall off
+     the bottom of the screen mid-presentation. */
+  .slide {
+    width: min(100%, calc((100dvh - 210px) * 16 / 9));
+    aspect-ratio: 16 / 9;
+    display: grid;
+    align-content: center;
+    gap: clamp(.75rem, 2vh, 1.5rem);
+    padding: clamp(1.25rem, 4vw, 3.5rem);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sheet);
+    overflow: auto;
+  }
+  .slide-title { font-size: clamp(1.5rem, 3.4vw, 3rem); }
+  .slide-title-layout { display: flex; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; flex-wrap: wrap; }
+  .slide-title-layout .lockup-stacked { --lockup-w: clamp(140px, 14vw, 240px); }
+  .slide-tagline { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.1rem, 2vw, 1.75rem); color: var(--accent); }
+  .slide-lede { font-size: clamp(1rem, 1.4vw, 1.375rem); max-width: 60ch; }
+  .slide-facts, .slide-kv { display: grid; grid-template-columns: auto 1fr; gap: .2rem .9rem; margin-block: 1rem; }
+  .slide-facts dt, .slide-kv dt { color: var(--ink-muted); font-size: var(--t-small); }
+  .slide-facts dd, .slide-kv dd { margin: 0; }
+  .slide-kv dd { font-family: var(--font-display); font-weight: 600; font-size: 1.25rem; }
+  .slide-two { display: grid; gap: clamp(1rem, 3vw, 2.5rem); align-items: center; }
+  @media (min-width: 760px) { .slide-two { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); } }
+  .slide-points { display: grid; gap: .7rem; list-style: none; padding: 0; margin: 0; }
+  .slide-points li { position: relative; padding-inline-start: 1.25rem; font-size: clamp(.95rem, 1.2vw, 1.25rem); }
+  .slide-points li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: .55em;
+    width: 8px; height: 8px;
+    rotate: 45deg;
+    background: var(--primary);
+  }
+  .slide-stat { display: grid; gap: .3rem; justify-items: center; text-align: center; }
+  .stat-value { font-family: var(--font-display); font-weight: 700; font-size: clamp(3rem, 7vw, 6rem); line-height: 1; color: var(--primary); margin: 0; }
+  .slide-demo { display: grid; gap: 1.25rem; justify-items: start; }
+  .slide-qr { display: grid; gap: .5rem; justify-items: center; }
+
+  .deck-bar {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .6rem clamp(.75rem, 2vw, 1.5rem);
+    border-block-start: 1px solid var(--line);
+    background: var(--surface);
+    flex-wrap: wrap;
+  }
+  .deck-bar .spacer { flex: 1 1 auto; }
+  .deck-count, .deck-speaker { font-size: var(--t-small); color: var(--ink-muted); }
+  .deck-timer {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    padding-inline: .5rem;
+  }
+  /* Three bands: under the assessment's floor, inside the window, over its
+     ceiling. The speaker needs to know which, not to do arithmetic on stage. */
+  .deck-timer[data-band='under'] { color: var(--ink-muted); }
+  .deck-timer[data-band='in'] { color: var(--healthy); }
+  .deck-timer[data-band='over'] { color: var(--accent); }
+  .deck[data-timer='0'] .deck-timer { opacity: .45; }
+
+  .deck-notes {
+    padding: 1rem clamp(.75rem, 2vw, 1.5rem);
+    border-block-start: 1px solid var(--line);
+    background: var(--surface-sunk);
+    max-height: 32vh;
+    overflow: auto;
+  }
+  .deck-notes h3 { font-size: 1rem; margin-block-end: .4rem; }
+  .deck-keys { text-align: center; color: var(--ink-muted); padding-block: .4rem; margin: 0; }
+
+  /* ===================================================== poster ============ */
+  .poster {
+    width: var(--pw);
+    min-height: var(--ph);
+    margin-inline: auto;
+    background: var(--wool);
+    color: var(--ink-core);
+    display: flex;
+    flex-direction: column;
+    /* Everything below is in millimetres so the browser lays out what the print
+       shop receives, rather than something that only resembles it. */
+    font-size: 3.4mm;
+    line-height: 1.45;
+  }
+  .poster .sadu-band { --band-h: 8mm; }
+  .poster-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8mm;
+    align-items: start;
+    padding: 12mm 14mm 8mm;
+  }
+  .poster-head .lockup { --lockup-w: 52mm; --lockup-h: 14mm; }
+  .poster-title h1 { font-size: 13mm; line-height: 1.05; margin-block-end: 3mm; }
+  .poster-tagline { font-family: var(--font-display); font-weight: 600; font-size: 6mm; color: var(--sadu-red); }
+  .poster-descriptor { font-size: 4.2mm; color: #4A5B51; }
+  .poster-credits { text-align: end; font-size: 3.2mm; line-height: 1.6; }
+  .poster-credits p { max-width: 62mm; }
+
+  .poster-grid {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7mm;
+    padding: 0 14mm 8mm;
+    align-content: start;
+  }
+  .poster-wide, .poster-shots, .poster-qr-block { grid-column: 1 / -1; }
+  .poster-block h2 {
+    font-size: 6mm;
+    margin-block-end: 3mm;
+    padding-block-end: 2mm;
+    border-block-end: 0.6mm solid var(--ghaf);
+  }
+  .poster-block p { max-width: none; margin-block-end: 2.5mm; }
+  .poster-note { font-size: 3mm; color: #4A5B51; }
+
+  .poster-stages { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3mm; list-style: none; padding: 0; margin: 0; }
+  .poster-stages li {
+    display: grid;
+    gap: 1mm;
+    padding-block-start: 3mm;
+    border-block-start: 1.2mm solid var(--ghaf-light);
+    font-size: 3.1mm;
+  }
+  .poster-stages b { font-size: 3.6mm; }
+
+  .poster-pipeline {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3mm;
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .poster-pipeline li {
+    position: relative;
+    padding: 3mm 3mm 3mm 9mm;
+    border: 0.4mm solid var(--ghaf-light);
+    font-size: 3.1mm;
+  }
+  .poster-pipeline li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 3mm;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--ghaf);
+  }
+
+  .poster-kv { display: grid; gap: 2mm; margin-block-end: 3mm; }
+  .poster-kv > div { display: flex; justify-content: space-between; gap: 4mm; border-block-end: 0.3mm dotted #C5CFC2; padding-block-end: 1mm; }
+  .poster-kv dt { color: #4A5B51; }
+  .poster-kv dd { margin: 0; font-family: var(--font-display); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .poster-shot-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5mm; }
+  .poster-shot-row img { width: 100%; border: 0.4mm solid #C5CFC2; border-radius: 2mm; }
+
+  .poster-qr-block { display: flex; gap: 10mm; }
+  .poster-qr { display: grid; gap: 2mm; justify-items: center; font-size: 3.2mm; }
+  .poster-qr img { width: 34mm; height: 34mm; }
+
+  .poster-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 8mm;
+    padding: 5mm 14mm 8mm;
+    font-size: 2.8mm;
+    color: #4A5B51;
+  }
+
+  /* On screen the poster is a preview: scaled to fit, centred, on a dark ground
+     so the sheet reads as a sheet. `zoom` rather than `transform: scale` because
+     a transform leaves the layout box at full size — 2,245 px across for an A1 —
+     so the sheet stayed off-centre and the page kept a horizontal scrollbar.
+     zoom reflows, so centring and page height come out right. Print sets its own
+     page box and never sees any of this. */
+  @media screen {
+    body[data-chrome='bare'] #view:has(.poster) {
+      background: #2A332C;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+    }
+    .poster { box-shadow: 0 20px 60px rgb(0 0 0 / .4); }
+  }
 }
