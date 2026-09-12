@@ -1,0 +1,107 @@
+[
+  {
+    "file": "ghaf.jpg",
+    "key": "ghaf",
+    "latin": "Prosopis cineraria",
+    "photo": 42829025,
+    "author": "Siddarth Machado",
+    "licence": "cc-by",
+    "observation": 27525737,
+    "want": "healthy",
+    "confidence": 0.998,
+    "similarity": 0.783,
+    "health": 95,
+    "band": "excellent",
+    "findings": [
+      "clean"
+    ]
+  },
+  {
+    "file": "sidr.jpg",
+    "key": "sidr",
+    "latin": "Ziziphus spina-christi",
+    "photo": 214021845,
+    "author": "Dedicated to the public domain",
+    "licence": "cc0",
+    "observation": 126155844,
+    "want": "healthy",
+    "confidence": 1,
+    "similarity": 0.728,
+    "health": 100,
+    "band": "excellent",
+    "findings": [
+      "evenColour",
+      "clean"
+    ]
+  },
+  {
+    "file": "nakhl.jpg",
+    "key": "nakhl",
+    "latin": "Phoenix dactylifera",
+    "photo": 481624509,
+    "author": "Valentin Moser",
+    "licence": "cc-by",
+    "observation": 267974620,
+    "want": "healthy",
+    "confidence": 1,
+    "similarity": 0.692,
+    "health": 86,
+    "band": "excellent",
+    "findings": [
+      "texture"
+    ]
+  },
+  {
+    "file": "samar.jpg",
+    "key": "samar",
+    "latin": "Vachellia tortilis",
+    "photo": 75857048,
+    "author": "Karim Haddad",
+    "licence": "cc-by",
+    "observation": 47818947,
+    "want": "healthy",
+    "confidence": 0.998,
+    "similarity": 0.65,
+    "health": 94,
+    "band": "excellent",
+    "findings": [
+      "evenColour",
+      "clean"
+    ]
+  },
+  {
+    "file": "ghaf-stressed.jpg",
+    "key": "ghaf",
+    "latin": "Prosopis cineraria",
+    "photo": 42829675,
+    "author": "Siddarth Machado",
+    "licence": "cc-by",
+    "observation": 27525737,
+    "want": "stressed",
+    "confidence": 0.934,
+    "similarity": 0.679,
+    "health": 48,
+    "band": "poor",
+    "findings": [
+      "necrosisHigh"
+    ]
+  },
+  {
+    "file": "nakhl-stressed.jpg",
+    "key": "nakhl",
+    "latin": "Phoenix dactylifera",
+    "photo": 482651528,
+    "author": "Sula Vanderplank",
+    "licence": "cc-by",
+    "observation": 268743154,
+    "want": "stressed",
+    "confidence": 1,
+    "similarity": 0.598,
+    "health": 52,
+    "band": "fair",
+    "findings": [
+      "necrosisSome",
+      "chlorosisHigh"
+    ]
+  }
+]

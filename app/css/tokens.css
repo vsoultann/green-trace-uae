@@ -1,0 +1,199 @@
+/**
+ * Warif design tokens.
+ *
+ * The cascade order is declared here, once, so a component rule can never be
+ * beaten by a base rule that happens to load later.
+ *
+ * Two ideas run through every value below:
+ *
+ *   smooth vs woven -- content sits on smooth, generously rounded surfaces;
+ *   data and progress are woven, meaning rectilinear, segmented and square.
+ *   The radii scale and the `--r-woven: 2px` floor are how that is enforced.
+ *
+ *   tonal elevation -- depth comes from surface/surface-sunk plus a 1px line,
+ *   not from shadows. Only two things in the app float, and they are the only
+ *   two shadows defined.
+ */
+@layer reset, tokens, base, components, views;
+
+@layer tokens {
+  :root {
+    /* ---------------------------------------------------------- core palette
+       These eight are the brand. Theme tokens below are assembled from them, so
+       a colour that is not in this list does not belong in the interface. */
+    --ghaf: #2E6147;
+    --ghaf-light: #7FA88A;
+    --sadu-red: #B23A2C;
+    --dune: #D9C6A0;
+    --wool: #F6F3EA;
+    --ink-core: #14231C;
+    --mist: #EEF1EA;
+    --night: #0F1712;
+
+    /* ------------------------------------------------------------ Day theme */
+    --bg: #EEF1EA;
+    --surface: #F8F9F5;
+    --surface-sunk: #E3E9E0;
+    --ink: #14231C;
+    --ink-muted: #4A5B51;
+    --line: #C5CFC2;
+    --primary: #2E6147;
+    --on-primary: #FFFFFF;
+    --accent: #B23A2C;
+
+    /* Leaf-tissue status colours: green healthy, yellow chlorotic, brown dead.
+       `-fill` paints area, the bare token writes text -- they are different
+       because a fill that passes as a swatch fails as 14px type. */
+    --healthy: #2F7A4B;
+    --healthy-fill: #4F9A67;
+    --chlorosis: #8A6400;
+    --chlorosis-fill: #D9A521;
+    --necrosis: #7A4B2A;
+    --necrosis-fill: #8C5A36;
+
+    --focus: #B23A2C;
+    --sadu-tile: url('../assets/brand/sadu-band.svg');
+    --mark: url('../assets/brand/warif-mark.svg');
+    --lockup: url('../assets/brand/warif-lockup.svg');
+    --lockup-rtl: url('../assets/brand/warif-lockup-rtl.svg');
+    --lockup-stacked: url('../assets/brand/warif-lockup-stacked.svg');
+
+    /* ------------------------------------------------------------ structure */
+    --shell-max: 1240px;
+    --gutter: clamp(1rem, 3vw, 2rem);
+
+    /* Radii by hierarchy. Anything that displays data uses --r-woven. */
+    --r-sheet: 28px;
+    --r-panel: 20px;
+    --r-ctl: 12px;
+    --r-pill: 999px;
+    --r-woven: 2px;
+
+    /* The only two shadows in the system. */
+    --shadow-sheet: 0 24px 48px -24px rgb(20 35 28 / .28), 0 2px 6px rgb(20 35 28 / .06);
+    --shadow-scan: 0 12px 28px -10px rgb(46 97 71 / .5);
+
+    --band-h: 12px;
+    --tap: 44px;
+
+    /* ----------------------------------------------------------------- type */
+    --font-display: 'Reem Kufi', 'Noto Kufi Arabic', 'Trebuchet MS', system-ui, sans-serif;
+    --font-text: 'Readex Pro', 'Noto Sans Arabic', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --t-display-xl: clamp(3rem, 6vw + 1rem, 6.5rem);
+    --t-display-l: clamp(2.25rem, 3vw + 1rem, 3.5rem);
+    --t-title: 1.5rem;
+    --t-subtitle: 1.25rem;
+    --t-body: 1rem;
+    --t-small: 0.875rem;
+    --measure: 66ch;
+
+    --lh-body: 1.6;
+    --lh-tight: 1.15;
+
+    /* Motion. --dur-* collapse to 0 under reduced motion, set in base.css. */
+    --dur-route: 180ms;
+    --dur-ui: 140ms;
+    --ease: cubic-bezier(.2, .7, .3, 1);
+
+    color-scheme: light;
+  }
+
+  /* ------------------------------------------------------- Night ("Majlis")
+     Named for the room it is meant for: the lights are low, someone is showing
+     the app to a guest, and a white sheet of paper in the hand would be rude. */
+  :root[data-theme='night'] {
+    --bg: #0F1712;
+    --surface: #17221B;
+    --surface-sunk: #0B120E;
+    --ink: #EAE5D8;
+    --ink-muted: #A9B4AA;
+    --line: #2B3A31;
+    --primary: #8FC19D;
+    --on-primary: #0F1712;
+    --accent: #E06A55;
+
+    --healthy: #7CC592;
+    --healthy-fill: #7CC592;
+    --chlorosis: #E3B341;
+    --chlorosis-fill: #E3B341;
+    --necrosis: #C98A5E;
+    --necrosis-fill: #C98A5E;
+
+    --focus: #E06A55;
+    --mark: url('../assets/brand/warif-mark-dark.svg');
+    --lockup: url('../assets/brand/warif-lockup-dark.svg');
+    --lockup-stacked: url('../assets/brand/warif-lockup-stacked-dark.svg');
+    --shadow-sheet: 0 24px 48px -24px rgb(0 0 0 / .6), 0 2px 6px rgb(0 0 0 / .3);
+    --shadow-scan: 0 12px 28px -10px rgb(0 0 0 / .7);
+
+    color-scheme: dark;
+  }
+
+  /* The RTL lockup has no dark variant of its own: it is the same drawing, and
+     the dark horizontal file already mirrors when the mark is flipped in CSS. */
+  :root[data-theme='night'] { --lockup-rtl: url('../assets/brand/warif-lockup-dark.svg'); }
+
+  /* ---------------------------------------------------------- High contrast
+     Not a "darker dark". Pure black and white with one signal colour, for the
+     evaluator reading a projected screen from the back of the hall. */
+  :root[data-theme='contrast'] {
+    --bg: #000000;
+    --surface: #000000;
+    --surface-sunk: #000000;
+    --ink: #FFFFFF;
+    --ink-muted: #FFFFFF;
+    --line: #FFFFFF;
+    --primary: #FFD400;
+    --on-primary: #000000;
+    --accent: #FFD400;
+
+    --healthy: #FFFFFF;
+    --healthy-fill: #FFFFFF;
+    --chlorosis: #FFD400;
+    --chlorosis-fill: #FFD400;
+    --necrosis: #FFFFFF;
+    --necrosis-fill: #9A9A9A;
+
+    --focus: #FFD400;
+    --mark: url('../assets/brand/warif-mark-mono.svg');
+    --shadow-sheet: none;
+    --shadow-scan: none;
+
+    color-scheme: dark;
+  }
+
+  /* Auto: follow the device. Explicit themes above win because they carry a
+     data-theme attribute and this rule does not. */
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme='auto'] {
+      --bg: #0F1712;
+      --surface: #17221B;
+      --surface-sunk: #0B120E;
+      --ink: #EAE5D8;
+      --ink-muted: #A9B4AA;
+      --line: #2B3A31;
+      --primary: #8FC19D;
+      --on-primary: #0F1712;
+      --accent: #E06A55;
+      --healthy: #7CC592;
+      --healthy-fill: #7CC592;
+      --chlorosis: #E3B341;
+      --chlorosis-fill: #E3B341;
+      --necrosis: #C98A5E;
+      --necrosis-fill: #C98A5E;
+      --focus: #E06A55;
+      --mark: url('../assets/brand/warif-mark-dark.svg');
+      --lockup: url('../assets/brand/warif-lockup-dark.svg');
+      --lockup-rtl: url('../assets/brand/warif-lockup-dark.svg');
+      --lockup-stacked: url('../assets/brand/warif-lockup-stacked-dark.svg');
+      --shadow-sheet: 0 24px 48px -24px rgb(0 0 0 / .6), 0 2px 6px rgb(0 0 0 / .3);
+      --shadow-scan: 0 12px 28px -10px rgb(0 0 0 / .7);
+      color-scheme: dark;
+    }
+  }
+
+  /* Text size is a setting, not a zoom: it moves the root em so the whole type
+     scale, the tap targets and the spacing grow together. */
+  :root[data-textsize='large'] { font-size: 112.5%; }
+}

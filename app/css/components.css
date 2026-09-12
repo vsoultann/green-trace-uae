@@ -1,0 +1,556 @@
+/**
+ * Components.
+ *
+ * The rule that shapes this file: content is smooth, data is woven. A panel
+ * holding prose gets 20px corners; anything that reports a measurement is built
+ * from square cells with a 1px outline, because a reading you can count is
+ * worth more than a reading you have to estimate from a bar's length.
+ */
+
+@layer components {
+
+  /* ==================================================== the Sadu band ===== */
+  /* The one bold thing. It replaces v1's flag rule at the top of every screen,
+     which is both a stronger piece of identity and a more respectful use of the
+     flag -- that now appears once, on the Project page, where it means something. */
+  .sadu-band {
+    height: var(--band-h);
+    background-image: var(--sadu-tile);
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    image-rendering: pixelated;
+    flex: none;
+  }
+  .sadu-band[data-size='tall'] { --band-h: 20px; }
+
+  /* ==================================================== brand lockups ===== */
+  .lockup {
+    display: block;
+    width: var(--lockup-w, 148px);
+    height: var(--lockup-h, 40px);
+    background-image: var(--lockup);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  :root[dir='rtl'] .lockup { background-image: var(--lockup-rtl); }
+  .lockup-stacked {
+    display: block;
+    width: var(--lockup-w, 260px);
+    aspect-ratio: 340 / 507;
+    background-image: var(--lockup-stacked);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  .mark {
+    display: block;
+    width: var(--mark-size, 28px);
+    height: var(--mark-size, 28px);
+    background-image: var(--mark);
+    background-repeat: no-repeat;
+    background-size: contain;
+    flex: none;
+  }
+
+  /* ========================================================== top bar ===== */
+  .topbar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-block-end: 1px solid var(--line);
+  }
+  .topbar-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 64px;
+    padding-block: .5rem;
+  }
+  .topbar a.home { text-decoration: none; display: flex; align-items: center; }
+  .topbar nav {
+    display: flex;
+    gap: .25rem;
+    margin-inline-start: 1.25rem;
+  }
+  .topbar nav a {
+    padding: .55rem .8rem;
+    border-radius: var(--r-ctl);
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: .9375rem;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .topbar nav a:hover { background: var(--surface-sunk); color: var(--ink); }
+  .topbar nav a[aria-current='page'] {
+    color: var(--ink);
+    font-weight: 500;
+    background: var(--surface-sunk);
+  }
+  .topbar .spacer { flex: 1 1 auto; }
+
+  /* Below the tablet breakpoint the bottom bar takes over navigation. */
+  @media (max-width: 820px) {
+    .topbar nav { display: none; }
+    .topbar .desk-only { display: none; }
+  }
+
+  /* ======================================================= bottom bar ===== */
+  .tabbar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: end;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(12px);
+    border-block-start: 1px solid var(--line);
+    padding-block-end: env(safe-area-inset-bottom, 0);
+  }
+  .tabbar a {
+    display: grid;
+    justify-items: center;
+    gap: .15rem;
+    padding-block: .5rem .45rem;
+    min-height: var(--tap);
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: .6875rem;
+    line-height: 1.2;
+  }
+  .tabbar a[aria-current='page'] { color: var(--primary); font-weight: 500; }
+  /* After .tabbar's own `display`, or it loses to it and the bar sits under a
+     laptop layout that already has a full navigation. */
+  @media (min-width: 821px) { .tabbar { display: none; } }
+  .tabbar a[aria-current='page'] .ico { stroke-width: 2.1; }
+
+  /* The scan action is the centre of the bar and a diamond, not a circle: it is
+     the same concentric-diamond motif that sits at the heart of the mark. */
+  .tabbar .scan-tab {
+    align-self: center;
+    color: var(--on-primary);
+    font-size: 0;
+  }
+  .tabbar .scan-tab .diamond {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    background: var(--primary);
+    color: var(--on-primary);
+    rotate: 45deg;
+    border-radius: 14px;
+    box-shadow: var(--shadow-scan);
+    margin-block-start: -22px;
+  }
+  .tabbar .scan-tab .diamond > * { rotate: -45deg; }
+  .tabbar .scan-tab[aria-current='page'] .diamond { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  /* ========================================================== buttons ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    min-height: var(--tap);
+    padding: .7rem 1.25rem;
+    border-radius: var(--r-ctl);
+    border: 1px solid transparent;
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 500;
+    font-size: .9375rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--dur-ui) var(--ease), border-color var(--dur-ui) var(--ease);
+  }
+  .btn:hover { background: var(--surface-sunk); }
+  .btn-primary { background: var(--primary); color: var(--on-primary); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--primary) 86%, var(--ink)); }
+  .btn-outline { border-color: var(--line); background: transparent; }
+  .btn-outline:hover { background: var(--surface-sunk); }
+  .btn-quiet { background: transparent; color: var(--ink-muted); padding-inline: .5rem; }
+  .btn-quiet:hover { background: var(--surface-sunk); color: var(--ink); }
+  .btn-wide { width: 100%; }
+  .btn-lg { min-height: 54px; padding: .9rem 1.6rem; font-size: 1.0625rem; }
+  .btn[disabled], .btn[aria-disabled='true'] { opacity: .5; pointer-events: none; }
+  .btn .ico { flex: none; }
+
+  .iconbtn {
+    display: inline-grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    border-radius: var(--r-ctl);
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    flex: none;
+  }
+  .iconbtn:hover { background: var(--surface-sunk); }
+
+  /* ============================================================ chips ===== */
+  .chips { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 36px;
+    padding: .35rem .85rem;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: var(--t-small);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .chip:hover { background: var(--surface-sunk); color: var(--ink); }
+  .chip[aria-pressed='true'], .chip[aria-selected='true'] {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 500;
+  }
+
+  /* A badge states a fact and is not clickable, so it is square-ish rather than
+     a pill -- the shape tells you whether you can press it. */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .18rem .5rem;
+    border-radius: var(--r-woven);
+    border: 1px solid var(--line);
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+  .badge-on { border-color: var(--primary); color: var(--primary); }
+  .badge-ref { border-style: dashed; }
+  .badge-invasive { border-color: var(--accent); color: var(--accent); }
+
+  /* =========================================================== panels ===== */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    padding: clamp(1.1rem, 2.4vw, 1.75rem);
+  }
+  .panel-sunk { background: var(--surface-sunk); }
+  .panel-flat { background: transparent; }
+  .sheet-surface {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sheet);
+    box-shadow: var(--shadow-sheet);
+  }
+
+  /* A section head is a real heading plus an optional action; it is never an
+     all-caps eyebrow label, and the action is never an arrow glyph. */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-block-end: 1rem;
+  }
+  .section-head h2 { font-size: var(--t-title); }
+  .section-head h3 { font-size: var(--t-subtitle); }
+
+  /* ================================================ bilingual headings ===== */
+  /* Modelled on UAE road signage: the active language is set large and the other
+     runs beneath it, smaller and quieter. Both are always present, so a visitor
+     reading either language is never the one being accommodated. */
+  .bi { display: grid; gap: .15rem; }
+  .bi .bi-lead {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: var(--lh-tight);
+    letter-spacing: -0.01em;
+  }
+  :root[lang='ar'] .bi .bi-lead { letter-spacing: normal; }
+  .bi .bi-alt {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--ink-muted);
+    line-height: 1.3;
+    letter-spacing: normal;
+    /* Each half sets its own direction, so the alternate line has to be pinned
+       to the start edge explicitly — otherwise an Arabic second line under an
+       English title drifts to the far side of the column. */
+    justify-self: start;
+    text-align: start;
+  }
+  /* Sized against the display scale rather than as an em of the block, which
+     would measure it against the body size and render it nearly invisible. */
+  .bi-xl .bi-lead { font-size: var(--t-display-xl); }
+  .bi-xl .bi-alt { font-size: clamp(1.25rem, 2vw + .4rem, 2rem); }
+  .bi-l .bi-lead { font-size: var(--t-display-l); }
+  .bi-l .bi-alt { font-size: clamp(1.125rem, 1vw + .5rem, 1.5rem); }
+  .bi-m .bi-lead { font-size: var(--t-title); }
+  .bi-m .bi-alt { font-size: .95rem; }
+  .bi-s .bi-lead { font-size: 1.0625rem; font-weight: 600; }
+  .bi-s .bi-alt { font-size: .8125rem; }
+  .latin-name { font-style: italic; color: var(--ink-muted); font-family: var(--font-text); }
+  :root[lang='ar'] .latin-name { font-style: italic; }
+
+  /* ==================================================== woven meters ====== */
+  /* Segmented rather than continuous on purpose. A 20-cell meter at 5 points a
+     cell can be counted; a smooth bar has to be believed. The cells carry a 1px
+     ink outline so they still separate for a viewer who cannot tell the fill
+     colours apart, and every meter is paired with its value as text. */
+  .meter { display: grid; gap: .4rem; }
+  .meter-cells {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 2px;
+    height: var(--meter-h, 26px);
+  }
+  .meter-cell {
+    border-radius: var(--r-woven);
+    background: var(--surface-sunk);
+    outline: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+    outline-offset: -1px;
+  }
+  .meter-cell[data-on='1'] { background: var(--meter-fill, var(--primary)); }
+  .meter-cell[data-partial] { background: linear-gradient(to var(--meter-dir, right), var(--meter-fill, var(--primary)) var(--fill), var(--surface-sunk) var(--fill)); }
+  :root[dir='rtl'] .meter-cell[data-partial] { --meter-dir: left; }
+  .meter-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .75rem;
+  }
+  .meter-value { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; }
+  .meter-value small { font-size: .55em; font-weight: 500; color: var(--ink-muted); }
+
+  .meter-healthy { --meter-fill: var(--healthy-fill); }
+  .meter-chlorosis { --meter-fill: var(--chlorosis-fill); }
+  .meter-necrosis { --meter-fill: var(--necrosis-fill); }
+
+  /* A status always carries its name in words next to the colour. */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    font-weight: 500;
+  }
+  .status .swatch {
+    width: 14px; height: 14px;
+    border-radius: var(--r-woven);
+    outline: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+    outline-offset: -1px;
+    flex: none;
+  }
+  .status-healthy { color: var(--healthy); }
+  .status-healthy .swatch { background: var(--healthy-fill); }
+  .status-chlorosis { color: var(--chlorosis); }
+  .status-chlorosis .swatch { background: var(--chlorosis-fill); }
+  .status-necrosis { color: var(--necrosis); }
+  .status-necrosis .swatch { background: var(--necrosis-fill); }
+
+  /* ============================================== data tables / matrix ==== */
+  .data-table { width: 100%; font-size: var(--t-small); }
+  .data-table th, .data-table td {
+    padding: .5rem .6rem;
+    text-align: start;
+    border-block-end: 1px solid var(--line);
+  }
+  .data-table th { font-weight: 500; color: var(--ink-muted); }
+  .data-table td.num, .data-table th.num { text-align: end; }
+
+  .matrix { display: grid; gap: 2px; font-size: .75rem; }
+  .matrix-cell {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: var(--r-woven);
+    outline: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
+    outline-offset: -1px;
+    background: color-mix(in srgb, var(--primary) calc(var(--v) * 100%), var(--surface-sunk));
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .matrix-cell[data-strong='1'] { color: var(--on-primary); font-weight: 600; }
+  .matrix-label { display: grid; place-items: center; color: var(--ink-muted); font-size: .7rem; }
+
+  /* ======================================================== key/value ===== */
+  .kv { display: grid; gap: .1rem; }
+  .kv dt { color: var(--ink-muted); font-size: var(--t-small); }
+  .kv dd { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 1.375rem; font-variant-numeric: tabular-nums; }
+  .kv-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.25rem; }
+
+  /* ============================================================ notes ===== */
+  .note {
+    border-inline-start: 3px solid var(--line);
+    padding: .75rem 0 .75rem 1rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 0;
+    color: var(--ink-muted);
+  }
+  .note-warn { border-inline-start-color: var(--chlorosis-fill); }
+  .note-alert { border-inline-start-color: var(--accent); }
+  .note strong, .note b { color: var(--ink); }
+
+  /* ============================================================ sheet ===== */
+  dialog.sheet {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    max-width: min(440px, 100vw);
+    width: 100%;
+    margin-inline: auto;
+    margin-block: auto;
+    color: var(--ink);
+  }
+  dialog.sheet::backdrop { background: rgb(10 18 14 / .55); backdrop-filter: blur(3px); }
+  dialog.sheet .sheet-body {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sheet);
+    box-shadow: var(--shadow-sheet);
+    padding: 1.5rem;
+    max-height: 85vh;
+    overflow: auto;
+  }
+  @media (max-width: 560px) {
+    dialog.sheet { margin-block-end: 0; max-width: 100vw; }
+    dialog.sheet .sheet-body { border-radius: var(--r-sheet) var(--r-sheet) 0 0; }
+  }
+
+  .seg {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    background: var(--surface-sunk);
+    border-radius: var(--r-ctl);
+    border: 1px solid var(--line);
+  }
+  .seg button {
+    flex: 1;
+    min-height: 38px;
+    padding: .35rem .6rem;
+    border-radius: 9px;
+    color: var(--ink-muted);
+    font-size: var(--t-small);
+    cursor: pointer;
+  }
+  .seg button[aria-pressed='true'] {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgb(20 35 28 / .12);
+  }
+
+  /* ============================================================ forms ===== */
+  .field { display: grid; gap: .35rem; }
+  .field > label { font-size: var(--t-small); color: var(--ink-muted); }
+  .input, textarea.input, select.input {
+    width: 100%;
+    min-height: var(--tap);
+    padding: .6rem .8rem;
+    border-radius: var(--r-ctl);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  textarea.input { min-height: 110px; resize: vertical; }
+
+  /* ============================================================ toast ===== */
+  #toast {
+    position: fixed;
+    inset-block-end: calc(env(safe-area-inset-bottom, 0px) + 84px);
+    inset-inline: 0;
+    margin-inline: auto;
+    width: max-content;
+    max-width: 90vw;
+    z-index: 70;
+    padding: .7rem 1.1rem;
+    border-radius: var(--r-pill);
+    background: var(--ink);
+    color: var(--bg);
+    font-size: var(--t-small);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity var(--dur-ui) var(--ease), transform var(--dur-ui) var(--ease);
+  }
+  #toast[data-show='1'] { opacity: 1; transform: none; }
+
+  /* ===================================================== the weave =========
+     The progress indicator is the Sadu band being woven column by column, and
+     the columns are driven by the three real stages of the pipeline rather than
+     by a timer. When it stops moving, the model has stopped working. */
+  .weave {
+    position: relative;
+    height: 20px;
+    background: var(--surface-sunk);
+    border: 1px solid var(--line);
+    border-radius: var(--r-woven);
+    overflow: hidden;
+  }
+  .weave-fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 0%;
+    background-image: var(--sadu-tile);
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    image-rendering: pixelated;
+    transition: width 260ms steps(8, end);
+  }
+  .weave-steps { display: grid; gap: .3rem; margin-block-start: .6rem; }
+  .weave-step {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-size: var(--t-small);
+    color: var(--ink-muted);
+  }
+  .weave-step .dot {
+    width: 9px; height: 9px;
+    rotate: 45deg;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    flex: none;
+  }
+  .weave-step[data-state='active'] { color: var(--ink); font-weight: 500; }
+  .weave-step[data-state='active'] .dot { background: var(--accent); border-color: var(--accent); }
+  .weave-step[data-state='done'] .dot { background: var(--primary); border-color: var(--primary); }
+
+  /* ========================================================== the QR ====== */
+  .qr {
+    background: #fff;
+    padding: 10px;
+    border-radius: var(--r-ctl);
+    width: max-content;
+    border: 1px solid var(--line);
+  }
+  .qr svg, .qr img { width: var(--qr-size, 132px); height: var(--qr-size, 132px); display: block; }
+
+  /* ==================================================== icon defaults ===== */
+  .ico {
+    width: 24px; height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+  }
+  .ico-sm { width: 18px; height: 18px; }
+  .ico-lg { width: 32px; height: 32px; }
+  /* Directional icons mirror in RTL; symbols that are not directional must not. */
+  :root[dir='rtl'] .ico-dir { scale: -1 1; }
+}

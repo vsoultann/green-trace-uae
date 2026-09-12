@@ -1,123 +1,62 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="auto" data-motion="auto" data-textsize="standard">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Green-Trace UAE — Leaf Identification & Health AI</title>
-<meta name="description" content="Identify Ghaf, Sidr, Date Palm and Samar trees from a single leaf, measure that leaf's health, and find the treatment near you — entirely on your device. A UAE graduation project.">
-<meta name="theme-color" content="#f7f2e7">
+
+<title>Warif — وارف</title>
+<meta name="description" content="Warif identifies a UAE tree from one leaf, checks that leaf's health and tells you what to do — on your device, even offline. A Grade 12 graduation project from Applied Technology High School, Al Ain.">
+<meta name="application-name" content="Warif">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Green-Trace">
-<meta property="og:title" content="Green-Trace UAE">
-<meta property="og:description" content="AI leaf identification and health diagnosis for four native UAE trees.">
+<meta name="apple-mobile-web-app-title" content="Warif">
+<meta name="color-scheme" content="light dark">
+
+<!-- Two theme colours so the browser's own chrome matches the page before any
+     script runs. themes.js takes over once a theme has actually been chosen. -->
+<meta name="theme-color" content="#EEF1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1712" media="(prefers-color-scheme: dark)">
+
+<meta property="og:title" content="Warif — وارف">
+<meta property="og:description" content="Read the leaf. Keep the shade. AI tree identification and leaf health for the UAE.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="./assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./assets/icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="./assets/icons/icon-180.png">
-<link rel="stylesheet" href="./css/themes.css">
-<link rel="stylesheet" href="./css/app.css">
-<link rel="stylesheet" href="./css/anim.css">
-<!-- Fonts are progressive enhancement. Every family below has a real fallback
-     in the CSS stack, so a blocked CDN or an offline kiosk changes the texture
-     of the page and nothing else. -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" media="print" onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700&display=swap">
+
+<!-- Self-hosted, so the kiosk keeps its typography when the venue wifi drops.
+     All four are preloaded because every bilingual heading sets both scripts. -->
+<link rel="preload" href="./assets/fonts/readex-pro-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/readex-pro-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/reem-kufi-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/reem-kufi-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="./css/tokens.css">
+<link rel="stylesheet" href="./css/base.css">
+<link rel="stylesheet" href="./css/components.css">
+<link rel="stylesheet" href="./css/views.css">
+<link rel="stylesheet" href="./css/print.css" media="print">
 </head>
 <body>
 
-<!-- The flag of the United Arab Emirates, as a 4px rule across the top of every
-     screen. Red hoist, then green, white and black. -->
-<div class="flagrule" role="presentation"><i></i><i></i><i></i></div>
+<a class="skip" href="#view">Skip to content</a>
 
-<header class="topbar">
-  <a class="brand" href="#/scan" aria-label="Green-Trace UAE, home">
-    <span class="mark" aria-hidden="true">
-      <svg viewBox="0 0 32 32" fill="none">
-        <path d="M16 29V13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M16 17c0-6 4-11 11-12 1 7-3 13-11 13Z" fill="currentColor"/>
-        <path d="M15 21c0-5-3.5-9-9-9.8C5.2 17 8.6 21.6 15 21Z" fill="currentColor" opacity=".45"/>
-      </svg>
-    </span>
-    <span class="brand-text">
-      <b data-i18n="app.name">Green-Trace UAE</b>
-      <small data-i18n="app.tag">UAE Leaf Identification &amp; Health AI</small>
-    </span>
-  </a>
-  <div class="spacer"></div>
-  <button class="iconbtn" id="btn-lang" aria-label="Language">
-    <span id="lang-label">ع</span>
-  </button>
-  <button class="iconbtn" id="btn-theme" aria-label="Appearance settings">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <circle cx="12" cy="12" r="4"/>
-      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" stroke-linecap="round"/>
-    </svg>
-  </button>
-</header>
+<!-- The Sadu band. One bold element, at the top of every screen. -->
+<div class="sadu-band" id="band" role="presentation"></div>
+
+<header class="topbar" id="topbar"></header>
 
 <main id="view" tabindex="-1"></main>
 
-<nav class="tabbar" aria-label="Main">
-  <a href="#/scan" data-tab="scan">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
-      <path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3" stroke-linecap="round"/>
-      <circle cx="12" cy="12" r="3.4"/>
-    </svg>
-    <span data-i18n="nav.scan">Scan</span>
-  </a>
-  <a href="#/library" data-tab="library">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
-      <path d="M11 20V11M11 13C11 7 15 3 21 3c0 7-4 10-10 10Z" stroke-linejoin="round"/>
-      <path d="M10 16c0-4-2.6-6.6-6.5-7 0 4 2.2 7 6.5 7Z" stroke-linejoin="round"/>
-    </svg>
-    <span data-i18n="nav.library">Trees</span>
-  </a>
-  <a href="#/nearby" data-tab="nearby">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
-      <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z" stroke-linejoin="round"/>
-      <circle cx="12" cy="10" r="2.6"/>
-    </svg>
-    <span data-i18n="nav.nearby">Nearby</span>
-  </a>
-  <a href="#/about" data-tab="about">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
-      <circle cx="12" cy="12" r="9"/><path d="M12 11v5" stroke-linecap="round"/><circle cx="12" cy="7.8" r="1.1" fill="currentColor" stroke="none"/>
-    </svg>
-    <span data-i18n="nav.about">About Us</span>
-  </a>
-  <a href="#/team" data-tab="team">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
-      <circle cx="9" cy="8" r="3.2"/><path d="M2.6 20a6.6 6.6 0 0 1 12.8 0" stroke-linecap="round"/>
-      <path d="M16.5 5.3a3.2 3.2 0 0 1 0 5.4M18 14.4A6.6 6.6 0 0 1 21.4 20" stroke-linecap="round"/>
-    </svg>
-    <span data-i18n="nav.team">Team</span>
-  </a>
-</nav>
+<nav class="tabbar" id="tabbar" aria-label="Main"></nav>
 
-<dialog class="sheet" id="sheet">
-  <div class="sheet-body">
-    <h2 data-i18n="settings.title">Appearance</h2>
-    <h3 data-i18n="settings.theme">Theme</h3>
-    <div class="theme-list" id="theme-list" role="radiogroup" aria-label="Theme"></div>
-    <h3 data-i18n="settings.language">Language</h3>
-    <div class="seg" id="lang-seg">
-      <button data-lang="en" type="button">English</button>
-      <button data-lang="ar" type="button">العربية</button>
-    </div>
-    <h3 style="margin-top:20px" data-i18n="settings.motion">Animation</h3>
-    <div class="seg" id="motion-seg">
-      <button data-motion="auto" type="button" data-i18n="motion.auto">Auto</button>
-      <button data-motion="on" type="button" data-i18n="motion.on">Full</button>
-      <button data-motion="off" type="button" data-i18n="motion.off">Off</button>
-    </div>
-    <p class="faint" style="margin:8px 0 0" data-i18n="settings.motionHint">Auto follows your device's reduced-motion setting.</p>
-    <button class="btn wide" id="sheet-close" style="margin-top:18px" data-i18n="settings.close">Done</button>
-  </div>
-</dialog>
+<dialog class="sheet" id="settings"></dialog>
 
-<div id="toast" role="status" aria-live="polite"></div>
+<div id="toast" role="status" data-show="0"></div>
 <p class="sr" id="live" aria-live="polite"></p>
 
 <script src="./vendor/tf.min.js"></script>

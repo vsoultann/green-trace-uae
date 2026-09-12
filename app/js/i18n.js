@@ -1,341 +1,680 @@
 /**
- * Minimal two-language dictionary. Arabic flips the document to RTL.
- * Lookup is `t('key')`; missing keys fall back to English, then to the key.
+ * Interface strings, English and Modern Standard Arabic.
  *
- * Long-form prose does not live here — the About Us page renders both languages
- * at once and keeps its text in data/about.js, and finding text lives beside the
- * analyser that produces it in health.js. This file is for interface labels.
+ * Rules this dictionary is written to:
+ *
+ *   - Sentence case. No all-caps labels: an eyebrow shouting LEAF SCANNER at a
+ *     visitor is not a warmer greeting than a heading that says what it is.
+ *   - No arrow glyphs and no middle-dot meta strings. A link says where it goes.
+ *   - Plant-health copy is never alarmist and always ends in something to do.
+ *   - Arabic is فصحى throughout, and is written to be read, not to be a
+ *     translation sitting next to English.
+ *
+ * Long-form prose does not live here. Species text is in data/species.js beside
+ * the species, findings live in health.js beside the analyser that produces
+ * them, and the project narrative is in data/about.js.
  */
+
 const STRINGS = {
   en: {
-    'app.name': 'Green-Trace UAE',
-    'app.tag': 'UAE Leaf Identification & Health AI',
-
+    /* ---------------------------------------------------------- navigation */
     'nav.scan': 'Scan',
-    'nav.library': 'Trees',
-    'nav.nearby': 'Nearby',
-    'nav.about': 'About Us',
+    'nav.trees': 'Trees',
+    'nav.help': 'Help',
+    'nav.project': 'Project',
     'nav.team': 'Team',
+    'nav.home': 'Warif, home',
+    'nav.main': 'Main',
+    'nav.skip': 'Skip to content',
+    'nav.settings': 'Settings',
+    'nav.language': 'Switch to Arabic',
 
-    'scan.title': 'Identify a UAE tree from its leaf',
-    'scan.lede': 'Point the camera at one leaf on a plain background. Everything runs on your device, offline.',
-    'scan.drop': 'Take or choose a photo',
-    'scan.dropHint': 'Tap here · or drag an image in',
-    'scan.camera': 'Use camera',
-    'scan.upload': 'Upload photo',
+    /* ---------------------------------------------------------- home/scan */
+    'scan.title': 'Know a UAE tree from one leaf.',
+    'scan.sub': 'Point your camera at one leaf on plain paper. Warif names the tree, checks the leaf’s health and tells you what to do — on this device, even offline.',
+    'scan.privacy': 'Runs on this device. No upload, no account, works offline.',
+    'scan.start': 'Scan a leaf',
+    'scan.upload': 'Upload a photo',
+    'scan.sample': 'Try a sample leaf',
     'scan.capture': 'Capture',
     'scan.cancel': 'Cancel',
     'scan.again': 'Scan another leaf',
-    'scan.analysing': 'Analysing leaf…',
-    'scan.loadingModel': 'Loading AI model…',
-    'scan.eyebrow': 'Leaf scanner',
-    'scan.tipLine': 'One leaf · plain background · even light',
-    'scan.knows': 'The {n} trees in this app',
-    'scan.knowsAll': 'Read about them',
+    'scan.viewfinder': 'Camera viewfinder',
+    'scan.placeholder': 'The camera preview appears here',
+    'scan.starting': 'Starting the camera…',
+    'scan.denied': 'The camera is not available',
+    'scan.deniedBody': 'Warif needs camera permission to scan a leaf. You can allow it in your browser’s site settings, or upload a photo instead — the result is identical.',
+    'scan.loading': 'Loading the model',
+    'scan.loadingHint': 'About 14 MB, once. After this it works offline.',
+    'scan.ready': 'Model ready',
+    'scan.knows': 'The trees Warif knows',
+    'scan.knowsSub': '{n} trees in the library, {m} recognised by the current model.',
+    'scan.analysing': 'Reading the leaf',
 
-    'result.species': 'Species identification',
+    /* ------------------------------------------------------------- weave */
+    'weave.1': 'Finding the leaf',
+    'weave.2': 'Reading its shape',
+    'weave.3': 'Checking its colour',
+
+    /* ------------------------------------------------------------ result */
+    'result.title': 'Result',
+    'result.photo': 'Photo',
+    'result.healthMap': 'Health map',
     'result.confidence': 'Confidence',
-    'result.alternatives': 'Other possibilities',
-    'result.lowConf': 'Confidence is low. This may still be the right tree, but check the leaf fills the frame and the light is even before relying on it.',
-    'result.health': 'Leaf health analysis',
-    'result.healthScore': 'Health score',
+    'result.confidenceHelp': 'How sure the model is of this species, out of ten.',
+    'result.lowConfidence': 'Confidence is low. This may still be the right tree — check that the leaf fills the frame and the light is even, then scan again.',
+    'result.uncertain': 'Treat this identification with caution.',
+    'result.uncertainAdvice': 'It may still be the right tree. Lay the leaf on plain paper, fill the frame with it, and scan again.',
+    'result.alternatives': 'Also considered',
+    'result.health': 'Leaf health',
+    'result.healthOf': 'out of 100',
     'result.findings': 'What the analysis found',
-    'result.method': 'How this was measured',
-    'result.methodBody': 'Species comes from a MobileNetV2 convolutional neural network fine-tuned on field photographs. Health is measured separately by classical computer vision: the photo is white-balanced against its own background, the leaf is segmented out, and each pixel is graded as healthy, chlorotic or necrotic. Colour uniformity and surface texture are measured inside the leaf only, so its outline is never mistaken for damage.',
+    'result.todo': 'What to do',
+    'result.where': 'Where to get it',
+    'result.whereAll': 'See all suppliers and helplines',
     'result.readMore': 'Read about this tree',
-    'result.disclaimer': 'A classroom demonstration, not a substitute for an agricultural inspection.',
-    'result.showOriginal': 'Show original photo',
-    'result.showAnalysis': 'Show health analysis',
+    'result.share': 'Share',
+    'result.shared': 'Result copied',
+    'result.method': 'How this was measured',
+    'result.methodBody': 'The species comes from a MobileNetV2 network with a head trained on field photographs. The health score is measured separately by classical computer vision: the photo is white-balanced against its own background, the leaf is cut out from it, and every pixel inside the blade is graded healthy, chlorotic or necrotic.',
+    'result.none': 'No leaf has been scanned yet.',
 
-    'unknown.title': 'I don’t recognise this leaf',
-    'unknown.body': 'This does not match any of the trees the model was trained on. Rather than force it into the closest one, the app is telling you it does not know.',
+    /* ----------------------------------------------------------- unknown */
+    'unknown.title': 'Warif doesn’t recognise this leaf.',
+    'unknown.body': 'This does not match any tree the model was trained on. Rather than force it into the nearest one, Warif is telling you it does not know.',
+    'unknown.why': 'Why',
     'unknown.noFoliage': 'There is little or no plant tissue in the photo.',
-    'unknown.unfamiliar': 'The image sits far from every species the model was trained on.',
-    'unknown.lowProbability': 'No species scored anywhere near high enough.',
+    'unknown.unfamiliar': 'The image sits far from every tree the model was trained on.',
+    'unknown.lowProbability': 'No tree scored anywhere near high enough.',
     'unknown.spreadEvenly': 'The scores are spread almost evenly, which means guessing.',
-    'unknown.seeFour': 'See the species it knows',
+    'unknown.tips': 'Three things that help',
+    'unknown.tip1': 'Lay one leaf on plain white paper.',
+    'unknown.tip2': 'Fill most of the frame with it.',
+    'unknown.tip3': 'Use even daylight, and avoid a hard shadow across the blade.',
+    'unknown.seeTrees': 'See the trees Warif knows',
+    'unknown.retry': 'Try again',
 
+    /* ------------------------------------------------------------ health */
     'health.excellent': 'Healthy',
     'health.good': 'Mostly healthy',
     'health.fair': 'Mild stress',
     'health.poor': 'Stressed',
-    'health.critical': 'Severely affected',
+    'health.bad': 'Badly damaged',
+    'health.invalid': 'No leaf found',
+    'health.legend': 'Green is healthy tissue, yellow is chlorotic, brown is dead.',
 
-    'metric.chlorosis': 'Chlorosis',
-    'metric.necrosis': 'Necrosis',
-    'metric.greenness': 'Greenness',
-    'metric.uniformity': 'Uniformity',
-    'metric.coverage': 'Leaf area',
-    'metric.texture': 'Texture variance',
+    /* ------------------------------------------------------------- trees */
+    'trees.title': 'Trees',
+    'trees.sub': '{n} trees in the library, {m} recognised by the current model.',
+    'trees.all': 'All',
+    'trees.native': 'Native',
+    'trees.introduced': 'Introduced',
+    'trees.invasive': 'Invasive',
+    'trees.recognised': 'Recognised',
+    'trees.reference': 'Reference only',
+    'trees.referenceWhy': 'In the library for reference. The current model was not trained on it, so a scan will not return it.',
+    'trees.accuracy': 'Model accuracy for this tree',
+    'trees.leaf': 'How to recognise the leaf',
+    'trees.about': 'About',
+    'trees.why': 'Why it matters here',
+    'trees.lookalike': 'Easily confused',
+    'trees.notFound': 'That tree is not in the library.',
+    'trees.back': 'Back to all trees',
+    'trees.scanThis': 'Scan a leaf',
 
-    'treat.title': 'What to do about it',
-    'treat.chlorosis': 'Treat the yellowing',
-    'treat.necrosis': 'Stop the dieback spreading',
-    'treat.pest': 'Deal with the pest',
-    'treat.pale': 'Feed the tree',
-    'treat.salinity': 'Check for salt stress',
+    /* -------------------------------------------------------------- help */
+    'help.title': 'Help',
+    'help.sub': 'Official helplines first, then the nearest places to buy what a treatment needs.',
+    'help.official': 'Official helplines',
+    'help.suppliers': 'Suppliers',
+    'help.locate': 'Use my location',
+    'help.locateWhy': 'Your location is used on this device to sort the list by distance. It is never sent anywhere.',
+    'help.located': 'Sorted by distance from you',
+    'help.denied': 'Location unavailable, so the list is in its normal order.',
+    'help.emirate': 'Emirate',
+    'help.allEmirates': 'All emirates',
+    'help.call': 'Call',
+    'help.directions': 'Directions',
+    'help.noHours': 'Opening hours not recorded',
+    'help.sells': 'Sells',
+    'help.searchOnline': 'Search online for more',
 
-    'nearby.title': 'Where to get it near you',
-    'nearby.lede': 'Nurseries and agricultural suppliers from our directory. Share your location to sort them by distance, or search Google Maps for anything not listed.',
-    'nearby.findOnMaps': 'Find near me',
-    'nearby.useLocation': 'Sort by distance from me',
-    'nearby.locating': 'Finding your location…',
-    'nearby.sorted': 'Sorted by distance',
-    'nearby.denied': 'Location unavailable — showing the full list instead.',
-    'nearby.directions': 'Directions',
-    'nearby.website': 'Website',
-    'nearby.hoursUnknown': 'Opening hours not recorded — check Google Maps',
-    'nearby.none': 'No suppliers listed for this category yet.',
-    'nearby.pageTitle': 'Help near you',
-    'nearby.pageLede': 'Official plant-health helplines, and nurseries and agricultural suppliers across the Emirates.',
-    'nearby.official': 'Official help',
-    'nearby.shops': 'Nurseries and suppliers',
-    'nearby.osmCredit': 'Shop locations, phone numbers and hours from OpenStreetMap contributors, ODbL. Volunteer-maintained, so check by phone before travelling.',
+    /* ----------------------------------------------------------- project */
+    'project.title': 'The project',
+    'project.name': 'The name',
+    'project.problem': 'The problem',
+    'project.approach': 'Our approach',
+    'project.more': 'Read further',
+    'project.how': 'How the AI works',
+    'project.howSub': 'The pipeline, the model card and what it cannot do.',
+    'project.lab': 'Test Lab',
+    'project.labSub': 'Speed, accuracy and reliability, measured.',
+    'project.journey': 'Journey',
+    'project.journeySub': 'How the project was made, and what changed between versions.',
+    'project.team': 'Team',
+    'project.teamSub': 'Who built it and who speaks to what.',
 
-    'aboutus.title': 'About Green-Trace UAE',
-    'aboutus.lede': 'A graduation project built on a simple idea: that a phone should be able to tell you what a tree is, and whether it is dying.',
-    'aboutus.tryIt': 'Try our project out',
-    'aboutus.tryHeading': 'See it work',
-    'aboutus.tryBody': 'Point it at a leaf. Everything happens on your device, and it works with the wifi switched off.',
-    'aboutus.seeNumbers': 'The numbers behind it',
-    'aboutus.meetTeam': 'Meet the team',
-    'aboutus.portraitCredit': 'Portraits: National Archives of the UAE (public domain); Press Service of the President of Azerbaijan (CC BY 4.0); International Monetary Fund (public domain).',
+    /* --------------------------------------------------------------- how */
+    'how.title': 'How the AI works',
+    'how.pipeline': 'The pipeline',
+    'how.modelCard': 'Model card',
+    'how.classes': 'Trees recognised',
+    'how.validation': 'Validation accuracy',
+    'how.perClass': 'Accuracy per tree',
+    'how.matrix': 'Confusion matrix',
+    'how.matrixHelp': 'Rows are the true tree, columns are what the model answered. A perfect model fills only the diagonal.',
+    'how.trained': 'Trained on',
+    'how.samples': 'training images',
+    'how.valSamples': 'held-out validation images',
+    'how.oodTitle': 'The “I don’t know” threshold',
+    'how.oodBody': 'Every photo is compared with the centre of each tree the model knows. Below a cosine similarity of {t} the photo is treated as something else entirely, and Warif refuses to name it.',
+    'how.limits': 'What it cannot do',
+    'how.trainedAt': 'Model trained',
 
-    'model.title': 'How the model works',
-    'model.how': 'The pipeline, end to end',
-    'model.how1': 'A MobileNetV2 convolutional neural network, pre-trained on ImageNet, converts the leaf photo into a 1,280-number description of its shape, texture and pattern.',
-    'model.how2': 'A small classifier, trained by us on openly-licensed field photographs of each species, maps that description onto a tree.',
-    'model.how3': 'Before naming anything, the photo is checked against the average appearance of each species in that 1,280-number space. Something unlike all of them is reported as unrecognised instead of being forced into the nearest class.',
-    'model.how4': 'Health is measured separately, without a neural network, so every number can be explained: the leaf is white-balanced and cut out of the background, then each pixel is graded as healthy, chlorotic (yellowing) or necrotic (dead).',
-    'model.performance': 'Model performance',
-    'model.valAcc': 'Validation accuracy',
-    'model.samples': 'Training samples',
-    'model.species': 'Species',
-    'model.perSpecies': 'Accuracy per species',
-    'model.heldOut': 'Measured on a held-out validation split the model never trained on.',
-    'model.credits': 'Credits & licence',
-    'model.creditsBody': 'Training photographs come from iNaturalist contributors under Creative Commons licences; every photo used is credited in dataset/inaturalist/CREDITS.json in the repository. The base network is Google’s MobileNetV2 (Apache 2.0). Source code:',
+    /* --------------------------------------------------------------- lab */
+    'lab.title': 'Test Lab',
+    'lab.sub': 'Everything on this page was measured, not estimated. Each block says on what and when.',
+    'lab.performance': 'Performance',
+    'lab.accuracy': 'Accuracy',
+    'lab.reliability': 'Reliability',
+    'lab.loadCold': 'Model load, cold',
+    'lab.loadWarm': 'Model load, cached',
+    'lab.inferMedian': 'Inference, median',
+    'lab.inferP95': 'Inference, 95th percentile',
+    'lab.timeToResult': 'Photo to result',
+    'lab.calibration': 'Health calibration, v1 to v2',
+    'lab.before': 'Before',
+    'lab.after': 'After',
+    'lab.healthyReported': 'Healthy leaves reported healthy',
+    'lab.medianScore': 'Median score on healthy leaves',
+    'lab.syntheticNecrosis': 'Synthetic necrosis detected',
+    'lab.syntheticChlorosis': 'Synthetic chlorosis detected',
+    'lab.runs': 'Repeated scans',
+    'lab.tensors': 'Tensor count after the run',
+    'lab.crashes': 'Crashes',
+    'lab.offline': 'Offline reload',
+    'lab.pass': 'Pass',
+    'lab.stable': 'Stable',
+    'lab.bench': 'Run the benchmark on this device',
+    'lab.benchRunning': 'Running {i} of {n}…',
+    'lab.benchDone': 'Median {ms} ms over {n} inferences on this device.',
+    'lab.measuredOn': 'Measured on {device}, {date}.',
+    'lab.noData': 'No benchmark file yet. Run npm run bench to generate app/data/lab.json.',
 
-    'about.qr': 'Open on your phone',
-    'about.qrHint': 'Scan to load this app instantly. It installs to the home screen and works offline.',
+    /* ----------------------------------------------------------- journey */
+    'journey.title': 'Journey',
+    'journey.stages': 'Production stages',
+    'journey.log': 'Iteration log',
+    'journey.problem': 'Problem',
+    'journey.change': 'Change',
+    'journey.evidence': 'Evidence',
+    'journey.result': 'Result',
+    'journey.compare': 'Version 1 and version 2',
+    'journey.compareHelp': 'Drag the handle to compare the same screen before and after.',
+    'journey.v1': 'v1 Green-Trace',
+    'journey.v2': 'v2 Warif',
+    'journey.screen': 'Screen',
 
-    'team.title': 'The team',
-    'team.lede': 'A graduation project by five students.',
-    'team.split': 'Who did what',
-    'team.splitNote': 'Percentages are the team’s own assessment of how the work divided across research, data collection, model training, programming and presentation.',
-    'team.gradProject': 'Graduation Project',
+    /* -------------------------------------------------------------- team */
+    'team.title': 'Team',
+    'team.supervisor': 'Supervisor',
+    'team.leader': 'Team leader',
+    'team.members': 'Members',
+    'team.responsibilities': 'Responsibilities',
+    'team.speaks': 'Speaking part',
+    'team.equal': 'Every member carried an equal share of the project. This page lists what each person was responsible for and the part they present.',
 
-    'theme.group.auto': 'Automatic',
-    'theme.group.emirati': 'Made for this project',
-    'theme.group.light': 'Light',
-    'theme.group.dark': 'Dark',
-    'theme.group.access': 'Accessibility',
+    /* ---------------------------------------------------------- feedback */
+    'feedback.title': 'Your feedback',
+    'feedback.sub': 'Four quick ratings and anything you want to tell us. It stays on this device.',
+    'feedback.clarity': 'Clarity',
+    'feedback.usefulness': 'Usefulness',
+    'feedback.design': 'Design',
+    'feedback.innovation': 'Innovation',
+    'feedback.comment': 'Comments',
+    'feedback.commentPlaceholder': 'What worked, and what would you change?',
+    'feedback.role': 'You are',
+    'feedback.roleEvaluator': 'Evaluator',
+    'feedback.roleTeacher': 'Teacher',
+    'feedback.roleParent': 'Parent',
+    'feedback.roleStudent': 'Student',
+    'feedback.roleGuest': 'Guest',
+    'feedback.name': 'Your name (optional)',
+    'feedback.submit': 'Send feedback',
+    'feedback.thanks': 'Thank you — your feedback was saved.',
+    'feedback.another': 'Leave more feedback',
+    'feedback.stars': '{n} of 5',
+    'feedback.onPhone': 'Prefer your own phone?',
+    'feedback.onPhoneBody': 'Scan this to open the same form on your phone.',
+    'feedback.admin': 'Collected feedback',
+    'feedback.export': 'Export as CSV',
+    'feedback.clear': 'Clear all responses',
+    'feedback.count': '{n} responses on this device',
+    'feedback.confirmClear': 'Delete every stored response on this device?',
 
-    'settings.title': 'Appearance',
-    'settings.theme': 'Theme',
+    /* ---------------------------------------------------------- showcase */
+    'showcase.tap': 'Tap to scan a leaf',
+    'showcase.qr': 'Open Warif on your phone',
+    'showcase.exit': 'Press Escape, or hold the logo, to leave kiosk mode',
+    'showcase.did': 'Did you know',
+
+    /* ----------------------------------------------------------- present */
+    'present.notes': 'Notes',
+    'present.timer': 'Timer',
+    'present.speaker': 'Speaker',
+    'present.slide': 'Slide {i} of {n}',
+    'present.start': 'Start',
+    'present.pause': 'Pause',
+    'present.reset': 'Reset',
+    'present.keys': 'Arrow keys move, N shows notes, T shows the timer.',
+    'present.demo': 'Open the live app',
+    'present.back': 'Back to the slides',
+
+    /* ------------------------------------------------------------- brand */
+    'brand.title': 'Brand',
+    'brand.sub': 'The identity, and the rules that keep it consistent.',
+    'brand.mark': 'The mark',
+    'brand.lockups': 'Lockups',
+    'brand.palette': 'Palette',
+    'brand.type': 'Type',
+    'brand.band': 'The Sadu band',
+    'brand.usage': 'Usage',
+    'brand.download': 'Download the SVG',
+
+    /* ---------------------------------------------------------- settings */
+    'settings.title': 'Settings',
     'settings.language': 'Language',
+    'settings.theme': 'Theme',
+    'settings.themeAuto': 'Auto',
+    'settings.themeDay': 'Day',
+    'settings.themeNight': 'Night',
+    'settings.themeContrast': 'High contrast',
+    'settings.themeAutoHint': 'Auto follows your device’s appearance setting.',
+    'settings.motion': 'Motion',
+    'settings.motionAuto': 'Auto',
+    'settings.motionOn': 'Full',
+    'settings.motionOff': 'Reduced',
+    'settings.motionHint': 'Auto follows your device’s reduced-motion setting.',
+    'settings.textsize': 'Text size',
+    'settings.textStandard': 'Standard',
+    'settings.textLarge': 'Large',
     'settings.close': 'Done',
-    'settings.motion': 'Animation',
-    'settings.motionHint': "Auto follows your device's reduced-motion setting.",
-    'motion.auto': 'Auto',
-    'motion.on': 'Full',
-    'motion.off': 'Off',
 
-    'library.title': 'The trees it knows',
-    'library.lede': 'Native, naturalised and invasive — the species that between them cover most of what grows in the Emirates.',
-    'library.leaf': 'How to recognise the leaf',
-    'library.about': 'About the tree',
-    'library.significance': 'Why it matters here',
-    'library.health': 'Common health problems',
-    'library.back': 'All trees',
-    'library.referenceOnly': 'Reference only',
-
-    'err.model': 'The AI model could not be loaded. Check your connection and reload.',
-    'err.camera': 'Camera unavailable. Upload a photo instead.',
-    'err.image': 'That image could not be read. Try another one.',
-    'copied': 'Link copied',
+    /* -------------------------------------------------------------- misc */
+    'misc.loading': 'Loading…',
+    'misc.error': 'Something went wrong',
+    'misc.retry': 'Try again',
+    'misc.print': 'Print this page',
+    'misc.of': 'of',
+    'misc.todo': 'To confirm',
   },
 
   ar: {
-    'app.name': 'الأثر الأخضر',
-    'app.tag': 'تعرّف على أشجار الإمارات وصحتها بالذكاء الاصطناعي',
-
-    'nav.scan': 'مسح',
-    'nav.library': 'الأشجار',
-    'nav.nearby': 'قريب منك',
-    'nav.about': 'عن المشروع',
+    'nav.scan': 'المسح',
+    'nav.trees': 'الأشجار',
+    'nav.help': 'المساعدة',
+    'nav.project': 'المشروع',
     'nav.team': 'الفريق',
+    'nav.home': 'وارف، الصفحة الرئيسية',
+    'nav.main': 'الرئيسية',
+    'nav.skip': 'تخطَّ إلى المحتوى',
+    'nav.settings': 'الإعدادات',
+    'nav.language': 'التبديل إلى الإنجليزية',
 
-    'scan.title': 'تعرّف على شجرة إماراتية من ورقتها',
-    'scan.lede': 'وجّه الكاميرا إلى ورقة واحدة على خلفية سادة. كل المعالجة على جهازك ودون إنترنت.',
-    'scan.drop': 'التقط صورة أو اخترها',
-    'scan.dropHint': 'اضغط هنا · أو اسحب صورة',
-    'scan.camera': 'استخدام الكاميرا',
-    'scan.upload': 'رفع صورة',
+    'scan.title': 'اعرف شجرتك من ورقة واحدة.',
+    'scan.sub': 'وجّه الكاميرا إلى ورقة واحدة على ورقٍ أبيض، وسيخبرك «وارف» باسم الشجرة وصحة الورقة وما ينبغي فعله، على جهازك مباشرةً ولو دون إنترنت.',
+    'scan.privacy': 'يعمل على جهازك. بلا رفعٍ للصور ولا حساب، ويعمل دون إنترنت.',
+    'scan.start': 'امسح ورقة',
+    'scan.upload': 'ارفع صورة',
+    'scan.sample': 'جرّب ورقة نموذجية',
     'scan.capture': 'التقاط',
     'scan.cancel': 'إلغاء',
-    'scan.again': 'مسح ورقة أخرى',
-    'scan.analysing': 'جارٍ التحليل…',
-    'scan.loadingModel': 'جارٍ تحميل النموذج…',
-    'scan.eyebrow': 'ماسح الأوراق',
-    'scan.tipLine': 'ورقة واحدة · خلفية سادة · إضاءة متساوية',
-    'scan.knows': 'الأشجار العشر في التطبيق',
-    'scan.knowsAll': 'اقرأ عنها',
+    'scan.again': 'امسح ورقة أخرى',
+    'scan.viewfinder': 'عدسة الكاميرا',
+    'scan.placeholder': 'تظهر معاينة الكاميرا هنا',
+    'scan.starting': 'جارٍ تشغيل الكاميرا…',
+    'scan.denied': 'الكاميرا غير متاحة',
+    'scan.deniedBody': 'يحتاج «وارف» إذن الكاميرا لمسح الورقة. يمكنك السماح به من إعدادات الموقع في متصفحك، أو رفع صورة بدلاً من ذلك، والنتيجة واحدة.',
+    'scan.loading': 'جارٍ تحميل النموذج',
+    'scan.loadingHint': 'نحو ١٤ ميغابايت مرة واحدة، ثم يعمل دون إنترنت.',
+    'scan.ready': 'النموذج جاهز',
+    'scan.knows': 'الأشجار التي يعرفها «وارف»',
+    'scan.knowsSub': '{n} أشجار في المكتبة، يتعرّف النموذج الحالي على {m} منها.',
+    'scan.analysing': 'جارٍ قراءة الورقة',
 
-    'result.species': 'تحديد النوع',
-    'result.confidence': 'نسبة الثقة',
+    'weave.1': 'نبحث عن الورقة',
+    'weave.2': 'نقرأ شكلها',
+    'weave.3': 'نفحص لونها',
+
+    'result.title': 'النتيجة',
+    'result.photo': 'الصورة',
+    'result.healthMap': 'خريطة الصحة',
+    'result.confidence': 'درجة الثقة',
+    'result.confidenceHelp': 'مدى ثقة النموذج بهذا النوع، من عشرة.',
+    'result.lowConfidence': 'الثقة منخفضة. قد تكون الشجرة صحيحة رغم ذلك؛ تأكد أن الورقة تملأ الإطار وأن الإضاءة متساوية، ثم أعد المسح.',
+    'result.uncertain': 'تعامل مع هذا التعرّف بحذر.',
+    'result.uncertainAdvice': 'قد تكون الشجرة صحيحة رغم ذلك. ضع الورقة على ورق أبيض سادة، واملأ بها الإطار، ثم أعد المسح.',
     'result.alternatives': 'احتمالات أخرى',
-    'result.lowConf': 'الثقة منخفضة. قد تكون الشجرة صحيحة رغم ذلك، لكن تأكد أن الورقة تملأ الإطار وأن الإضاءة متساوية قبل الاعتماد على النتيجة.',
-    'result.health': 'تحليل صحة الورقة',
-    'result.healthScore': 'مؤشر الصحة',
-    'result.findings': 'نتائج التحليل',
-    'result.method': 'طريقة القياس',
-    'result.methodBody': 'يُحدَّد النوع بشبكة عصبية التفافية MobileNetV2 مدرَّبة على صور ميدانية. أما الصحة فتُقاس بالرؤية الحاسوبية الكلاسيكية: تُضبط إضاءة الصورة اعتماداً على خلفيتها، ثم تُفصل الورقة عن تلك الخلفية، وتُصنَّف كل بكسل كسليمة أو مصفرّة أو متنخرة. ويُقاس تجانس اللون وملمس السطح داخل الورقة فقط، حتى لا يُحسب حدّها الخارجي ضرراً.',
+    'result.health': 'صحة الورقة',
+    'result.healthOf': 'من ١٠٠',
+    'result.findings': 'ما رصده التحليل',
+    'result.todo': 'ما ينبغي فعله',
+    'result.where': 'أين تجد ما تحتاجه',
+    'result.whereAll': 'اطّلع على كل المورّدين وأرقام الجهات',
     'result.readMore': 'اقرأ عن هذه الشجرة',
-    'result.disclaimer': 'عرض تعليمي ولا يغني عن الفحص الزراعي المتخصص.',
-    'result.showOriginal': 'إظهار الصورة الأصلية',
-    'result.showAnalysis': 'إظهار تحليل الصحة',
+    'result.share': 'مشاركة',
+    'result.shared': 'نُسخت النتيجة',
+    'result.method': 'كيف قِيس ذلك',
+    'result.methodBody': 'يأتي تحديد النوع من شبكة MobileNetV2 مع طبقة مدرَّبة على صور ميدانية. أما درجة الصحة فتُقاس بالرؤية الحاسوبية الكلاسيكية: تُضبط إضاءة الصورة على خلفيتها، ثم تُفصل الورقة عنها، ويُصنَّف كل بكسل داخل النصل سليماً أو مصفرّاً أو متنخّراً.',
+    'result.none': 'لم تُمسح أي ورقة بعد.',
 
-    'unknown.title': 'لا أتعرّف على هذه الورقة',
-    'unknown.body': 'لا تطابق هذه الصورة أياً من الأشجار التي تدرّب عليها النموذج. وبدل حشرها في أقربها، يخبرك التطبيق بأنه لا يعرف.',
-    'unknown.noFoliage': 'لا يوجد نسيج نباتي في الصورة أو يكاد.',
-    'unknown.unfamiliar': 'الصورة بعيدة عن كل نوع تدرّب عليه النموذج.',
-    'unknown.lowProbability': 'لم يحصل أي نوع على درجة قريبة من الكافية.',
-    'unknown.spreadEvenly': 'الدرجات موزّعة بالتساوي تقريباً، وهذا يعني التخمين.',
-    'unknown.seeFour': 'شاهد الأنواع التي يعرفها',
+    'unknown.title': 'لم يتعرّف «وارف» على هذه الورقة.',
+    'unknown.body': 'لا تطابق هذه الصورة أي شجرة دُرّب عليها النموذج. وبدل إقحامها في أقرب نوع، يخبرك «وارف» بصراحة أنه لا يعرف.',
+    'unknown.why': 'لماذا',
+    'unknown.noFoliage': 'لا يكاد يوجد نسيج نباتي في الصورة.',
+    'unknown.unfamiliar': 'الصورة بعيدة عن كل شجرة دُرّب عليها النموذج.',
+    'unknown.lowProbability': 'لم تحصل أي شجرة على درجة قريبة من الكافية.',
+    'unknown.spreadEvenly': 'الدرجات موزَّعة بالتساوي تقريباً، وهذا تخمين.',
+    'unknown.tips': 'ثلاثة أمور تساعد',
+    'unknown.tip1': 'ضع ورقة واحدة على ورقٍ أبيض سادة.',
+    'unknown.tip2': 'اجعلها تملأ معظم الإطار.',
+    'unknown.tip3': 'استخدم ضوء نهار متساوياً، وتجنّب ظلاً حاداً على النصل.',
+    'unknown.seeTrees': 'اطّلع على الأشجار التي يعرفها «وارف»',
+    'unknown.retry': 'أعد المحاولة',
 
     'health.excellent': 'سليمة',
-    'health.good': 'سليمة غالباً',
+    'health.good': 'سليمة في الغالب',
     'health.fair': 'إجهاد خفيف',
     'health.poor': 'مُجهَدة',
-    'health.critical': 'متضررة بشدة',
+    'health.bad': 'متضررة بشدة',
+    'health.invalid': 'لم تُعثر على ورقة',
+    'health.legend': 'الأخضر نسيج سليم، والأصفر مصفرّ، والبني ميت.',
 
-    'metric.chlorosis': 'الاصفرار',
-    'metric.necrosis': 'التنخر',
-    'metric.greenness': 'درجة الخضرة',
-    'metric.uniformity': 'تجانس اللون',
-    'metric.coverage': 'مساحة الورقة',
-    'metric.texture': 'تباين الملمس',
+    'trees.title': 'الأشجار',
+    'trees.sub': '{n} أشجار في المكتبة، يتعرّف النموذج الحالي على {m} منها.',
+    'trees.all': 'الكل',
+    'trees.native': 'محلية',
+    'trees.introduced': 'مُدخَلة',
+    'trees.invasive': 'غازية',
+    'trees.recognised': 'يتعرّف عليها',
+    'trees.reference': 'للاطّلاع فقط',
+    'trees.referenceWhy': 'موجودة في المكتبة للاطّلاع. لم يُدرَّب النموذج الحالي عليها، فلن تظهر في نتيجة مسح.',
+    'trees.accuracy': 'دقة النموذج لهذه الشجرة',
+    'trees.leaf': 'كيف تميّز الورقة',
+    'trees.about': 'نبذة',
+    'trees.why': 'لماذا تهمّنا هنا',
+    'trees.lookalike': 'يسهل الخلط بينها',
+    'trees.notFound': 'هذه الشجرة ليست في المكتبة.',
+    'trees.back': 'العودة إلى كل الأشجار',
+    'trees.scanThis': 'امسح ورقة',
 
-    'treat.title': 'ما العمل',
-    'treat.chlorosis': 'عالج الاصفرار',
-    'treat.necrosis': 'أوقف انتشار الموت',
-    'treat.pest': 'تعامل مع الآفة',
-    'treat.pale': 'غذِّ الشجرة',
-    'treat.salinity': 'افحص الإجهاد الملحي',
+    'help.title': 'المساعدة',
+    'help.sub': 'أرقام الجهات الرسمية أولاً، ثم أقرب الأماكن لشراء ما تحتاجه المعالجة.',
+    'help.official': 'أرقام الجهات الرسمية',
+    'help.suppliers': 'المورّدون',
+    'help.locate': 'استخدم موقعي',
+    'help.locateWhy': 'يُستخدم موقعك على جهازك لترتيب القائمة حسب المسافة، ولا يُرسل إلى أي جهة.',
+    'help.located': 'مرتَّبة حسب المسافة عنك',
+    'help.denied': 'الموقع غير متاح، فالقائمة بترتيبها المعتاد.',
+    'help.emirate': 'الإمارة',
+    'help.allEmirates': 'كل الإمارات',
+    'help.call': 'اتصال',
+    'help.directions': 'الاتجاهات',
+    'help.noHours': 'ساعات العمل غير مسجّلة',
+    'help.sells': 'يبيع',
+    'help.searchOnline': 'ابحث على الإنترنت عن المزيد',
 
-    'nearby.title': 'أين تجده قربك',
-    'nearby.lede': 'مشاتل وموردون زراعيون من دليلنا. شارك موقعك لترتيبهم حسب المسافة، أو ابحث في خرائط جوجل عمّا ليس في القائمة.',
-    'nearby.findOnMaps': 'ابحث قربي',
-    'nearby.useLocation': 'رتّب حسب المسافة مني',
-    'nearby.locating': 'جارٍ تحديد موقعك…',
-    'nearby.sorted': 'مرتّب حسب المسافة',
-    'nearby.denied': 'تعذّر تحديد الموقع — تُعرض القائمة كاملة.',
-    'nearby.directions': 'الاتجاهات',
-    'nearby.website': 'الموقع',
-    'nearby.hoursUnknown': 'ساعات العمل غير مسجّلة — راجع خرائط جوجل',
-    'nearby.none': 'لا يوجد موردون في هذه الفئة بعد.',
-    'nearby.pageTitle': 'مساعدة قريبة منك',
-    'nearby.pageLede': 'خطوط المساعدة الرسمية لصحة النبات، ومشاتل وموردون زراعيون في مختلف الإمارات.',
-    'nearby.official': 'الجهات الرسمية',
-    'nearby.shops': 'المشاتل والموردون',
-    'nearby.osmCredit': 'مواقع المتاجر وأرقامها وساعات عملها من مساهمي OpenStreetMap بترخيص ODbL. يحدّثها متطوعون، لذا اتصل قبل الذهاب.',
+    'project.title': 'المشروع',
+    'project.name': 'الاسم',
+    'project.problem': 'المشكلة',
+    'project.approach': 'منهجنا',
+    'project.more': 'اقرأ المزيد',
+    'project.how': 'كيف يعمل الذكاء الاصطناعي',
+    'project.howSub': 'مسار المعالجة، وبطاقة النموذج، وحدوده.',
+    'project.lab': 'مختبر الاختبار',
+    'project.labSub': 'السرعة والدقة والموثوقية، مقيسة.',
+    'project.journey': 'المسيرة',
+    'project.journeySub': 'كيف بُني المشروع، وما الذي تغيّر بين النسختين.',
+    'project.team': 'الفريق',
+    'project.teamSub': 'من بناه، ومن يتحدث عن كل جزء.',
 
-    'aboutus.title': 'عن الأثر الأخضر',
-    'aboutus.lede': 'مشروع تخرج بُني على فكرة بسيطة: أن يستطيع الهاتف أن يخبرك ما هذه الشجرة، وهل هي تموت.',
-    'aboutus.tryIt': 'جرّب مشروعنا',
-    'aboutus.tryHeading': 'شاهده يعمل',
-    'aboutus.tryBody': 'وجّهه إلى ورقة شجر. كل شيء يحدث على جهازك، ويعمل والواي فاي مطفأ.',
-    'aboutus.seeNumbers': 'الأرقام وراءه',
-    'aboutus.meetTeam': 'تعرّف على الفريق',
-    'aboutus.portraitCredit': 'الصور: الأرشيف الوطني للإمارات (ملكية عامة)؛ الدائرة الصحفية لرئيس أذربيجان (CC BY 4.0)؛ صندوق النقد الدولي (ملكية عامة).',
+    'how.title': 'كيف يعمل الذكاء الاصطناعي',
+    'how.pipeline': 'مسار المعالجة',
+    'how.modelCard': 'بطاقة النموذج',
+    'how.classes': 'الأشجار التي يتعرّف عليها',
+    'how.validation': 'دقة التحقق',
+    'how.perClass': 'الدقة لكل شجرة',
+    'how.matrix': 'مصفوفة الالتباس',
+    'how.matrixHelp': 'الصفوف هي الشجرة الحقيقية، والأعمدة ما أجاب به النموذج. النموذج المثالي يملأ القطر وحده.',
+    'how.trained': 'دُرِّب على',
+    'how.samples': 'صورة تدريب',
+    'how.valSamples': 'صورة تحقق محجوزة',
+    'how.oodTitle': 'عتبة «لا أعرف»',
+    'how.oodBody': 'تُقارن كل صورة بمركز كل شجرة يعرفها النموذج. وتحت تشابه جيبي قدره {t} تُعامل الصورة على أنها شيء آخر تماماً، فيمتنع «وارف» عن تسميتها.',
+    'how.limits': 'ما لا يستطيع فعله',
+    'how.trainedAt': 'تاريخ تدريب النموذج',
 
-    'model.title': 'كيف يعمل النموذج',
-    'model.how': 'المسار من البداية إلى النهاية',
-    'model.how1': 'شبكة عصبية التفافية MobileNetV2 مدرَّبة مسبقاً على ImageNet تحوّل صورة الورقة إلى وصف رقمي من ١٢٨٠ قيمة يمثل شكلها وملمسها ونمطها.',
-    'model.how2': 'مصنّف صغير دربناه على صور ميدانية مفتوحة الترخيص لكل نوع يربط هذا الوصف بالشجرة المناسبة.',
-    'model.how3': 'قبل تسمية أي نوع، تُقارن الصورة بالمظهر المتوسط لكل نوع في فضاء الـ١٢٨٠ قيمة. وما لا يشبه أياً منها يُعلَن أنه غير معروف بدل حشره في أقرب فئة.',
-    'model.how4': 'تُقاس الصحة بشكل منفصل ودون شبكة عصبية حتى يمكن تفسير كل رقم: تُضبط إضاءة الورقة وتُفصل عن الخلفية، ثم تُصنَّف كل بكسل كسليمة أو مصفرّة أو متنخرة.',
-    'model.performance': 'أداء النموذج',
-    'model.valAcc': 'دقة التحقق',
-    'model.samples': 'عينات التدريب',
-    'model.species': 'الأنواع',
-    'model.perSpecies': 'الدقة لكل نوع',
-    'model.heldOut': 'قيست على مجموعة تحقق منفصلة لم يتدرب عليها النموذج.',
-    'model.credits': 'المصادر والترخيص',
-    'model.creditsBody': 'صور التدريب من مساهمي iNaturalist بتراخيص المشاع الإبداعي، وكل صورة مستخدمة موثقة في ملف CREDITS.json داخل المستودع. الشبكة الأساسية هي MobileNetV2 من جوجل بترخيص Apache 2.0. الشيفرة المصدرية:',
+    'lab.title': 'مختبر الاختبار',
+    'lab.sub': 'كل رقم في هذه الصفحة مقيس لا مقدَّر، وكل قسم يذكر على أي جهاز ومتى.',
+    'lab.performance': 'الأداء',
+    'lab.accuracy': 'الدقة',
+    'lab.reliability': 'الموثوقية',
+    'lab.loadCold': 'تحميل النموذج، أول مرة',
+    'lab.loadWarm': 'تحميل النموذج، من الذاكرة',
+    'lab.inferMedian': 'زمن الاستدلال، الوسيط',
+    'lab.inferP95': 'زمن الاستدلال، المئين ٩٥',
+    'lab.timeToResult': 'من الصورة إلى النتيجة',
+    'lab.calibration': 'معايرة تحليل الصحة، من النسخة الأولى إلى الثانية',
+    'lab.before': 'قبل',
+    'lab.after': 'بعد',
+    'lab.healthyReported': 'أوراق سليمة صُنّفت سليمة',
+    'lab.medianScore': 'وسيط الدرجة للأوراق السليمة',
+    'lab.syntheticNecrosis': 'تنخّر مُصطنع تم رصده',
+    'lab.syntheticChlorosis': 'اصفرار مُصطنع تم رصده',
+    'lab.runs': 'عمليات مسح متكررة',
+    'lab.tensors': 'عدد المصفوفات بعد التشغيل',
+    'lab.crashes': 'الأعطال',
+    'lab.offline': 'إعادة التحميل دون إنترنت',
+    'lab.pass': 'ناجح',
+    'lab.stable': 'مستقر',
+    'lab.bench': 'شغّل الاختبار على هذا الجهاز',
+    'lab.benchRunning': 'جارٍ التشغيل {i} من {n}…',
+    'lab.benchDone': 'الوسيط {ms} ملّي ثانية عبر {n} عملية استدلال على هذا الجهاز.',
+    'lab.measuredOn': 'قيس على {device} بتاريخ {date}.',
+    'lab.noData': 'لا يوجد ملف قياس بعد. شغّل npm run bench لإنشاء app/data/lab.json.',
 
-    'about.qr': 'افتح التطبيق على هاتفك',
-    'about.qrHint': 'امسح الرمز لفتح التطبيق فوراً. يمكن تثبيته على الشاشة الرئيسية ويعمل دون إنترنت.',
+    'journey.title': 'المسيرة',
+    'journey.stages': 'مراحل الإنتاج',
+    'journey.log': 'سجل التحسين',
+    'journey.problem': 'المشكلة',
+    'journey.change': 'التغيير',
+    'journey.evidence': 'الدليل',
+    'journey.result': 'النتيجة',
+    'journey.compare': 'النسخة الأولى والثانية',
+    'journey.compareHelp': 'اسحب المقبض لمقارنة الشاشة نفسها قبل وبعد.',
+    'journey.v1': 'النسخة الأولى، الأثر الأخضر',
+    'journey.v2': 'النسخة الثانية، وارف',
+    'journey.screen': 'الشاشة',
 
     'team.title': 'الفريق',
-    'team.lede': 'مشروع تخرج من إعداد خمسة طلاب.',
-    'team.split': 'من فعل ماذا',
-    'team.splitNote': 'النسب تقدير الفريق نفسه لتوزّع العمل بين البحث وجمع البيانات وتدريب النموذج والبرمجة والعرض.',
-    'team.gradProject': 'مشروع تخرج',
+    'team.supervisor': 'المشرف',
+    'team.leader': 'قائد الفريق',
+    'team.members': 'الأعضاء',
+    'team.responsibilities': 'المسؤوليات',
+    'team.speaks': 'جزء العرض',
+    'team.equal': 'حمل كل عضو نصيباً متساوياً من المشروع. تعرض هذه الصفحة ما كان كل فرد مسؤولاً عنه، والجزء الذي يقدّمه.',
 
-    'theme.group.auto': 'تلقائي',
-    'theme.group.emirati': 'مصممة لهذا المشروع',
-    'theme.group.light': 'فاتحة',
-    'theme.group.dark': 'داكنة',
-    'theme.group.access': 'إمكانية الوصول',
+    'feedback.title': 'رأيك',
+    'feedback.sub': 'أربع تقييمات سريعة وما تودّ قوله لنا. يبقى كل ذلك على هذا الجهاز.',
+    'feedback.clarity': 'الوضوح',
+    'feedback.usefulness': 'الفائدة',
+    'feedback.design': 'التصميم',
+    'feedback.innovation': 'الابتكار',
+    'feedback.comment': 'ملاحظات',
+    'feedback.commentPlaceholder': 'ما الذي نجح، وما الذي تودّ تغييره؟',
+    'feedback.role': 'أنت',
+    'feedback.roleEvaluator': 'مُقيِّم',
+    'feedback.roleTeacher': 'معلّم',
+    'feedback.roleParent': 'ولي أمر',
+    'feedback.roleStudent': 'طالب',
+    'feedback.roleGuest': 'زائر',
+    'feedback.name': 'اسمك (اختياري)',
+    'feedback.submit': 'أرسل رأيك',
+    'feedback.thanks': 'شكراً لك، حُفظ رأيك.',
+    'feedback.another': 'أضف رأياً آخر',
+    'feedback.stars': '{n} من ٥',
+    'feedback.onPhone': 'تفضّل هاتفك؟',
+    'feedback.onPhoneBody': 'امسح هذا الرمز لفتح النموذج نفسه على هاتفك.',
+    'feedback.admin': 'الردود المجمّعة',
+    'feedback.export': 'تصدير CSV',
+    'feedback.clear': 'حذف كل الردود',
+    'feedback.count': '{n} رداً على هذا الجهاز',
+    'feedback.confirmClear': 'هل تريد حذف كل الردود المخزّنة على هذا الجهاز؟',
 
-    'settings.title': 'المظهر',
-    'settings.theme': 'السمة',
+    'showcase.tap': 'المس الشاشة لمسح ورقة',
+    'showcase.qr': 'افتح «وارف» على هاتفك',
+    'showcase.exit': 'اضغط Escape أو أطل الضغط على الشعار للخروج من وضع الكشك',
+    'showcase.did': 'هل تعلم',
+
+    'present.notes': 'ملاحظات',
+    'present.timer': 'المؤقّت',
+    'present.speaker': 'المتحدث',
+    'present.slide': 'الشريحة {i} من {n}',
+    'present.start': 'ابدأ',
+    'present.pause': 'إيقاف مؤقت',
+    'present.reset': 'تصفير',
+    'present.keys': 'أسهم لوحة المفاتيح للتنقل، وN للملاحظات، وT للمؤقّت.',
+    'present.demo': 'افتح التطبيق الحيّ',
+    'present.back': 'العودة إلى الشرائح',
+
+    'brand.title': 'الهوية',
+    'brand.sub': 'الهوية البصرية، والقواعد التي تحفظ اتساقها.',
+    'brand.mark': 'الشعار',
+    'brand.lockups': 'التركيبات',
+    'brand.palette': 'الألوان',
+    'brand.type': 'الخطوط',
+    'brand.band': 'شريط السدو',
+    'brand.usage': 'الاستخدام',
+    'brand.download': 'نزّل ملف SVG',
+
+    'settings.title': 'الإعدادات',
     'settings.language': 'اللغة',
-    'settings.close': 'تم',
+    'settings.theme': 'المظهر',
+    'settings.themeAuto': 'تلقائي',
+    'settings.themeDay': 'نهار',
+    'settings.themeNight': 'ليل',
+    'settings.themeContrast': 'تباين عالٍ',
+    'settings.themeAutoHint': 'التلقائي يتبع إعداد المظهر في جهازك.',
     'settings.motion': 'الحركة',
-    'settings.motionHint': 'الوضع التلقائي يتبع إعداد تقليل الحركة في جهازك.',
-    'motion.auto': 'تلقائي',
-    'motion.on': 'كاملة',
-    'motion.off': 'إيقاف',
+    'settings.motionAuto': 'تلقائي',
+    'settings.motionOn': 'كاملة',
+    'settings.motionOff': 'مخفّفة',
+    'settings.motionHint': 'التلقائي يتبع إعداد تقليل الحركة في جهازك.',
+    'settings.textsize': 'حجم النص',
+    'settings.textStandard': 'قياسي',
+    'settings.textLarge': 'كبير',
+    'settings.close': 'تم',
 
-    'library.title': 'الأشجار التي يعرفها',
-    'library.lede': 'محلية ومستوطنة وغازية — أنواع تغطي بينها معظم ما ينمو في الإمارات.',
-    'library.leaf': 'كيف تميّز الورقة',
-    'library.about': 'عن الشجرة',
-    'library.significance': 'أهميتها لدينا',
-    'library.health': 'المشكلات الصحية الشائعة',
-    'library.back': 'كل الأشجار',
-    'library.referenceOnly': 'مرجع فقط',
-
-    'err.model': 'تعذّر تحميل النموذج. تحقق من الاتصال وأعد التحميل.',
-    'err.camera': 'الكاميرا غير متاحة. ارفع صورة بدلاً من ذلك.',
-    'err.image': 'تعذّرت قراءة الصورة. جرّب صورة أخرى.',
-    'copied': 'تم نسخ الرابط',
+    'misc.loading': 'جارٍ التحميل…',
+    'misc.error': 'حدث خطأ ما',
+    'misc.retry': 'أعد المحاولة',
+    'misc.print': 'اطبع هذه الصفحة',
+    'misc.of': 'من',
+    'misc.todo': 'بحاجة إلى تأكيد',
   },
 };
 
-const LANG_KEY = 'gt.lang';
-let current = localStorage.getItem(LANG_KEY) || (navigator.language?.startsWith('ar') ? 'ar' : 'en');
+const STORE_KEY = 'warif.lang';
+let current = 'en';
+const listeners = new Set();
 
-export const lang = () => current;
-export const isRTL = () => current === 'ar';
+/** The device's language, unless the visitor has chosen one before. */
+function initial() {
+  try {
+    const saved = localStorage.getItem(STORE_KEY);
+    if (saved === 'en' || saved === 'ar') return saved;
+  } catch { /* private mode; fall through to the device */ }
+  return (navigator.languages || [navigator.language || 'en'])
+    .some((l) => String(l).toLowerCase().startsWith('ar')) ? 'ar' : 'en';
+}
+
+export function lang() { return current; }
+export function dir() { return current === 'ar' ? 'rtl' : 'ltr'; }
+
+/** Subscribe to language changes; returns an unsubscribe function. */
+export function onLangChange(fn) {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
+
+export function setLang(next, { silent = false } = {}) {
+  if (next !== 'en' && next !== 'ar') return;
+  current = next;
+  try { localStorage.setItem(STORE_KEY, next); } catch { /* not fatal */ }
+  applyToDocument();
+  if (!silent) for (const fn of listeners) fn(current);
+}
+
+export function toggleLang() { setLang(current === 'en' ? 'ar' : 'en'); }
+
+export function applyToDocument() {
+  const root = document.documentElement;
+  root.lang = current;
+  root.dir = dir();
+}
 
 /**
- * Looks up a string, optionally filling `{name}` placeholders.
- *
- * Interpolation rather than concatenation because word order differs between
- * the two languages: "Knows 10 species" and "يعرف ١٠ أنواع" put the number in
- * different places, and gluing strings together would force one of them to be
- * wrong.
+ * Look up a string. `{name}` placeholders are filled from `vars`, and numbers
+ * passed through go via the Western-digit formatter below.
  */
 export function t(key, vars) {
-  const str = STRINGS[current]?.[key] ?? STRINGS.en[key] ?? key;
-  if (!vars) return str;
-  return str.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m));
+  let s = STRINGS[current][key] ?? STRINGS.en[key] ?? key;
+  if (vars) {
+    for (const [k, v] of Object.entries(vars)) {
+      s = s.replaceAll(`{${k}}`, typeof v === 'number' ? num(v) : String(v));
+    }
+  }
+  return s;
 }
 
-/** Applies the language to <html> and notifies listeners so views can re-render. */
-export function setLang(next) {
-  current = STRINGS[next] ? next : 'en';
-  localStorage.setItem(LANG_KEY, current);
-  document.documentElement.lang = current;
-  document.documentElement.dir = current === 'ar' ? 'rtl' : 'ltr';
-  window.dispatchEvent(new CustomEvent('gt:lang', { detail: current }));
+/** Picks the active language out of a `{en, ar}` pair. */
+export const L = (pair) => (pair ? (pair[current] ?? pair.en ?? '') : '');
+
+/* ------------------------------------------------------------------ numbers */
+
+/**
+ * Western digits in both languages.
+ *
+ * The UAE writes 800 3050 on the side of a ministry van in Western digits, and
+ * a phone number a visitor has to dial is not the place to be purist about
+ * Eastern Arabic numerals. `ar-AE-u-nu-latn` is the locale that says exactly
+ * that: Arabic conventions, Western digits.
+ */
+const FORMATTERS = new Map();
+function formatter(opts) {
+  const locale = current === 'ar' ? 'ar-AE-u-nu-latn' : 'en-AE';
+  const id = locale + JSON.stringify(opts ?? {});
+  if (!FORMATTERS.has(id)) FORMATTERS.set(id, new Intl.NumberFormat(locale, opts));
+  return FORMATTERS.get(id);
 }
 
-export function initLang() {
-  document.documentElement.lang = current;
-  document.documentElement.dir = current === 'ar' ? 'rtl' : 'ltr';
+export function num(value, opts) {
+  if (value == null || Number.isNaN(value)) return '—';
+  return formatter(opts).format(value);
 }
+
+/** A 0..1 fraction as a whole percentage, e.g. 0.8147 -> "81%". */
+export function pct(fraction, digits = 0) {
+  if (fraction == null || Number.isNaN(fraction)) return '—';
+  return formatter({ minimumFractionDigits: digits, maximumFractionDigits: digits }).format(fraction * 100) + '%';
+}
+
+export function date(value) {
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return '—';
+  const locale = current === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB';
+  return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(d);
+}
+
+current = initial();
+applyToDocument();

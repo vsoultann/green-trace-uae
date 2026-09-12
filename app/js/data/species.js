@@ -1,13 +1,23 @@
 /**
- * Reference data for the ten species Green-Trace UAE recognises.
+ * Reference data for the ten trees in the Warif library.
  *
  * `key` and the ordering here must match tools/species.mjs and the class order
  * baked into the trained model's metadata -- model.js asserts this on load.
+ *
+ * The library is deliberately larger than the model. Ten trees are documented
+ * here; the deployed model is trained on however many appear in
+ * model/metadata.json, and the interface marks the difference everywhere it
+ * shows a count. A tree the model was not trained on is real reference material
+ * and is labelled "Reference only" rather than quietly implying a scan would
+ * return it.
+ *
+ * `status` is native / introduced / invasive, and drives the filter on the
+ * Trees page as well as the warning on Mesquite.
  */
 export const SPECIES = [
   {
     key: 'ghaf',
-    emoji: '🌳',
+    status: 'native',
     latin: 'Prosopis cineraria',
     en: {
       name: 'Ghaf',
@@ -34,7 +44,7 @@ export const SPECIES = [
   },
   {
     key: 'sidr',
-    emoji: '🍃',
+    status: 'native',
     latin: 'Ziziphus spina-christi',
     en: {
       name: 'Sidr',
@@ -60,7 +70,7 @@ export const SPECIES = [
   },
   {
     key: 'nakhl',
-    emoji: '🌴',
+    status: 'native',
     latin: 'Phoenix dactylifera',
     en: {
       name: 'Date Palm',
@@ -86,7 +96,7 @@ export const SPECIES = [
   },
   {
     key: 'samar',
-    emoji: '🌾',
+    status: 'native',
     latin: 'Vachellia tortilis',
     en: {
       name: 'Samar',
@@ -112,7 +122,7 @@ export const SPECIES = [
   },
   {
     key: 'qurm',
-    emoji: '🌊',
+    status: 'native',
     latin: 'Avicennia marina',
     en: {
       name: 'Grey Mangrove',
@@ -139,7 +149,7 @@ export const SPECIES = [
   },
   {
     key: 'athl',
-    emoji: '🌾',
+    status: 'native',
     latin: 'Tamarix aphylla',
     en: {
       name: 'Athel Tamarisk',
@@ -166,7 +176,7 @@ export const SPECIES = [
   },
   {
     key: 'arak',
-    emoji: '🪥',
+    status: 'native',
     latin: 'Salvadora persica',
     en: {
       name: 'Arak (Toothbrush Tree)',
@@ -193,7 +203,7 @@ export const SPECIES = [
   },
   {
     key: 'neem',
-    emoji: '🌿',
+    status: 'introduced',
     latin: 'Azadirachta indica',
     en: {
       name: 'Neem',
@@ -220,7 +230,7 @@ export const SPECIES = [
   },
   {
     key: 'osher',
-    emoji: '🫧',
+    status: 'native',
     latin: 'Calotropis procera',
     en: {
       name: 'Apple of Sodom',
@@ -247,7 +257,7 @@ export const SPECIES = [
   },
   {
     key: 'mesquite',
-    emoji: '⚠️',
+    status: 'invasive',
     latin: 'Prosopis juliflora',
     en: {
       name: 'Mesquite',

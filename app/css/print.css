@@ -1,0 +1,45 @@
+/**
+ * Print.
+ *
+ * The Lab, Journey and Team pages are the evidence the school wants as PDFs, so
+ * they have to survive Chrome's "Save as PDF" without anyone rebuilding them in
+ * a document. Navigation goes, colour stays (with background graphics on), and
+ * nothing that carries a measurement is allowed to break across a page.
+ */
+@page { margin: 14mm 12mm; }
+
+body {
+  background: #fff;
+  color: #14231C;
+}
+
+.topbar, .tabbar, .skip, #toast, dialog.sheet,
+.subnav, .btn, .chip, .no-print { display: none !important; }
+
+#view { padding: 0 !important; }
+.shell { max-width: none; padding-inline: 0; }
+
+/* One bold rule at the top of the sheet, as on screen. */
+.sadu-band { height: 6mm; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+.panel, .sheet-surface, .meter, .kv, .matrix-wrap, .stage, .member, .iter {
+  break-inside: avoid;
+  box-shadow: none !important;
+}
+
+h1, h2, h3 { break-after: avoid; }
+
+/* Colour is data here — a health meter printed grey says nothing. */
+.meter-cell, .matrix-cell, .status .swatch, .sadu-band, .weave-fill {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* A link that has to be typed back in is worth its URL; one that is a route
+   inside this app is not. */
+a[href^='http']::after {
+  content: ' (' attr(href) ')';
+  font-size: .75em;
+  color: #4A5B51;
+  word-break: break-all;
+}

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Warif"><title>Warif</title>
-<rect width="512" height="512" rx="112" fill="#1F4A36"/>
-<g transform="translate(35.84 35.84) scale(6.88)"><defs><mask id="ak"><rect width="64" height="64" fill="#fff"/><path d="M32 24.5L37 29.5 32 34.5 27 29.5Z"/></mask></defs>
-<g mask="url(#ak)">
+<rect width="512" height="512" fill="#1F4A36"/>
+<g transform="translate(87.04 87.04) scale(5.28)"><defs><mask id="mk"><rect width="64" height="64" fill="#fff"/><path d="M32 24.5L37 29.5 32 34.5 27 29.5Z"/></mask></defs>
+<g mask="url(#mk)">
  <path d="M30.8 4A30.83 30.83 0 0 0 30.8 55Z" fill="#EDE6D6"/>
  <g fill="#7FA88A"><rect x="33.2" y="4.7" width="3" height="3.7"/><rect x="33.2" y="9.8" width="7.5" height="3.7"/><rect x="33.2" y="14.9" width="10.5" height="3.7"/><rect x="33.2" y="20" width="12" height="3.7"/><rect x="33.2" y="25.1" width="13.5" height="3.7"/><rect x="33.2" y="30.2" width="13.5" height="3.7"/><rect x="33.2" y="35.3" width="12" height="3.7"/><rect x="33.2" y="40.4" width="10.5" height="3.7"/><rect x="33.2" y="45.5" width="7.5" height="3.7"/><rect x="33.2" y="50.6" width="3" height="3.7"/></g>
  <rect x="30.8" y="53" width="2.4" height="8" rx="1.2" fill="#EDE6D6"/>

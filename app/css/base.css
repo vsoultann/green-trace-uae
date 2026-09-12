@@ -1,0 +1,181 @@
+/**
+ * Reset, self-hosted type, and the layout primitives every view is built from.
+ *
+ * The fonts are served from this repository rather than a CDN. The kiosk runs
+ * on a school table with no guarantee of wifi, and a logo that falls back to
+ * Trebuchet halfway through a presentation is a worse failure than a slow one.
+ */
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body, h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol { margin: 0; }
+  ul[class], ol[class] { list-style: none; padding: 0; }
+  img, svg, video, canvas { display: block; max-width: 100%; }
+  input, button, textarea, select { font: inherit; color: inherit; }
+  button { background: none; border: 0; }
+  table { border-collapse: collapse; }
+  [hidden] { display: none !important; }
+}
+
+@layer base {
+  /* --------------------------------------------------------------- webfonts
+     Variable weights, Latin and Arabic subsets only. Two families, four files,
+     86 KB in total -- everything else in the fontsource package is weight the
+     kiosk would download and never draw. */
+  @font-face {
+    font-family: 'Reem Kufi';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400 700;
+    src: url('../assets/fonts/reem-kufi-latin-wght-normal.woff2') format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+      U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Reem Kufi';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400 700;
+    src: url('../assets/fonts/reem-kufi-arabic-wght-normal.woff2') format('woff2-variations');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF,
+      U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+  }
+  @font-face {
+    font-family: 'Readex Pro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 160 700;
+    src: url('../assets/fonts/readex-pro-latin-wght-normal.woff2') format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+      U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Readex Pro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 160 700;
+    src: url('../assets/fonts/readex-pro-arabic-wght-normal.woff2') format('woff2-variations');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF,
+      U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+  }
+
+  /* ------------------------------------------------------------------ page */
+  html { height: 100%; }
+  body {
+    min-height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-text);
+    font-size: var(--t-body);
+    font-weight: 350;
+    line-height: var(--lh-body);
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Arabic sets a little larger and much looser: the script carries more
+     vertical detail per line and suffocates at Latin leading. */
+  :root[lang='ar'] body { font-size: 1.0625rem; line-height: 1.8; }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: var(--lh-tight);
+    letter-spacing: -0.01em;
+  }
+  /* Arabic is never letter-spaced. Kufi is drawn joined; tracking it breaks the
+     words apart into unreadable pieces. */
+  :root[lang='ar'] h1, :root[lang='ar'] h2,
+  :root[lang='ar'] h3, :root[lang='ar'] h4,
+  [lang='ar'], [dir='rtl'] { letter-spacing: normal; }
+
+  p { max-width: var(--measure); }
+
+  a { color: inherit; text-underline-offset: .22em; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-color: var(--accent); }
+
+  /* One focus treatment everywhere, and it is always visible. An evaluator
+     tabbing through the kiosk should never have to guess where they are. */
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Data reads in columns, so digits must not jitter as values change. */
+  .tnum, td, th, .meter-value { font-variant-numeric: tabular-nums; }
+
+  ::selection { background: var(--primary); color: var(--on-primary); }
+
+  /* ------------------------------------------------------------ primitives */
+  .shell {
+    width: 100%;
+    max-width: var(--shell-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .grid12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.75rem);
+  }
+
+  .stack > * + * { margin-block-start: var(--stack, 1rem); }
+  .stack-lg { --stack: 1.75rem; }
+  .stack-sm { --stack: .5rem; }
+
+  .row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+  .muted { color: var(--ink-muted); }
+  .small { font-size: var(--t-small); }
+  .measure { max-width: var(--measure); }
+
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0;
+    margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+
+  /* Skip link: hidden until focused, then a real button at the top. */
+  .skip {
+    position: absolute; inset-block-start: -100px; inset-inline-start: 1rem;
+    z-index: 60; padding: .7rem 1.1rem; border-radius: var(--r-ctl);
+    background: var(--primary); color: var(--on-primary);
+    text-decoration: none; font-weight: 500;
+  }
+  .skip:focus { inset-block-start: calc(var(--band-h) + .5rem); }
+
+  /* ------------------------------------------------------------ reduced motion
+     Honoured as a floor, and the settings sheet can force it on top. The app
+     never *depends* on animation: the analysis steps show as text either way. */
+  @media (prefers-reduced-motion: reduce) {
+    :root[data-motion='auto'] { --dur-route: 0ms; --dur-ui: 0ms; }
+    :root[data-motion='auto'] *,
+    :root[data-motion='auto'] *::before,
+    :root[data-motion='auto'] *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+    }
+  }
+  :root[data-motion='off'] { --dur-route: 0ms; --dur-ui: 0ms; }
+  :root[data-motion='off'] *,
+  :root[data-motion='off'] *::before,
+  :root[data-motion='off'] *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  /* Route changes cross-fade, driven from the router with startViewTransition.
+     There is deliberately no `@view-transition { navigation: auto }` here: that
+     opts into *cross-document* transitions, and on a hash-routed single page it
+     left the old snapshot stacked on top of the new one. Progressive
+     enhancement either way — a browser without the API simply swaps. */
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation-duration: var(--dur-route);
+  }
+}
