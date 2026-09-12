@@ -65,12 +65,22 @@ function provenance(block) {
   return `<p class="small muted">${t('lab.measuredOn', { device: block.device, date: date(block.measuredAt) })}</p>`;
 }
 
-const ms = (v) => (v == null ? '—' : `${num(Math.round(v))} ms`);
+/**
+ * A measurement with a unit, isolated from the paragraph around it.
+ *
+ * "954 ms" set inside an Arabic page renders as "ms 954": the number and the
+ * unit are two separate runs, and the right-to-left paragraph swaps them.
+ * <bdi> makes the pair one run and lets the browser resolve its direction from
+ * its own contents, which is the same reason scientific names are wrapped.
+ */
+const unit = (value, suffix) => `<bdi>${value}\u00A0${suffix}</bdi>`;
+
+const ms = (v) => (v == null ? '—' : unit(num(Math.round(v)), 'ms'));
 
 function performance(lab) {
   const p = lab.performance;
   if (!p) return '';
-  const kb = (bytes) => (bytes == null ? '—' : `${num(Math.round(bytes / 1024))} KB`);
+  const kb = (bytes) => (bytes == null ? '—' : unit(num(Math.round(bytes / 1024)), 'KB'));
   const pay = lab.payload;
 
   return html`<section class="panel" aria-labelledby="perf-title">
@@ -87,7 +97,7 @@ function performance(lab) {
       <h3 class="section-title">${t('lab.payload')}</h3>
       <dl class="kv-row">
         <div class="kv"><dt>${t('lab.shell')}</dt><dd>${raw(kb(pay.shellGzipBytes))}</dd></div>
-        <div class="kv"><dt>${t('lab.offlineTotal')}</dt><dd>${raw(`${num(Math.round(pay.totalBytes / 1024 / 1024 * 10) / 10)} MB`)}</dd></div>
+        <div class="kv"><dt>${t('lab.offlineTotal')}</dt><dd>${raw(unit(num(Math.round(pay.totalBytes / 1024 / 1024 * 10) / 10), 'MB'))}</dd></div>
         <div class="kv"><dt>${t('lab.files')}</dt><dd>${raw(num(pay.files))}</dd></div>
       </dl>
       <p class="small muted measure">${t('lab.shellNote')}</p>` : '')}

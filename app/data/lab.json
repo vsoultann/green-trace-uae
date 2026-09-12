@@ -82,11 +82,11 @@
     }
   },
   "payload": {
-    "measuredAt": "2026-09-12T13:49:41.229Z",
+    "measuredAt": "2026-09-12T13:51:21.771Z",
     "files": 105,
-    "totalBytes": 18513314,
-    "shellBytes": 552620,
-    "shellGzipBytes": 257111,
+    "totalBytes": 18513786,
+    "shellBytes": 553092,
+    "shellGzipBytes": 257331,
     "budgetBytes": 256000
   }
 }
