@@ -14,6 +14,7 @@
 import { html, raw, $, $$ } from '../ui/dom.js';
 import { bilingual } from '../ui/bilingual.js';
 import { t, L } from '../i18n.js';
+import { icon } from '../icons.js';
 import { STAGES, ITERATIONS, COMPARISONS } from '../data/journey.js';
 import { CONFIG } from '../config.js';
 import { projectNav } from './project.js';
@@ -38,8 +39,11 @@ export default function journeyView() {
       <section aria-labelledby="compare-title" class="compare-section">
         <div class="section-head">
           <h2 id="compare-title">${t('journey.compare')}</h2>
-          <p class="small muted">${t('journey.compareHelp')}</p>
+          <a class="btn btn-outline" href="${CONFIG.links.previousSite}" target="_blank" rel="noopener">
+            ${raw(icon('directions', { size: 'sm' }))}${t('journey.openV1')}
+          </a>
         </div>
+        <p class="small muted measure">${t('journey.openV1Help')}</p>
         ${raw(compare())}
       </section>
 

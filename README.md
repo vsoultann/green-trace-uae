@@ -18,7 +18,8 @@ specialist) and **Mohammed Rashed** (programmer), supervised by
 Shipped as *Green-Trace UAE* in version 1; renamed and rebuilt as Warif in
 version 2. The Journey page inside the app records what changed and why.
 
-🌐 **Live app:** https://vsoultann.github.io/green-trace-uae/
+🌐 **Live app:** https://vsoultann.github.io/warif/
+📦 **Version 1**, still deployed for comparison: https://vsoultann.github.io/green-trace-uae/
 
 ---
 
@@ -233,8 +234,8 @@ kiosk-qr.png            2000px QR for the printed stand
 ## Running it locally
 
 ```bash
-git clone https://github.com/vsoultann/green-trace-uae
-cd green-trace-uae
+git clone https://github.com/vsoultann/warif
+cd warif
 npm install
 npm run serve          # http://localhost:8080
 ```

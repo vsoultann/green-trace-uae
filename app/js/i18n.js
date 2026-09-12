@@ -225,6 +225,8 @@ const STRINGS = {
     'journey.v1': 'v1 Green-Trace',
     'journey.v2': 'v2 Warif',
     'journey.screen': 'Screen',
+    'journey.openV1': 'Open version 1',
+    'journey.openV1Help': 'Green-Trace is still deployed, from its own address, so you can open both and compare them yourself rather than take our screenshots for it.',
 
     /* -------------------------------------------------------------- team */
     'team.title': 'Team',
@@ -518,6 +520,8 @@ const STRINGS = {
     'journey.v1': 'النسخة الأولى، الأثر الأخضر',
     'journey.v2': 'النسخة الثانية، وارف',
     'journey.screen': 'الشاشة',
+    'journey.openV1': 'افتح النسخة الأولى',
+    'journey.openV1Help': 'ما زال «الأثر الأخضر» منشوراً على عنوانه الخاص، فيمكنك فتح النسختين والمقارنة بنفسك بدل الاكتفاء بلقطاتنا.',
 
     'team.title': 'الفريق',
     'team.supervisor': 'المشرف',

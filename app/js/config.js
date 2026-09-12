@@ -60,8 +60,15 @@ export const CONFIG = {
   },
 
   links: {
-    site: 'https://vsoultann.github.io/green-trace-uae/',
-    repo: 'https://github.com/vsoultann/green-trace-uae',
+    site: 'https://vsoultann.github.io/warif/',
+    repo: 'https://github.com/vsoultann/warif',
+    /* Green-Trace v1 is still deployed, from its own repository, so the two can
+       be opened side by side at the showcase and so there is a known-good app
+       to fall back to. Its service worker owns a different path, which is why
+       they are separate repositories rather than two folders in one: two apps
+       under one path prefix means one of them caches the other's pages. */
+    previousSite: 'https://vsoultann.github.io/green-trace-uae/',
+    previousRepo: 'https://github.com/vsoultann/green-trace-uae',
     /* Set this to a Microsoft Forms URL and the Feedback page shows it as a QR
        for phones alongside the on-device form. Empty = on-device only. */
     feedbackFormUrl: '',
