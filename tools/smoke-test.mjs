@@ -73,7 +73,15 @@ const check = (name, ok, detail = '') => {
 console.log('\nLoading app...');
 await page.goto(base, { waitUntil: 'networkidle2', timeout: 60000 });
 
-check('page renders a view', await page.$eval('#view', (el) => el.children.length > 0));
+/* The shell awaits the model card — a kilobyte, same origin — before it builds
+   the first view, so the first paint can land just after networkidle2 under
+   load. Waiting for the view is the check; asserting on it immediately was
+   testing the machine's spare capacity. */
+const rendered = await page
+  .waitForFunction(() => Boolean(document.querySelector('#view')?.dataset.route), { timeout: 30000 })
+  .then(() => true)
+  .catch(() => false);
+check('page renders a view', rendered);
 check('bottom bar has five destinations', (await page.$$('.tabbar a')).length === 5);
 check('top bar carries the lockup', Boolean(await page.$('.topbar .lockup')));
 

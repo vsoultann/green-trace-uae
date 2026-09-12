@@ -1,0 +1,647 @@
+<title>Warif Handover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Readex+Pro:wght@300..600&display=swap">
+<style>
+  :root {
+    /* The project's own tokens, so the report and the thing it reports on are
+       recognisably one object. */
+    --ghaf: #2E6147;
+    --ghaf-light: #7FA88A;
+    --sadu-red: #B23A2C;
+
+    --bg: #EEF1EA;
+    --surface: #F8F9F5;
+    --sunk: #E3E9E0;
+    --ink: #14231C;
+    --muted: #4A5B51;
+    --line: #C5CFC2;
+    --primary: var(--ghaf);
+    --accent: var(--sadu-red);
+
+    --ok: #2F7A4B;
+    --warn: #8A6400;
+    --open: #B23A2C;
+
+    --display: 'Reem Kufi', 'Trebuchet MS', system-ui, sans-serif;
+    --text: 'Readex Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --measure: 68ch;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1712;
+      --surface: #17221B;
+      --sunk: #0B120E;
+      --ink: #EAE5D8;
+      --muted: #A9B4AA;
+      --line: #2B3A31;
+      --primary: #8FC19D;
+      --accent: #E06A55;
+      --ok: #7CC592;
+      --warn: #E3B341;
+      --open: #E06A55;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1712;
+    --surface: #17221B;
+    --sunk: #0B120E;
+    --ink: #EAE5D8;
+    --muted: #A9B4AA;
+    --line: #2B3A31;
+    --primary: #8FC19D;
+    --accent: #E06A55;
+    --ok: #7CC592;
+    --warn: #E3B341;
+    --open: #E06A55;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--text);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .band {
+    display: block;
+    width: 100%;
+    height: 11px;
+    image-rendering: pixelated;
+  }
+
+  .sheet {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-inline: max(16px, 4vw);
+    padding-block: clamp(2rem, 5vw, 4rem) 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.25rem, 4vw, 3.5rem);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -0.015em; }
+  h2 { font-size: clamp(1.375rem, 2.4vw, 1.75rem); }
+  h3 { font-size: 1.0625rem; font-weight: 600; }
+  p { margin: 0; max-width: var(--measure); }
+
+  a { color: inherit; text-decoration-color: var(--accent); text-underline-offset: .2em; }
+  code {
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+    font-size: .875em;
+    background: var(--sunk);
+    padding: .1em .35em;
+    border-radius: 3px;
+  }
+
+  /* ------------------------------------------------------------- masthead */
+  .masthead { display: grid; gap: 1rem; }
+  .eyebrow {
+    font-family: var(--display);
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--primary);
+  }
+  .lede { font-size: 1.125rem; color: var(--muted); max-width: 62ch; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.5rem;
+    font-size: .8125rem;
+    color: var(--muted);
+    padding-block-start: .5rem;
+    border-block-start: 1px solid var(--line);
+  }
+  .meta b { font-weight: 500; color: var(--ink); }
+
+  /* ---------------------------------------------------------------- tiles */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .tile { background: var(--surface); padding: 1.1rem 1.25rem; display: grid; gap: .2rem; }
+  .tile .figure {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--primary);
+  }
+  .tile .caption { font-size: .8125rem; color: var(--muted); }
+
+  /* --------------------------------------------------------------- blocks */
+  section { display: grid; gap: 1.25rem; }
+  .section-head { display: grid; gap: .4rem; }
+
+  /* Both groups here hold four blocks. auto-fit gave three and a lonely
+     fourth; two columns give a filled 2x2 at every width that has the room. */
+  .cols { display: grid; gap: 1.25rem; }
+  @media (min-width: 680px) { .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 1.25rem;
+    display: grid;
+    gap: .6rem;
+    align-content: start;
+  }
+  .block ul { margin: 0; padding-inline-start: 1.1rem; display: grid; gap: .4rem; font-size: .9375rem; }
+  .block li::marker { color: var(--ghaf-light); }
+
+  /* Findings are not a numbered sequence — they are a set with severities, so
+     the marker carries the severity rather than an invented order. */
+  .findings { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .finding {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    gap: 0 1.25rem;
+    padding: 1.1rem 1.25rem;
+  }
+  @media (max-width: 620px) { .finding { grid-template-columns: 1fr; gap: .5rem; } }
+  .chip {
+    font-size: .6875rem;
+    font-weight: 500;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    padding: .15rem .45rem;
+    border: 1px solid currentColor;
+    justify-self: start;
+    align-self: start;
+    white-space: nowrap;
+  }
+  .chip.fixed { color: var(--ok); }
+  .chip.open { color: var(--open); }
+  .chip.noted { color: var(--warn); }
+  .finding-body { display: grid; gap: .35rem; }
+  .finding-body p { font-size: .9375rem; }
+  .finding-body .evidence { font-size: .875rem; color: var(--muted); }
+
+  /* --------------------------------------------------------------- tables */
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .9375rem; min-width: 520px; }
+  caption { text-align: start; font-size: .8125rem; color: var(--muted); padding-block-end: .6rem; }
+  th, td { text-align: start; padding: .55rem .75rem; border-block-end: 1px solid var(--line); }
+  thead th { font-weight: 500; color: var(--muted); font-size: .8125rem; }
+  td.num, th.num { text-align: end; font-variant-numeric: tabular-nums; }
+  tbody tr:last-child th, tbody tr:last-child td { border-block-end: 0; }
+  .delta { color: var(--ok); font-weight: 500; }
+
+  /* ----------------------------------------------------------------- todo */
+  .todo {
+    border: 2px solid var(--accent);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    display: grid;
+    gap: 1.25rem;
+  }
+  .todo-list { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .todo-item {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: .35rem 1rem;
+    padding: .9rem 1.1rem;
+    align-items: baseline;
+  }
+  @media (max-width: 620px) { .todo-item { grid-template-columns: auto 1fr; } }
+  .todo-mark {
+    width: 9px; height: 9px;
+    rotate: 45deg;
+    background: var(--accent);
+    align-self: center;
+  }
+  .todo-who {
+    font-size: .75rem;
+    color: var(--muted);
+    justify-self: end;
+    white-space: nowrap;
+  }
+  @media (max-width: 620px) { .todo-who { grid-column: 2; justify-self: start; } }
+  .todo-item .where { font-size: .8125rem; color: var(--muted); grid-column: 2; }
+
+  footer {
+    border-block-start: 1px solid var(--line);
+    padding-block-start: 1.25rem;
+    font-size: .8125rem;
+    color: var(--muted);
+    display: grid;
+    gap: .4rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a { transition: text-decoration-color 120ms ease; }
+  }
+</style>
+
+<svg class="band" aria-hidden="true" shape-rendering="crispEdges">
+  <defs>
+    <pattern id="sadu" width="14" height="11" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="14" height="1" fill="#14231C"/>
+      <rect x="0" y="1" width="14" height="1" fill="#F6F3EA"/>
+      <rect x="0" y="2" width="2" height="1" fill="#D9C6A0"/>
+      <rect x="2" y="2" width="1" height="1" fill="#14231C"/>
+      <rect x="3" y="2" width="3" height="1" fill="#B23A2C"/>
+      <rect x="6" y="2" width="2" height="1" fill="#F6F3EA"/>
+      <rect x="8" y="2" width="3" height="1" fill="#B23A2C"/>
+      <rect x="11" y="2" width="1" height="1" fill="#14231C"/>
+      <rect x="12" y="2" width="2" height="1" fill="#D9C6A0"/>
+      <rect x="0" y="3" width="1" height="1" fill="#D9C6A0"/>
+      <rect x="1" y="3" width="1" height="1" fill="#14231C"/>
+      <rect x="2" y="3" width="3" height="1" fill="#B23A2C"/>
+      <rect x="5" y="3" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="6" y="3" width="2" height="1" fill="#14231C"/>
+      <rect x="8" y="3" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="9" y="3" width="3" height="1" fill="#B23A2C"/>
+      <rect x="12" y="3" width="1" height="1" fill="#14231C"/>
+      <rect x="13" y="3" width="1" height="1" fill="#D9C6A0"/>
+      <rect x="0" y="4" width="1" height="1" fill="#14231C"/>
+      <rect x="1" y="4" width="3" height="1" fill="#B23A2C"/>
+      <rect x="4" y="4" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="5" y="4" width="1" height="1" fill="#14231C"/>
+      <rect x="6" y="4" width="2" height="1" fill="#F6F3EA"/>
+      <rect x="8" y="4" width="1" height="1" fill="#14231C"/>
+      <rect x="9" y="4" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="10" y="4" width="3" height="1" fill="#B23A2C"/>
+      <rect x="13" y="4" width="1" height="1" fill="#14231C"/>
+      <rect x="0" y="5" width="3" height="1" fill="#B23A2C"/>
+      <rect x="3" y="5" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="4" y="5" width="1" height="1" fill="#14231C"/>
+      <rect x="5" y="5" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="6" y="5" width="2" height="1" fill="#B23A2C"/>
+      <rect x="8" y="5" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="9" y="5" width="1" height="1" fill="#14231C"/>
+      <rect x="10" y="5" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="11" y="5" width="3" height="1" fill="#B23A2C"/>
+      <rect x="0" y="6" width="1" height="1" fill="#14231C"/>
+      <rect x="1" y="6" width="3" height="1" fill="#B23A2C"/>
+      <rect x="4" y="6" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="5" y="6" width="1" height="1" fill="#14231C"/>
+      <rect x="6" y="6" width="2" height="1" fill="#F6F3EA"/>
+      <rect x="8" y="6" width="1" height="1" fill="#14231C"/>
+      <rect x="9" y="6" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="10" y="6" width="3" height="1" fill="#B23A2C"/>
+      <rect x="13" y="6" width="1" height="1" fill="#14231C"/>
+      <rect x="0" y="7" width="1" height="1" fill="#D9C6A0"/>
+      <rect x="1" y="7" width="1" height="1" fill="#14231C"/>
+      <rect x="2" y="7" width="3" height="1" fill="#B23A2C"/>
+      <rect x="5" y="7" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="6" y="7" width="2" height="1" fill="#14231C"/>
+      <rect x="8" y="7" width="1" height="1" fill="#F6F3EA"/>
+      <rect x="9" y="7" width="3" height="1" fill="#B23A2C"/>
+      <rect x="12" y="7" width="1" height="1" fill="#14231C"/>
+      <rect x="13" y="7" width="1" height="1" fill="#D9C6A0"/>
+      <rect x="0" y="8" width="2" height="1" fill="#D9C6A0"/>
+      <rect x="2" y="8" width="1" height="1" fill="#14231C"/>
+      <rect x="3" y="8" width="3" height="1" fill="#B23A2C"/>
+      <rect x="6" y="8" width="2" height="1" fill="#F6F3EA"/>
+      <rect x="8" y="8" width="3" height="1" fill="#B23A2C"/>
+      <rect x="11" y="8" width="1" height="1" fill="#14231C"/>
+      <rect x="12" y="8" width="2" height="1" fill="#D9C6A0"/>
+      <rect x="0" y="9" width="14" height="1" fill="#F6F3EA"/>
+      <rect x="0" y="10" width="14" height="1" fill="#14231C"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#sadu)"/>
+</svg>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Handover — branch <code>warif-revamp</code></p>
+    <h1>Warif — وارف</h1>
+    <p class="lede">
+      Green-Trace UAE has been renamed and rebuilt. The AI engine is untouched; everything
+      around it is new, and six things that were quietly wrong are now right. Nothing has
+      been pushed to <code>main</code>, so the live kiosk still serves v1 until you say
+      otherwise.
+    </p>
+    <p class="meta">
+      <span><b>12 September 2026</b></span>
+      <span>9 commits, 201 files</span>
+      <span><b>67</b> automated checks passing</span>
+      <span>Grade 12 Graduation Project · ATS Al Ain</span>
+    </p>
+  </header>
+
+  <section aria-label="Current state">
+    <div class="tiles">
+      <div class="tile"><span class="figure">15</span><span class="caption">routes, each checked in English and Arabic</span></div>
+      <div class="tile"><span class="figure">4</span><span class="caption">themes, down from sixteen</span></div>
+      <div class="tile"><span class="figure">10 / 4</span><span class="caption">trees documented / recognised by the model</span></div>
+      <div class="tile"><span class="figure">81.5%</span><span class="caption">validation accuracy, unchanged</span></div>
+      <div class="tile"><span class="figure">17.6 MB</span><span class="caption">precached, verified offline</span></div>
+      <div class="tile"><span class="figure">0</span><span class="caption">console errors across every route</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What changed</h2>
+      <p>The engine — <code>model.js</code>, <code>health.js</code>, <code>nearby.js</code>, the
+      trained weights — was kept. One line of <code>model.js</code> changed, for the reason in
+      the findings below.</p>
+    </div>
+    <div class="cols">
+      <div class="block">
+        <h3>Identity</h3>
+        <ul>
+          <li>Named <b>Warif</b> — an Arabic word for shade that spreads wide and greenery that is lush.</li>
+          <li>A mark drawn from Al Sadu: a leaf smooth on one side, woven on the other, with the diamond motif at its heart.</li>
+          <li>Reem Kufi and Readex Pro, self-hosted — the venue wifi can drop without the typography going with it.</li>
+          <li>The woven band replaces the flag rule. The flag now appears once, where it means something.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Interface</h3>
+        <ul>
+          <li>A real desktop layout: the viewfinder is on screen at 1366 px without scrolling.</li>
+          <li>Ten species drawn to their actual leaf structure, replacing three emoji shared between ten trees.</li>
+          <li>Measurements are drawn as countable cells rather than smooth bars.</li>
+          <li>Four themes, each a decision: Auto, Day, Night, High contrast.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Honesty</h3>
+        <ul>
+          <li>Every count reads the model file: “10 trees in the library, 4 recognised by the current model”.</li>
+          <li>Untrained trees carry a <b>Reference only</b> badge everywhere they appear.</li>
+          <li>The Test Lab renders measurements, never estimates, each with its device and date.</li>
+          <li>Unconfirmed facts render a visible <b>To confirm</b> marker taken from the data.</li>
+        </ul>
+      </div>
+      <div class="block">
+        <h3>Showcase kit</h3>
+        <ul>
+          <li><code>#/showcase</code> — kiosk: wake lock, rotating facts, resets itself after 90 seconds.</li>
+          <li><code>#/present</code> — six slides, live figures, a timer that marks the 4:00 floor and 10:00 ceiling. Runs 7:15.</li>
+          <li><code>#/poster</code> — prints to a single 594 × 841 mm page.</li>
+          <li><code>#/feedback</code> — four ratings, stored on the device, CSV export at <code>?admin=1</code>.</li>
+          <li><code>#/brand</code> — the identity and its rules.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What was measured</h2>
+      <p>Written by <code>npm run bench</code> into <code>app/data/lab.json</code>, which is the
+      only thing the Test Lab page renders. Timings are on headless Chromium with software
+      rendering and are a floor, not a promise — the Lab page has a button that re-runs the
+      inference on the evaluator's own machine.</p>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption>Health analyser, measured over 800 reference photographs across all ten species</caption>
+        <thead>
+          <tr><th>Measure</th><th class="num">v1</th><th class="num">v2, 4 species</th><th class="num">v2, all 10</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Healthy leaves reported healthy</th><td class="num">11.3%</td><td class="num">48.1%</td><td class="num delta">57.3%</td></tr>
+          <tr><th>Median score on healthy leaves</th><td class="num">47</td><td class="num">86</td><td class="num delta">92</td></tr>
+          <tr><th>Synthetic necrosis detected (25% / 45%)</th><td class="num">—</td><td class="num">100% / 100%</td><td class="num">99.2% / 100%</td></tr>
+          <tr><th>Synthetic chlorosis detected (38% / 60%)</th><td class="num">—</td><td class="num">93% / 97%</td><td class="num">89.4% / 93.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption>What the unknown-leaf check refuses, 40 photographs per tree, none of them trained</caption>
+        <thead>
+          <tr><th>Tree</th><th class="num">Refused as unfamiliar</th><th>Tree</th><th class="num">Refused as unfamiliar</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Mesquite</th><td class="num">0 / 40</td><th>Neem</th><td class="num">2 / 40</td></tr>
+          <tr><th>Athel Tamarisk</th><td class="num">0 / 40</td><th>Grey Mangrove</th><td class="num">2 / 40</td></tr>
+          <tr><th>Arak</th><td class="num">2 / 40</td><th>Apple of Sodom</th><td class="num">10 / 40</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <caption>Reliability, 30 consecutive scans</caption>
+        <thead><tr><th>Measure</th><th class="num">Result</th></tr></thead>
+        <tbody>
+          <tr><th>Tensor count before / after</th><td class="num">131 / 131 — no leak</td></tr>
+          <tr><th>Same photograph, same answer</th><td class="num">identical across all 30</td></tr>
+          <tr><th>Crashes</th><td class="num">0</td></tr>
+          <tr><th>Reload with the network off</th><td class="num delta">renders</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What broke, and what changed</h2>
+      <p>The six that matter. All thirteen are in <code>docs/ITERATIONS.md</code>, and a shorter
+      version is inside the app at <code>#/project/journey</code>.</p>
+    </div>
+
+    <div class="findings">
+      <article class="finding">
+        <span class="chip fixed">Fixed</span>
+        <div class="finding-body">
+          <h3>A photograph of a desk came back as a healthy Ghaf</h3>
+          <p>Wood grain returned “Ghaf, 98% — Leaf health 93 out of 100, healthy”, with treatment
+          advice and three shops to buy it from. The app had scored the image at 0.36 similarity
+          against a 0.59 threshold — it knew — but one objection only downgrades an answer to
+          “treat with caution”.</p>
+          <p class="evidence">A similarity far below the threshold now refuses on its own. Over
+          480 photographs of the four trained species exactly one falls below that margin; the
+          non-leaf probes sit at 0.31–0.38. Now: 4 of 4 refused, 0 of 80 real leaves refused.</p>
+        </div>
+      </article>
+
+      <article class="finding">
+        <span class="chip fixed">Fixed</span>
+        <div class="finding-body">
+          <h3>The app claimed to work offline and did not</h3>
+          <p>The service worker was never registering. It was registered from a <code>load</code>
+          listener, but the shell now waits for the model card first — so the listener was
+          attached to an event that had already fired. The app looked healthy and had no offline
+          cache at all.</p>
+          <p class="evidence">Found by <code>npm run bench</code>. Now 98 files precached, and
+          both the bench and the test suite reload with the network off.</p>
+        </div>
+      </article>
+
+      <article class="finding">
+        <span class="chip fixed">Fixed</span>
+        <div class="finding-body">
+          <h3>The species count on screen disagreed with the model</h3>
+          <p>“Species: 10” beside a four-class model. Anyone who scanned a mangrove leaf and got
+          “Ghaf” had been told by our own page that mangrove was covered.</p>
+          <p class="evidence">Counts now come from <code>metadata.classes.length</code>, and
+          <code>npm test</code> fails if the badges on screen disagree with the model file.</p>
+        </div>
+      </article>
+
+      <article class="finding">
+        <span class="chip fixed">Fixed</span>
+        <div class="finding-body">
+          <h3>Every species drawing rendered as nothing</h3>
+          <p>The leaf shapes emitted their SVG path data as text content rather than inside a
+          <code>&lt;path d&gt;</code>. Ten drawings rendered as ten empty boxes, silently.</p>
+          <p class="evidence">The Ghaf and the Mesquite now differ on screen the way the real
+          leaves do, which is the whole argument for drawing them.</p>
+        </div>
+      </article>
+
+      <article class="finding">
+        <span class="chip noted">Stated, not hidden</span>
+        <div class="finding-body">
+          <h3>The refusal does not catch what we assumed</h3>
+          <p>We believed the unknown-leaf check would refuse a tree the model had never seen. It
+          refuses things that are not plants — and refused 0 of 40 Mesquite.</p>
+          <p class="evidence">Stated on the How page and in the Test Lab with its numbers. The
+          demonstration sample that relied on the assumption was removed rather than kept because
+          it happened to work.</p>
+        </div>
+      </article>
+
+      <article class="finding">
+        <span class="chip open">Open</span>
+        <div class="finding-body">
+          <h3>The sensitivity suite is failing, and has been left failing</h3>
+          <p>Synthetic chlorosis at 38% of the leaf is detected 89.4% of the time — below the
+          suite's own 90% floor, so <code>npm run sensitivity</code> exits non-zero. It was 93%
+          when the reference set held four species; six of the ten have foliage the thresholds
+          were never tuned against.</p>
+          <p class="evidence">Nothing was re-floored and no threshold was loosened to make the red
+          go away. Necrosis is unaffected at 99.2% and 100%.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="todo" aria-labelledby="confirm">
+    <div class="section-head">
+      <h2 id="confirm">Before this is presented — six things only you can confirm</h2>
+      <p>Each one is a <code>todo</code> field in the data, so <code>npm test</code> prints the
+      list at the end of every run and the pages that use them show a <b>To confirm</b> marker
+      until they are cleared.</p>
+    </div>
+
+    <div class="todo-list">
+      <div class="todo-item">
+        <span class="todo-mark" aria-hidden="true"></span>
+        <span>The Arabic spelling of the supervisor's name — <span lang="ar" dir="rtl">الأستاذ حمدي حرسي</span></span>
+        <span class="todo-who">ask Mr. Hamdy Hersi</span>
+        <span class="where">app/js/config.js and app/js/data/team.js</span>
+      </div>
+      <div class="todo-item">
+        <span class="todo-mark" aria-hidden="true"></span>
+        <span>Each member's role and three responsibilities — written from the v1 credits, not from you</span>
+        <span class="todo-who">all five</span>
+        <span class="where">app/js/data/team.js</span>
+      </div>
+      <div class="todo-item">
+        <span class="todo-mark" aria-hidden="true"></span>
+        <span>The Zayed quotation's exact wording, against an official source</span>
+        <span class="todo-who">Mohammed Abdulla</span>
+        <span class="where">app/js/data/about.js — <code>QUOTES.zayedAgriculture</code></span>
+      </div>
+      <div class="todo-item">
+        <span class="todo-mark" aria-hidden="true"></span>
+        <span>Four Journey dates the repository cannot know — research, design, and the showcase</span>
+        <span class="todo-who">Mohammed Abdulla</span>
+        <span class="where">app/js/data/journey.js — entries marked <code>todo: true</code></span>
+      </div>
+      <div class="todo-item">
+        <span class="todo-mark" aria-hidden="true"></span>
+        <span>The ATS logo from the workbook, then set <code>school.hasLogo</code> to true</span>
+        <span class="todo-who">Mohammed Abdulla</span>
+        <span class="where">app/img/ats-logo.png</span>
+      </div>
+      <div class="todo-item">
+        <span class="todo-mark" aria-hidden="true"></span>
+        <span>The Microsoft Forms link, then run <code>npm run qr</code> to put a QR on the kiosk and the poster</span>
+        <span class="todo-who">Sultan</span>
+        <span class="where">app/js/config.js — <code>links.feedbackFormUrl</code></span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Running it</h2>
+      <p>Run <code>npm run sw</code> after changing anything in <code>app/</code>, or the kiosk
+      caches the old version.</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <caption>The commands, and when each one matters</caption>
+        <thead><tr><th>Command</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><th><code>npm run serve</code></th><td>Working on it locally</td></tr>
+          <tr><th><code>npm test</code></th><td>Before every commit — 67 checks, both languages, fails on any console error</td></tr>
+          <tr><th><code>npm run sw</code></th><td>After changing any file in <code>app/</code></td></tr>
+          <tr><th><code>npm run bench</code></th><td>After changing the model or the analyser — rewrites the Test Lab's figures</td></tr>
+          <tr><th><code>npm run samples</code></th><td>After retraining — re-verifies the six demonstration leaves</td></tr>
+          <tr><th><code>npm run poster</code></th><td>To produce the A1 PDF for the print shop</td></tr>
+          <tr><th><code>npm run shots</code> then <code>npm run evidence</code></th><td>After a visual change — refreshes the workbook screenshots</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Still open</h2>
+    </div>
+    <div class="cols">
+      <div class="block">
+        <h3>Six of ten species untrained</h3>
+        <p><code>npm run fetch</code> and <code>npm run train</code> finish it. The interface
+        already reads the count from the model, so it will follow without any edit.</p>
+      </div>
+      <div class="block">
+        <h3>Chlorosis below the detection floor</h3>
+        <p>Re-tune the thresholds against ten species, or re-scope the suite to the four the
+        model knows. Either is a decision, not a quiet edit.</p>
+      </div>
+      <div class="block">
+        <h3>Calibrated on reference photographs</h3>
+        <p>Forty photographs of your actual kiosk leaves, then <code>npm run calibrate</code>, is
+        the honest confirmation that the numbers hold.</p>
+      </div>
+      <div class="block">
+        <h3>The repository is still named green-trace-uae</h3>
+        <p>Renaming changes the Pages URL, so it needs <code>links.site</code> updated and
+        <code>npm run qr</code> re-run. Say the word and it takes a minute.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Nothing has been pushed to <code>main</code>.</b> The live kiosk still serves v1 until
+    you merge <code>warif-revamp</code>, and pushing to <code>main</code> auto-deploys.</p>
+    <p>Training photographs from iNaturalist contributors under CC-BY and CC0. Shop data ©
+    OpenStreetMap contributors (ODbL). Built with TensorFlow.js.</p>
+  </footer>
+</div>
