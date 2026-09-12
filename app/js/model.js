@@ -5,7 +5,7 @@
  *   1. a frozen MobileNetV2 (ImageNet) that turns a 224x224 photo into a
  *      1280-dimension feature vector,
  *   2. a small dense head, trained by tools/train.mjs, that maps that vector
- *      onto the Green-Trace species.
+ *      onto the species Warif knows.
  *
  * Both are served from this repository, so once the service worker has cached
  * them the kiosk works with the network unplugged.

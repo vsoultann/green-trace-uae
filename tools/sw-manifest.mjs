@@ -16,6 +16,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import zlib from 'node:zlib';
+import { promisify } from 'node:util';
+
+const gzip = promisify(zlib.gzip);
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const APP = path.join(ROOT, 'app');
@@ -61,8 +65,56 @@ sw = sw.replace(
 
 await fs.writeFile(swPath, sw);
 
-const bytes = (await Promise.all(files.map(async (f) => (await fs.stat(path.join(APP, f))).size)))
-  .reduce((a, b) => a + b, 0);
+/* The payload figure lives here rather than in the benchmark because this tool
+   already has every file open, and it runs on every change — so the number on
+   the Test Lab page cannot go stale between benchmark runs.
+
+   "Shell" is the interface itself — the page, every stylesheet, every view
+   module and both typefaces. It excludes the model weights and the TensorFlow.js
+   runtime (the engine, downloaded after first paint and then cached forever) and
+   the photographs, screenshots and icons (content, not interface). Both the raw
+   and the gzipped size are recorded, because Pages serves it compressed and
+   quoting the uncompressed figure would overstate what anyone waits for. */
+const IS_SHELL = (f) => f === 'index.html'
+  || f === 'manifest.webmanifest'
+  || f.startsWith('css/')
+  || f.startsWith('js/')
+  || f.startsWith('assets/fonts/');
+
+let totalBytes = 0;
+let shellBytes = 0;
+let shellGzipBytes = 0;
+for (const rel of files) {
+  const body = await fs.readFile(path.join(APP, rel));
+  totalBytes += body.length;
+  if (!IS_SHELL(rel)) continue;
+  shellBytes += body.length;
+  // woff2, png and jpg are already compressed; gzipping them again is noise.
+  shellGzipBytes += /\.(woff2|png|jpg|jpeg|webp)$/.test(rel)
+    ? body.length
+    : (await gzip(body, { level: 9 })).length;
+}
 
 console.log(`Cache name  warif-v1-${version}`);
-console.log(`Precaching  ${files.length} files, ${(bytes / 1024 / 1024).toFixed(1)} MB`);
+console.log(`Precaching  ${files.length} files, ${(totalBytes / 1024 / 1024).toFixed(1)} MB`);
+console.log(`Shell       ${(shellGzipBytes / 1024).toFixed(1)} KB over the wire`
+  + ` (${(shellBytes / 1024).toFixed(1)} KB raw) — page, CSS, every view, both typefaces`);
+
+/* Merge into the lab report rather than replacing it: the benchmark owns every
+   other field there and takes ten minutes to produce them. */
+const labPath = path.join(APP, 'data', 'lab.json');
+try {
+  const lab = JSON.parse(await fs.readFile(labPath, 'utf8'));
+  lab.payload = {
+    measuredAt: new Date().toISOString(),
+    files: files.length,
+    totalBytes,
+    shellBytes,
+    shellGzipBytes,
+    budgetBytes: 250 * 1024,
+  };
+  await fs.writeFile(labPath, `${JSON.stringify(lab, null, 2)}\n`);
+  console.log('Updated    app/data/lab.json (payload)');
+} catch {
+  // No lab.json yet: npm run bench writes it, and this runs again after.
+}

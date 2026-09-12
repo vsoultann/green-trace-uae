@@ -26,4 +26,4 @@ http.createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end('not found');
   }
-}).listen(PORT, () => console.log(`Green-Trace UAE dev server → http://localhost:${PORT}/`));
+}).listen(PORT, () => console.log(`Warif dev server — http://localhost:${PORT}/`));

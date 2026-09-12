@@ -1,4 +1,4 @@
-// Single source of truth for the Green-Trace UAE species.
+// Single source of truth for the Warif species.
 // Keep this in sync with app/js/data/species.js (the browser copy).
 //
 // The order of this array IS the class order of the trained model. Changing it

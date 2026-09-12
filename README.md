@@ -291,6 +291,24 @@ variation, not more of the same frame.
 | `npm run qr` | After changing `links.site` or `links.feedbackFormUrl` in `app/js/config.js` |
 | `npm run brand` | After editing the mark or the lockups |
 
+### Payload
+
+`npm run sw` prints, and records in `app/data/lab.json`, what a visitor actually
+downloads. At the time of writing:
+
+| | |
+|---|---|
+| The interface, over the wire | **251 KB** — the page, every stylesheet, every screen and both typefaces, gzipped as the server sends them |
+| The engine | 15 MB of model weights plus 1.5 MB of TensorFlow.js, fetched after the first screen is drawn and then kept |
+| Held for offline use | 17.7 MB across 105 files |
+
+A first visit draws the home screen from roughly two thirds of the interface
+figure; the rest is the screens it has not opened yet, which the service worker
+fetches in the background. The 250 KB budget is for the whole interface, and it
+is sitting exactly on it — the two typefaces are 85 KB of that and do not
+compress further, so the next thing to give way should be a view module, not a
+subset of a script.
+
 ## Regenerating the QR code
 
 ```bash

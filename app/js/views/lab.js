@@ -70,6 +70,9 @@ const ms = (v) => (v == null ? '—' : `${num(Math.round(v))} ms`);
 function performance(lab) {
   const p = lab.performance;
   if (!p) return '';
+  const kb = (bytes) => (bytes == null ? '—' : `${num(Math.round(bytes / 1024))} KB`);
+  const pay = lab.payload;
+
   return html`<section class="panel" aria-labelledby="perf-title">
     <div class="section-head"><h2 id="perf-title">${t('lab.performance')}</h2></div>
     <dl class="kv-row">
@@ -79,6 +82,16 @@ function performance(lab) {
       <div class="kv"><dt>${t('lab.inferP95')}</dt><dd>${raw(ms(p.inferenceP95Ms))}</dd></div>
       <div class="kv"><dt>${t('lab.timeToResult')}</dt><dd>${raw(ms(p.timeToResultMedianMs))}</dd></div>
     </dl>
+
+    ${raw(pay ? html`
+      <h3 class="section-title">${t('lab.payload')}</h3>
+      <dl class="kv-row">
+        <div class="kv"><dt>${t('lab.shell')}</dt><dd>${raw(kb(pay.shellGzipBytes))}</dd></div>
+        <div class="kv"><dt>${t('lab.offlineTotal')}</dt><dd>${raw(`${num(Math.round(pay.totalBytes / 1024 / 1024 * 10) / 10)} MB`)}</dd></div>
+        <div class="kv"><dt>${t('lab.files')}</dt><dd>${raw(num(pay.files))}</dd></div>
+      </dl>
+      <p class="small muted measure">${t('lab.shellNote')}</p>` : '')}
+
     ${raw(provenance(lab))}
   </section>`;
 }

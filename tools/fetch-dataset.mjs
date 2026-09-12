@@ -21,7 +21,7 @@ const perClass = Number(args[args.indexOf('--per-class') + 1]) || 400;
 const force = args.includes('--force');
 
 const OPEN_LICENCES = ['cc0', 'cc-by', 'cc-by-sa', 'cc-by-nc', 'cc-by-nc-sa'];
-const UA = 'Green-Trace-UAE/1.0 (graduation project; contact via github.com/vsoultann)';
+const UA = 'Warif/2.0 (graduation project; contact via github.com/vsoultann)';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

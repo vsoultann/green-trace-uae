@@ -80,5 +80,13 @@
       "osher": 10,
       "qurm": 2
     }
+  },
+  "payload": {
+    "measuredAt": "2026-09-12T13:49:41.229Z",
+    "files": 105,
+    "totalBytes": 18513314,
+    "shellBytes": 552620,
+    "shellGzipBytes": 257111,
+    "budgetBytes": 256000
   }
 }

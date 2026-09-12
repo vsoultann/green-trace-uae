@@ -1,5 +1,5 @@
 /**
- * Trains the Green-Trace UAE species classifier.
+ * Trains the Warif species classifier.
  *
  * Transfer learning: the vendored MobileNetV2 stays frozen and supplies a
  * 1280-d feature vector per image; only a small dense head is trained. That
@@ -66,7 +66,7 @@ async function listDir(dir) {
 
 /* ---------- 1. gather files ---------- */
 
-console.log('Green-Trace UAE — training the species head\n');
+console.log('Warif — training the species head\n');
 
 const perClass = [];
 for (const sp of SPECIES) {
@@ -346,7 +346,7 @@ const saved = await head.save(tf.io.withSaveHandler(async (artifacts) => {
 void saved;
 
 await fs.writeFile(path.join(OUT, 'metadata.json'), JSON.stringify({
-  name: 'Green-Trace UAE species classifier',
+  name: 'Warif species classifier',
   trainedAt: new Date().toISOString(),
   architecture: 'MobileNetV2 (frozen, ImageNet) + 192-96-4 dense head',
   inputSize: 224,
