@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "Warif (وارف) — AI tree identification and leaf health for the UAE. Tooling for the dataset fetch, model training, health-analyser calibration, brand assets and the evidence the workbook needs.",
+  "description": "Warif (\u0648\u0627\u0631\u0641) \u2014 AI tree identification and leaf health for the UAE. Tooling for the dataset fetch, model training, health-analyser calibration, brand assets and the evidence the workbook needs.",
   "scripts": {
     "serve": "node tools/serve.mjs",
     "test": "node tools/smoke-test.mjs",
@@ -18,7 +18,8 @@
     "sw": "node tools/sw-manifest.mjs",
     "shots": "node tools/shots.mjs docs/evidence/v2 --routes '#/,#/result,#/trees,#/trees/ghaf,#/help,#/project,#/project/how,#/project/lab,#/project/journey,#/team,#/feedback,#/brand,#/showcase,#/present,#/poster' --lang en,ar --theme day --flat",
     "shots:night": "node tools/shots.mjs docs/evidence/v2-night --routes '#/,#/result,#/trees,#/project/how,#/team' --lang en,ar --theme night --flat",
-    "evidence": "node tools/evidence.mjs"
+    "evidence": "node tools/evidence.mjs",
+    "poster": "node tools/poster-pdf.mjs"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",

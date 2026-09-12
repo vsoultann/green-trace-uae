@@ -8,9 +8,43 @@
  */
 @page { margin: 14mm 12mm; }
 
+/**
+ * Paper is light, whatever the screen was.
+ *
+ * The whole Day palette is pinned here rather than only the body colours.
+ * Without it a page printed from Night mode kept the dark theme's brand tokens,
+ * and the wordmark — a background image that swaps to its light-on-dark variant
+ * — printed as nothing at all on a cream sheet. It looked fine on screen and
+ * arrived from the print shop with a hole where the logo should be.
+ */
+:root {
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-sunk: #F2F5F0;
+  --ink: #14231C;
+  --ink-muted: #4A5B51;
+  --line: #C5CFC2;
+  --primary: #2E6147;
+  --on-primary: #FFFFFF;
+  --accent: #B23A2C;
+  --healthy: #2F7A4B;
+  --healthy-fill: #4F9A67;
+  --chlorosis: #8A6400;
+  --chlorosis-fill: #D9A521;
+  --necrosis: #7A4B2A;
+  --necrosis-fill: #8C5A36;
+  --mark: url('../assets/brand/warif-mark.svg');
+  --lockup: url('../assets/brand/warif-lockup.svg');
+  --lockup-rtl: url('../assets/brand/warif-lockup-rtl.svg');
+  --lockup-stacked: url('../assets/brand/warif-lockup-stacked.svg');
+  --shadow-sheet: none;
+  --shadow-scan: none;
+  color-scheme: light;
+}
+
 body {
   background: #fff;
-  color: #14231C;
+  color: var(--ink);
 }
 
 .topbar, .tabbar, .skip, #toast, dialog.sheet,

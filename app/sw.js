@@ -10,10 +10,11 @@
  * anything in app/, and the cache name changes with the contents. Editing
  * either by hand will work until the next time somebody runs the tool.
  */
-const CACHE = 'warif-v1-196c5501';
+const CACHE = 'warif-v1-058fdb48';
 
 const SHELL = [
   './',
+  './assets/brand/sadu-band-contrast.svg',
   './assets/brand/sadu-band.svg',
   './assets/brand/warif-lockup-dark.png',
   './assets/brand/warif-lockup-dark.svg',

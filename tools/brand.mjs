@@ -92,6 +92,16 @@ const SADU_MAP = [
 const SADU_INK = { K: C.ink, W: C.wool, R: C.saduRed, S: C.dune };
 
 /**
+ * The band in the high-contrast palette.
+ *
+ * Somebody using high contrast is using it because four close colours are hard
+ * to separate, and a twelve-pixel strip of Ghaf green, Sadu red, dune and wool
+ * is exactly that. The weave keeps its structure; it is redrawn in the three
+ * colours that theme is allowed — black, white and one signal yellow.
+ */
+const SADU_CONTRAST = { K: '#000000', W: '#FFFFFF', R: '#FFD400', S: '#9A9A9A' };
+
+/**
  * The band as one repeatable tile. Adjacent same-colour cells are merged into a
  * single rect so the file stays small and the renderer has no hairline seams to
  * round differently from its neighbours.
@@ -267,6 +277,7 @@ const files = {
   [path.join(BRAND, 'warif-mark-dark.svg')]: markSVG({ leaf: C.onDarkLeaf, rows: C.onDarkRows, node: C.onDarkNode, id: 'md' }),
   [path.join(BRAND, 'warif-mark-mono.svg')]: markSVG({ leaf: 'currentColor', rows: 'currentColor', node: 'currentColor', id: 'mm' }),
   [path.join(BRAND, 'sadu-band.svg')]: saduTile(),
+  [path.join(BRAND, 'sadu-band-contrast.svg')]: saduTile(SADU_CONTRAST),
   [path.join(BRAND, 'warif-lockup.svg')]: horizontalLockup({ leaf: C.ghaf, rows: C.ghafLight, node: C.saduRed, ink: C.ink, muted: '#4A5B51', id: 'lh' }),
   [path.join(BRAND, 'warif-lockup-rtl.svg')]: horizontalLockup({ leaf: C.ghaf, rows: C.ghafLight, node: C.saduRed, ink: C.ink, muted: '#4A5B51', rtl: true, id: 'lr' }),
   [path.join(BRAND, 'warif-lockup-dark.svg')]: horizontalLockup({ leaf: C.onDarkLeaf, rows: C.onDarkRows, node: C.onDarkNode, ink: '#EAE5D8', muted: '#A9B4AA', id: 'ld' }),

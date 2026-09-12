@@ -900,7 +900,15 @@
   .deck-keys { text-align: center; color: var(--ink-muted); padding-block: .4rem; margin: 0; }
 
   /* ===================================================== poster ============ */
+  /* The poster is paper. It pins the light brand tokens rather than following
+     the interface theme — a wordmark that swaps to its light-on-dark variant is
+     invisible on a cream sheet, and the sheet is cream whatever the screen is. */
   .poster {
+    --mark: url('../assets/brand/warif-mark.svg');
+    --lockup: url('../assets/brand/warif-lockup.svg');
+    --lockup-rtl: url('../assets/brand/warif-lockup-rtl.svg');
+    --lockup-stacked: url('../assets/brand/warif-lockup-stacked.svg');
+    --sadu-tile: url('../assets/brand/sadu-band.svg');
     width: var(--pw);
     min-height: var(--ph);
     margin-inline: auto;

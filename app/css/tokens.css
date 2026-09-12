@@ -157,6 +157,14 @@
 
     --focus: #FFD400;
     --mark: url('../assets/brand/warif-mark-mono.svg');
+    /* The light-on-dark lockups, because this theme is black. The day lockup is
+       Ghaf green on transparent and all but disappears against it. */
+    --lockup: url('../assets/brand/warif-lockup-dark.svg');
+    --lockup-rtl: url('../assets/brand/warif-lockup-dark.svg');
+    --lockup-stacked: url('../assets/brand/warif-lockup-stacked-dark.svg');
+    /* The weave keeps its structure and loses its four close colours: somebody
+       in high contrast is here because those are hard to separate. */
+    --sadu-tile: url('../assets/brand/sadu-band-contrast.svg');
     --shadow-sheet: none;
     --shadow-scan: none;
 
